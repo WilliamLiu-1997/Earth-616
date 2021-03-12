@@ -721,15 +721,15 @@ function meteorite_move(meteorite1){
         document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
       }
 
-      angle += 0.0005;
       var rotate=angle * Math.PI * rotatespeed;
-      if(speedup){rotatespeed=Math.min(rotatespeed*1.01,50);
+      if(speedup){rotatespeed=Math.min(rotatespeed*1.0101010101,50);
         document.getElementById("plantspeed").innerHTML=Math.floor(rotatespeed*2);
         if(rotatespeed<50)angle *= 0.99}
       if(speeddown){rotatespeed=Math.max(rotatespeed*0.99,0.5);
         document.getElementById("plantspeed").innerHTML=Math.floor(rotatespeed*2);
-        if(rotatespeed>0.5)angle *= 1.01}
+        if(rotatespeed>0.5)angle *= 1.0101010101}
 
+      angle += 0.0005;
 
       sun.rotation.y -= (0.005 / Math.PI) * rotatespeed/5;
 
