@@ -631,12 +631,12 @@ function generate_meteoritegroup(size){
     }
     
     var v1=new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5).normalize();
-    while(new THREE.Vector3(-x,-y,-z).normalize().dot(v1)<0.7||new THREE.Vector3(-x,-y,-z).normalize().dot(v1)>0.8){
+    while(new THREE.Vector3(-x,-y,-z).normalize().dot(v1)<0.7||new THREE.Vector3(-x,-y,-z).normalize().dot(v1)>0.9){
       v1=new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5).normalize();
     }
 
 
-    for(var i=0;i<3;i++){
+    for(var i=0;i<10;i++){
       if(i%2==0)var meteorite=new THREE.Sprite(material);
       else var meteorite=new THREE.Sprite(materialr);
       meteorite.position.set(x,y,z);
@@ -847,9 +847,9 @@ function meteorite_move(meteorite1){
             var sin_ix_2 = Math.sin((ix + count*0.5) * 0.3);
             var sin_iy_2 = Math.sin((iy + count*0.5) * 0.5);
             var sin_iz_2 = Math.sin((iz + count*0.5) * 0.4);
-            var sin_ix_1 = Math.sin((ix + count * 5) * 0.1);
-            var sin_iy_1 = Math.sin((iy + count * 5) * 0.3);
-            var sin_iz_1 = Math.sin((iz + count * 5) * 0.7);
+            var sin_ix_1 = Math.sin((ix + count * 10) * 0.1);
+            var sin_iy_1 = Math.sin((iy + count * 10) * 0.3);
+            var sin_iz_1 = Math.sin((iz + count * 10) * 0.7);
             var dis = Math.sqrt(
               Math.pow(x - particle.position.x, 2) +
                 Math.pow(z - particle.position.z, 2) +
