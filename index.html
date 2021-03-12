@@ -140,11 +140,9 @@
     const starball = new THREE.TextureLoader().load("img/ball.png");
     var meteoriteball = new THREE.TextureLoader().load("img/star0.png");
     var meteoritetail = new THREE.TextureLoader().load("img/start0.png");
-    var meteoritetail1 = new THREE.TextureLoader().load("img/start1.png");
     
     var meteoriteballr = new THREE.TextureLoader().load("img/star00.png");
     var meteoritetailr = new THREE.TextureLoader().load("img/start00.png");
-    var meteoritetail1r = new THREE.TextureLoader().load("img/start11.png");
 
 
 
@@ -596,15 +594,6 @@ function generate_meteoritegroup(size){
         map: meteoritetailr,
         color: 0xffffff,
       });
-      var material2 = new THREE.SpriteMaterial({
-        map: meteoritetail1,
-        color: 0xffffff,
-      });
-      
-      var material2r = new THREE.SpriteMaterial({
-        map: meteoritetail1r,
-        color: 0xffffff,
-      });
       
     var meteoritegroup = new THREE.Object3D();
 
@@ -641,9 +630,9 @@ function generate_meteoritegroup(size){
       meteorite.position.set(x,y,z);
       meteorite.scale.set(size*1.35, size*1.35, 1)
       meteoritegroup.add(meteorite)
-      x=x-size*v1.x/15;
-      y=y-size*v1.y/15;
-      z=z-size*v1.z/15;
+      x=x-size*v1.x/20;
+      y=y-size*v1.y/20;
+      z=z-size*v1.z/20;
       size*=0.99;
     }
 
@@ -831,7 +820,7 @@ function meteorite_move(meteorite1){
             var sin_iz_2 = Math.sin((iz + count*0.5) * 0.4);
             var sin_i = Math.sin((i + count * 10) * 0.5)*3;
             var dis = Math.sqrt(
-              Math.pow(x - particle.position.x, 2) +
+                Math.pow(x - particle.position.x, 2) +
                 Math.pow(z - particle.position.z, 2) +
                 Math.pow(y - particle.position.y, 2)
             );
