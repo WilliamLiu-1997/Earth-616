@@ -33,7 +33,7 @@
   }
   
   .btn {
-    font-size: 32px;
+    font-size: 5vh;
     position: absolute;
     color: #ffffffdd;
     position:relative;
@@ -45,11 +45,11 @@
   }
 
   .btn:hover {
-    font-size: 6vh;
+    font-size: 5.5vh;
     color: #aaaaaa;
   }
 
   .btn:active{
-    font-size: 5vh;
+    font-size: 4.5vh;
     color: #888888;
   }
