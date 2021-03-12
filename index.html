@@ -38,7 +38,7 @@
         height: 5%;
         margin: 5%;
         margin-top:2%;
-        font-size: 20px;
+        font-size: 3vh;
         text-align: center;
         color: #ffffffcc;
         background-color: rgba(0, 0, 0, 0);
@@ -63,11 +63,10 @@
           remnants, interstellar gas, dust, and dark matter. The galaxies in the
           Universe are constantly changing – through secular evolution, mergers
           and interactions. They are mysterious!
-          <br />
-          <br />
+        </p><p>
           Go to a galaxy, and explore its secrets!
         </p>
-        <a class="btn" onclick="hideMe()">START EXPERIENCE</a>
+        <a class="btn" onclick="hideMe()">START EXPLORATION</a>
       </div>
     </div>
   </body>
@@ -104,7 +103,7 @@
     var cameraPosition = new THREE.Vector3(0, 150, 1500);
     var cameraDirection = new THREE.Vector3(0, 0, 0);
 
-    var SEPARATION = 200,
+    var SEPARATION = 210,
       AMOUNTX = 30,
       AMOUNTY = 30,
       AMOUNTZ = 10;
@@ -867,7 +866,7 @@ function meteorite_move(meteorite1){
 
             particle.scale.x = particle.scale.y = Math.max(
               sin_ix_1 + sin_iy_1 + sin_iz_1 + 3,
-              1.5
+              1.25
             );
           }
         }

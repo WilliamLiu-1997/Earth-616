@@ -19,16 +19,15 @@
   }
 
   h1 {
-    font-size: 50px;
+    font-size: 5.5vh;
     margin-bottom: 3%;
     width: 60%;
     text-align: center;
   }
   
   p {
-    margin-top: 10px;
-    font-size: 30px;
-    max-width: 50em;
+    margin-top: 1%;
+    font-size: 4.5vh;
     width: 60%;
     text-align: center;
   }
@@ -46,11 +45,11 @@
   }
 
   .btn:hover {
-    font-size: 35px;
+    font-size: 6vh;
     color: #aaaaaa;
   }
 
   .btn:active{
-    font-size: 33px;
+    font-size: 5vh;
     color: #888888;
   }
