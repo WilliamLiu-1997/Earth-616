@@ -96,6 +96,7 @@
     var speeddown=false;
     var addmet=false;
     var meteorites=[];
+    var countstep=true;
 
     var color = new THREE.Color();
     var spotLight;
@@ -572,6 +573,7 @@
 
 
 function generate_meteoritegroup(size){
+  size=size*(Math.random()*0.6+0.7)
   var osize=size;
     var material = new THREE.SpriteMaterial({
         map: meteoriteball,
@@ -615,16 +617,16 @@ function generate_meteoritegroup(size){
     }
     
     var v1=new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5).normalize();
-    while(new THREE.Vector3(-x,-y,-z).normalize().dot(v1)<0.7||new THREE.Vector3(-x,-y,-z).normalize().dot(v1)>0.9){
+    while(new THREE.Vector3(-x,-y,-z).normalize().dot(v1)<0.75||new THREE.Vector3(-x,-y,-z).normalize().dot(v1)>0.85){
       v1=new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5).normalize();
     }
 
 
-    for(var i=0;i<6;i++){
+    for(var i=0;i<2;i++){
       if(i%2==0)var meteorite=new THREE.Sprite(material);
       else var meteorite=new THREE.Sprite(materialr);
       meteorite.position.set(x,y,z);
-      meteorite.scale.set(size*1.35, size*1.35, 1)
+      meteorite.scale.set(size, size, 1)
       meteoritegroup.add(meteorite)
       x=x-size*v1.x/20;
       y=y-size*v1.y/20;
@@ -632,60 +634,63 @@ function generate_meteoritegroup(size){
       size*=0.99;
     }
 
-    var num=6;
-    while(size>osize*0.01){
-      if(size<osize*0.8)num=2
+    var num=3;
+    while(size>1){
       for(i=0;i<num;i++){
-        
-      if(i%2==0)var meteorite=new THREE.Sprite(material1);
-      else var meteorite=new THREE.Sprite(material1r);
+      if(i==0){var meteorite=new THREE.Sprite(material);
+        if(size>osize*0.6)meteorite.scale.set(size*0.5, size*0.5, 1);
+      else meteorite.scale.set(size*0.4, size*0.4, 1);}
+      else if(i%2==0){var meteorite=new THREE.Sprite(material1);
+      meteorite.scale.set(size*0.99, size*0.99, 1)}         
+      else{var meteorite=new THREE.Sprite(material1r);
+        meteorite.scale.set(size*0.99, size*0.99, 1)}
       meteorite.position.set(x-size*v1.x*Math.random()/5,y-size*v1.y*Math.random()/5,z-size*v1.z*Math.random()/5);
-      meteorite.scale.set(size*0.99, size*0.99, 1)
       meteoritegroup.add(meteorite)
     }
-      x=x-size*v1.x/20;
-      y=y-size*v1.y/20;
-      z=z-size*v1.z/20;
-      size*=0.993;
+      x=x-size*v1.x/10;
+      y=y-size*v1.y/10;
+      z=z-size*v1.z/10;
+      size*=0.9915;
     }
 
     return [meteoritegroup,v1];
 
 }
 
-function meteorite_move(meteorite1){
-      meteorite1[0].position.x+=meteorite1[1].x*20;
-      meteorite1[0].position.y+=meteorite1[1].y*20;
-      meteorite1[0].position.z+=meteorite1[1].z*20;
-      var mlen=meteorite1[0].children.length;
-      for(var m=0;m<mlen;m++){
-        if(Math.random()<0.7)continue;
-        var met=meteorite1[0].children[m];
-        var x=met.position.x;
-        var y=met.position.y;
-        var z=met.position.z;
-        var size=met.scale.x;
-        var v1=meteorite1[1];
-        met.position.set(x-size*v1.x*(Math.random()-0.5)/50,y-size*v1.y*(Math.random()-0.5)/50,z-size*v1.z*(Math.random()-0.5)/50);
-      }
+function meteorite_move(meteorite1,count){
       if(meteorite1[0].position.x*meteorite1[0].position.x+meteorite1[0].position.y*meteorite1[0].position.y+meteorite1[0].position.z*meteorite1[0].position.z>20000*20000){
         scene.remove(meteorite1[0]);
       return true;
-    }else{
-      return false;}
+    }
+      if(count){return false;}
+      meteorite1[0].position.x+=meteorite1[1].x*40;
+      meteorite1[0].position.y+=meteorite1[1].y*40;
+      meteorite1[0].position.z+=meteorite1[1].z*40;
+      return false;
+      //var mlen=meteorite1[0].children.length;
+      //for(var m=10;m<mlen;m++){
+        //if(Math.random()<0.5)continue;
+        //var met=meteorite1[0].children[m];
+        //var x=met.position.x;
+        //var y=met.position.y;
+        //var z=met.position.z;
+        //var size=met.scale.x;
+        //var v1=meteorite1[1];
+        //met.position.set(x-size*v1.x*(Math.random()-0.5)/25,y-size*v1.y*(Math.random()-0.5)/25,z-size*v1.z*(Math.random()-0.5)/25);
+      //}
 }
 
 
     function animate() {
       if(addmet){
-        var meteorite1=generate_meteoritegroup(50*(Math.random()*0.6+0.7));
+        var meteorite1=generate_meteoritegroup(60);
         meteorites.push(meteorite1);
         scene.add(meteorite1[0]);
         addmet=false;
         document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
       }
       for(var met in meteorites){
-        if(meteorite_move(meteorites[met]))meteorites.splice(met,1);
+        if(meteorite_move(meteorites[met],countstep))meteorites.splice(met,1);
         document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
       }
 
@@ -803,15 +808,17 @@ function meteorite_move(meteorite1){
 
       //Ball Maving
       for(var i = 0;i<particles.length; i++){
+        if(countstep)continue;
         particle = particles[i];
+        particle.scale.x = particle.scale.y=Math.max(Math.sin(star_s_speed[i]*count*150)*2 + 2,1.25);
         var d=star_d[i];
         var ds=star_d_speed[i];
-        particle.position.x+=d.x*Math.cos(ds.x*count)/8;
-        particle.position.y+=d.y*Math.cos(ds.y*count)/8;
-        particle.position.z+=d.z*Math.cos(ds.z*count)/8;
-        particle.scale.x = particle.scale.y=Math.max(Math.sin(star_s_speed[i]*count*150)*2 + 2,1.25);
+        particle.position.x+=d.x*Math.cos(ds.x*count)/3;
+        particle.position.y+=d.y*Math.cos(ds.y*count)/3;
+        particle.position.z+=d.z*Math.cos(ds.z*count)/3;
       }
       count += 0.0005;
+      countstep=!countstep;
 
       operation_method_1();
       bounder_detect();
