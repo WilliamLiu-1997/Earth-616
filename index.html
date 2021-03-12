@@ -125,19 +125,19 @@
     sunbackground1.scale.set(380, 280, 1);
 
     var sun = obj_lighting("./texture/j025.jpg", 100, 0, 0, 0);
-    var star1 = obj("./texture/j022.jpg", 10, 200, 0, 0);
-    var star2 = obj("./texture/j006.jpg", 15, 300, 0, 0);
-    var star3 = obj("./texture/j007.jpg", 20, 500, 0, 0);
+    var star1 = obj("./texture/j022.jpg", 8, 200, 0, 0);
+    var star2 = obj("./texture/j006.jpg", 12, 300, 0, 0);
+    var star3 = obj("./texture/j011.jpg", 20, 500, 0, 0);
     var starlite3 = obj("./texture/j029.jpg", 3, 525, 30, 0);
     var star4 = obj("./texture/j008.jpg", 25, 800, 0, 0);
     var ring4 = ring1("./texture/ring6.png", 30, 25, 800, 0, 0);
-    var star5 = obj("./texture/j009.jpg", 30, 1100, 0, 0);
+    var star5 = obj("./texture/j016.jpg", 30, 1100, 0, 0);
     var star6 = obj("./texture/j021.jpg", 35, 1500, 0, 0);
     var starlite6 = obj("./texture/j024.jpg", 4, 1555, 30, 0);
-    var star7 = obj("./texture/j011.jpg", 20, 1800, 0, 0);
+    var star7 = obj("./texture/j009.jpg", 20, 1800, 0, 0);
     var star8 = obj("./texture/j012.jpg", 25, 2000, 0, 0);
     var ring8 = ring2("./texture/ring5.png", 40, 5, 2000, 0, 0);
-    var star9 = obj("./texture/j013.jpg", 15, 2300, 0, 0);
+    var star9 = obj("./texture/j030.jpg", 15, 2300, 0, 0);
     const starball = new THREE.TextureLoader().load("img/ball.png");
     var meteoriteball = new THREE.TextureLoader().load("img/star0.png");
     var meteoritetail = new THREE.TextureLoader().load("img/start0.png");
@@ -450,7 +450,7 @@
         esc = false;
         display = document.getElementById("content").style.display;
       }
-      if (fast) maxSpeed = 5;
+      if (fast) maxSpeed = 6;
       else maxSpeed = 2;
 
       var delta = clock.getDelta();
