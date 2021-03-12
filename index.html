@@ -858,14 +858,14 @@ function meteorite_move(meteorite1){
             var xyz =
               ((sin_ix_2 + sin_iy_2 + sin_iz_2) * Math.max(dis, 1200)) / 20000;
 
-            if(i%8>=4)particle.position.y += xyz;
-            else particle.position.y -= xyz;
+            if(i%8>=4)particle.position.y += xyz*(i%17+1)/11;
+            else particle.position.y -= xyz*(i%17+1)/11;
 
-            if(i%4>=2)particle.position.x += xyz;
-            else particle.position.x -= xyz;
+            if(i%4>=2)particle.position.x += xyz*(i%13+1)/9;
+            else particle.position.x -= xyz*(i%13+1)/9;
 
-            if(i%2==0)particle.position.z += xyz;
-            else particle.position.z += xyz;
+            if(i%2==0)particle.position.z += xyz*(i%11+1)/7;
+            else particle.position.z += xyz*(i%11+1)/7;
 
             particle.scale.x = particle.scale.y = Math.max(
               sin_ix_1 + sin_iy_1 + sin_iz_1 + 3,
