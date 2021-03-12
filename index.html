@@ -809,7 +809,7 @@ function meteorite_move(meteorite1){
         particle.position.x+=d.x*Math.cos(ds.x*count)/8;
         particle.position.y+=d.y*Math.cos(ds.y*count)/8;
         particle.position.z+=d.z*Math.cos(ds.z*count)/8;
-        particle.scale.x = particle.scale.y=Math.max(Math.sin(star_s_speed[i]*count*150)*2 + 2,1.5);
+        particle.scale.x = particle.scale.y=Math.max(Math.sin(star_s_speed[i]*count*150)*2 + 2,1.25);
       }
       count += 0.0005;
 
