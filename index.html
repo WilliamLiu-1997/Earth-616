@@ -636,17 +636,17 @@ function generate_meteoritegroup(size){
     }
 
 
-    for(var i=0;i<10;i++){
+    for(var i=0;i<5;i++){
       if(i%2==0)var meteorite=new THREE.Sprite(material);
       else var meteorite=new THREE.Sprite(materialr);
       meteorite.position.set(x,y,z);
       meteorite.scale.set(size*1.35, size*1.35, 1)
       meteoritegroup.add(meteorite)
-    }
       x=x-size*v1.x/30;
       y=y-size*v1.y/30;
       z=z-size*v1.z/30;
       size*=0.99;
+    }
 
     var num=5;
     while(size>osize*0.6){
@@ -711,7 +711,7 @@ function meteorite_move(meteorite1){
 
     function animate() {
       if(addmet){
-        var meteorite1=generate_meteoritegroup(75);
+        var meteorite1=generate_meteoritegroup(50*(Math.random()*0.6+0.7));
         meteorites.push(meteorite1);
         scene.add(meteorite1[0]);
         addmet=false;
@@ -866,7 +866,7 @@ function meteorite_move(meteorite1){
             particle.position.z += xyz;
 
             particle.scale.x = particle.scale.y = Math.max(
-              sin_ix_1 + 0.75 + sin_iy_1 + 0.75 + sin_iz_1 + 0.75,
+              sin_ix_1 + sin_iy_1 + sin_iz_1 + 3,
               1.5
             );
           }
