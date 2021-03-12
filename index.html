@@ -728,7 +728,7 @@ function meteorite_move(meteorite1){
         if(rotatespeed<50)angle *= 0.99}
       if(speeddown){rotatespeed=Math.max(rotatespeed*0.99,0.5);
         document.getElementById("plantspeed").innerHTML=Math.floor(rotatespeed*2);
-        if(rotatespeed>0.5)angle *= 0.99}
+        if(rotatespeed>0.5)angle *= 1.01}
 
 
       sun.rotation.y -= (0.005 / Math.PI) * rotatespeed/5;
