@@ -635,21 +635,21 @@ function generate_meteoritegroup(size){
     }
 
 
-    for(var i=0;i<5;i++){
+    for(var i=0;i<6;i++){
       if(i%2==0)var meteorite=new THREE.Sprite(material);
       else var meteorite=new THREE.Sprite(materialr);
       meteorite.position.set(x,y,z);
       meteorite.scale.set(size*1.35, size*1.35, 1)
       meteoritegroup.add(meteorite)
-      x=x-size*v1.x/30;
-      y=y-size*v1.y/30;
-      z=z-size*v1.z/30;
+      x=x-size*v1.x/15;
+      y=y-size*v1.y/15;
+      z=z-size*v1.z/15;
       size*=0.99;
     }
 
-    var num=5;
-    while(size>osize*0.6){
-      if(size<osize*0.82)num=2
+    var num=6;
+    while(size>osize*0.01){
+      if(size<osize*0.8)num=2
       for(i=0;i<num;i++){
         
       if(i%2==0)var meteorite=new THREE.Sprite(material1);
@@ -661,24 +661,7 @@ function generate_meteoritegroup(size){
       x=x-size*v1.x/20;
       y=y-size*v1.y/20;
       z=z-size*v1.z/20;
-      size*=0.995;
-    }
-
-    var num=8;
-    while(size>osize*0.05){
-      if(size<osize*0.4)num=3;
-      for(i=0;i<num;i++){
-        
-      if(i%2==0)var meteorite=new THREE.Sprite(material2);
-      else var meteorite=new THREE.Sprite(material2r);
-      meteorite.position.set(x-size*v1.x*Math.random()/5,y-size*v1.y*Math.random()/5,z-size*v1.z*Math.random()/5);
-      meteorite.scale.set(size, size, 1)
-      meteoritegroup.add(meteorite)
-    }
-      x=x-size*v1.x/10;
-      y=y-size*v1.y/10;
-      z=z-size*v1.z/10;
-      size*=0.99;
+      size*=0.993;
     }
 
     return [meteoritegroup,v1];
@@ -700,7 +683,7 @@ function meteorite_move(meteorite1){
         var v1=meteorite1[1];
         met.position.set(x-size*v1.x*(Math.random()-0.5)/50,y-size*v1.y*(Math.random()-0.5)/50,z-size*v1.z*(Math.random()-0.5)/50);
       }
-      if(meteorite1[0].position.x*meteorite1[0].position.x+meteorite1[0].position.y*meteorite1[0].position.y+meteorite1[0].position.z*meteorite1[0].position.z>15000*20000){
+      if(meteorite1[0].position.x*meteorite1[0].position.x+meteorite1[0].position.y*meteorite1[0].position.y+meteorite1[0].position.z*meteorite1[0].position.z>20000*20000){
         scene.remove(meteorite1[0]);
       return true;
     }else{
@@ -846,9 +829,7 @@ function meteorite_move(meteorite1){
             var sin_ix_2 = Math.sin((ix + count*0.5) * 0.3);
             var sin_iy_2 = Math.sin((iy + count*0.5) * 0.5);
             var sin_iz_2 = Math.sin((iz + count*0.5) * 0.4);
-            var sin_ix_1 = Math.sin((ix + count * 10) * 0.1);
-            var sin_iy_1 = Math.sin((iy + count * 10) * 0.3);
-            var sin_iz_1 = Math.sin((iz + count * 10) * 0.7);
+            var sin_i = Math.sin((i + count * 10) * 0.5)*3;
             var dis = Math.sqrt(
               Math.pow(x - particle.position.x, 2) +
                 Math.pow(z - particle.position.z, 2) +
@@ -858,17 +839,17 @@ function meteorite_move(meteorite1){
             var xyz =
               ((sin_ix_2 + sin_iy_2 + sin_iz_2) * Math.max(dis, 1200)) / 20000;
 
-            if(i%8>=4)particle.position.y += xyz*(i%17+1)/11;
-            else particle.position.y -= xyz*(i%17+1)/11;
+            if(i%8>=4)particle.position.y += xyz*(i%17)/11;
+            else particle.position.y -= xyz*(i%17)/11;
 
-            if(i%4>=2)particle.position.x += xyz*(i%13+1)/9;
-            else particle.position.x -= xyz*(i%13+1)/9;
+            if(i%4>=2)particle.position.x += xyz*(i%13)/9;
+            else particle.position.x -= xyz*(i%13)/9;
 
-            if(i%2==0)particle.position.z += xyz*(i%11+1)/7;
-            else particle.position.z += xyz*(i%11+1)/7;
+            if(i%2==0)particle.position.z += xyz*(i%11)/7;
+            else particle.position.z += xyz*(i%11)/7;
 
             particle.scale.x = particle.scale.y = Math.max(
-              sin_ix_1 + sin_iy_1 + sin_iz_1 + 3,
+              sin_i + 3,
               1.25
             );
           }
