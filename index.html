@@ -657,12 +657,11 @@ function generate_meteoritegroup(size){
 
 }
 
-function meteorite_move(meteorite1,count){
+function meteorite_move(meteorite1){
       if(meteorite1[0].position.x*meteorite1[0].position.x+meteorite1[0].position.y*meteorite1[0].position.y+meteorite1[0].position.z*meteorite1[0].position.z>20000*20000){
         scene.remove(meteorite1[0]);
       return true;
     }
-      if(count){return false;}
       meteorite1[0].position.x+=meteorite1[1].x*40;
       meteorite1[0].position.y+=meteorite1[1].y*40;
       meteorite1[0].position.z+=meteorite1[1].z*40;
@@ -690,7 +689,7 @@ function meteorite_move(meteorite1,count){
         document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
       }
       for(var met in meteorites){
-        if(meteorite_move(meteorites[met],countstep))meteorites.splice(met,1);
+        if(meteorite_move(meteorites[met]))meteorites.splice(met,1);
         document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
       }
 
@@ -807,8 +806,9 @@ function meteorite_move(meteorite1,count){
       star9.position.z = Math.cos(position9) * 2300;
 
       //Ball Maving
+      
+      if(countstep){
       for(var i = 0;i<particles.length; i++){
-        if(countstep)continue;
         particle = particles[i];
         particle.scale.x = particle.scale.y=Math.max(Math.sin(star_s_speed[i]*count*150)*2 + 2,1.25);
         var d=star_d[i];
@@ -816,7 +816,7 @@ function meteorite_move(meteorite1,count){
         particle.position.x+=d.x*Math.cos(ds.x*count)/3;
         particle.position.y+=d.y*Math.cos(ds.y*count)/3;
         particle.position.z+=d.z*Math.cos(ds.z*count)/3;
-      }
+      }}
       count += 0.0005;
       countstep=!countstep;
 
