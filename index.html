@@ -109,7 +109,9 @@
       AMOUNTZ = 10;
     var particles,
       particle,
-      randomstar,
+      star_d,
+      star_d_speed,
+      star_s_speed,
       count = 0;
 
     const sunlight = new THREE.TextureLoader().load("img/lensflare2.png");
@@ -160,7 +162,9 @@
       );
 
       particles = new Array();
-      randomstar = new Array();
+      star_d = new Array();
+      star_d_speed = new Array();
+      star_s_speed = new Array();
       var material = new THREE.SpriteMaterial({
         map: starball,
         color: 0xffffff,
@@ -170,11 +174,13 @@
         for (var iy = 0; iy < AMOUNTY; iy++) {
           for (var iz = 0; iz < AMOUNTZ; iz++) {
             particle = particles[i] = new THREE.Sprite(material);
-            randomstar[i]=i;
+            star_d[i]=new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5);
+            star_d_speed[i]=new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5);
+            star_s_speed[i]=Math.random()-0.5;
             i++;
-            particle.position.x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2+ (Math.random() * SEPARATION) / 2;
-            particle.position.z = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2+ (Math.random() * SEPARATION) / 2;
-            particle.position.y = iz * SEPARATION - (AMOUNTZ * SEPARATION) / 2+ (Math.random() * SEPARATION) / 2;
+            particle.position.x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2+ (Math.random() * SEPARATION);
+            particle.position.z = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2+ (Math.random() * SEPARATION);
+            particle.position.y = iz * SEPARATION - (AMOUNTZ * SEPARATION) / 2+ (Math.random() * SEPARATION);
             scene.add(particle);
           }
         }
@@ -556,16 +562,6 @@
       cameraDirection.normalize();
     }
 
-    function shuffleArray(array) {
-      for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-      }
-    }
-
-    shuffleArray(randomstar);
     var angle = 0;
     document.getElementById("plantspeed").innerHTML=Math.floor(rotatespeed*2);
     
@@ -806,45 +802,16 @@ function meteorite_move(meteorite1){
       star9.position.z = Math.cos(position9) * 2300;
 
       //Ball Maving
-      var i = 0;
-      for (var ix = 0; ix < AMOUNTX; ix++) {
-        for (var iy = 0; iy < AMOUNTY; iy++) {
-          for (var iz = 0; iz < AMOUNTZ; iz++) {
-            var x = 0;
-            var z = 0;
-            var y = 0;
-            particle = particles[randomstar[i]];
-            i++;
-            var sin_ix_2 = Math.sin((ix + count*0.5) * 0.3);
-            var sin_iy_2 = Math.sin((iy + count*0.5) * 0.5);
-            var sin_iz_2 = Math.sin((iz + count*0.5) * 0.4);
-            var sin_i = Math.sin((i + count * 10) * 0.5)*3;
-            var dis = Math.sqrt(
-                Math.pow(x - particle.position.x, 2) +
-                Math.pow(z - particle.position.z, 2) +
-                Math.pow(y - particle.position.y, 2)
-            );
-
-            var xyz =
-              ((sin_ix_2 + sin_iy_2 + sin_iz_2) * Math.max(dis, 1200)) / 20000;
-
-            if(i%8>=4)particle.position.y += xyz*(i%17)/11;
-            else particle.position.y -= xyz*(i%17)/11;
-
-            if(i%4>=2)particle.position.x += xyz*(i%13)/9;
-            else particle.position.x -= xyz*(i%13)/9;
-
-            if(i%2==0)particle.position.z += xyz*(i%11)/7;
-            else particle.position.z += xyz*(i%11)/7;
-
-            particle.scale.x = particle.scale.y = Math.max(
-              sin_i + 3,
-              1.25
-            );
-          }
-        }
+      for(var i = 0;i<particles.length; i++){
+        particle = particles[i];
+        var d=star_d[i];
+        var ds=star_d_speed[i];
+        particle.position.x+=d.x*Math.cos(ds.x*count)/8;
+        particle.position.y+=d.y*Math.cos(ds.y*count)/8;
+        particle.position.z+=d.z*Math.cos(ds.z*count)/8;
+        particle.scale.x = particle.scale.y=Math.max(Math.sin(star_s_speed[i]*count*150)*2 + 2,1.25);
       }
-      count += 0.005;
+      count += 0.0005;
 
       operation_method_1();
       bounder_detect();
