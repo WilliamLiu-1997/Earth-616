@@ -19,13 +19,6 @@
     user-select: none;
   }
 
-  #content:hover {
-    box-shadow: 20px 20px 50px 15px rgba(0,0,0,0.6);
-  }
-  
-  #content::after{
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s ease-in-out;
-  }
   h1 {
     font-size: 50px;
     margin-bottom: 3%;
@@ -49,11 +42,16 @@
     width: 60%;
     right:20%;
     top:10%;
+    transition: font-size 0.3s, color 0.3s, transform 0.3s;
+    -webkit-transition: font-size 0.3s, color 0.3s, -webkit-transform 0.3s;
   }
 
   .btn:hover {
-    font-size: 33px;
+    font-size: 35px;
     color: #aaaaaa;
   }
 
-  
+  .btn:active{
+    font-size: 33px;
+    color: #888888;
+  }

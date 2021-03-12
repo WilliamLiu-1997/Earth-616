@@ -27,7 +27,7 @@
         text-align:center;
         width: 90%;
         height: 100%;
-        margin-left: 10%;
+        padding-left: 10%;
         background-color: rgba(0, 0, 0, 0.5);
       }
 
@@ -40,6 +40,7 @@
         margin-top:2%;
         font-size: 20px;
         text-align: center;
+        color: #ffffffcc;
         background-color: rgba(0, 0, 0, 0);
       }
     </style>
@@ -49,7 +50,7 @@
   <body>
     <div id="container"></div>
     <div id="secondBlocker" style="display: none">
-      Press W A S D to move. Press Shift to speed up. Use Mouse to look around.
+      Press W A S D to move, Shift to speed up. Use Mouse to look around.
       Press ESC to disable mouse direction.</br>Press P/O to speed up/down the plants rotation and moving. Current speed:<span id="plantspeed"></span>%
     </br>
     Smash the Space, and then a meteorite will show up! Meteorites:<span id="meteorite"></span>/10
@@ -72,6 +73,7 @@
   </body>
 
   <script src="./three.js/build/three.js"></script>
+  <script src="./JS/jquery.js"></script>
 
   <script type="module">
     import {
@@ -906,13 +908,9 @@ function meteorite_move(meteorite1){
   </script>
   <script>
     function hideMe() {
-      document.getElementById("content").style.display = "none";
-      document.getElementById("blocker").style.display = "none";
-      document.getElementById("secondBlocker").style.display = "block";
-    }
-
-    function hideSec() {
-      document.getElementById("secondBlocker").style.display = "none";
+      $("#content").fadeOut(1500);
+      $("#blocker").fadeOut(1500);
+      $("#secondBlocker").delay(1200).fadeIn(1000);
     }
   </script>
 </html>
