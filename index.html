@@ -48,12 +48,12 @@
   </head>
 
   <body>
-    <div id="container"></div>
+    <div id="container"></div><div id="esc"></div>
     <div id="secondBlocker" style="display: none">
       Press W A S D to move, Shift to speed up. Use Mouse to look around.
-      Press ESC to disable mouse direction.</br>Press P/O to speed up/down the plants rotation and moving. Current speed:<span id="plantspeed"></span>%
+      Press ESC to disable mouse direction.</br>Press P/O to speed up/down the plants rotation and moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span>%
     </br>
-    Smash the Space, and then a meteorite will show up! Meteorites:<span id="meteorite"></span>/10
+    Smash the Space, and then a meteorite will show up!&nbsp;&nbsp;&nbsp;Meteorites: <span id="meteorite"></span>
     </div>
     <div id="blocker">
       <div id="content">
@@ -158,7 +158,7 @@
       camera = new THREE.PerspectiveCamera(
         45, // fov 45 degree
         window.innerWidth / window.innerHeight, //aspect (width/height ratio)
-        0.1, //near
+        0.5, //near
         10000 // far
       );
 
@@ -445,7 +445,7 @@
     function operation_method_1() {
       if (
         display != "none" &&
-        document.getElementById("content").style.display == "none"
+        document.getElementById("esc").style.display == "none"
       ) {
         esc = false;
         display = document.getElementById("content").style.display;
@@ -572,7 +572,7 @@
     var angle = 0;
     document.getElementById("plantspeed").innerHTML=Math.floor(rotatespeed*2);
     
-    document.getElementById("meteorite").innerHTML=meteorites.length;
+    document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
 
 
 
@@ -715,11 +715,11 @@ function meteorite_move(meteorite1){
         meteorites.push(meteorite1);
         scene.add(meteorite1[0]);
         addmet=false;
-        document.getElementById("meteorite").innerHTML=meteorites.length;
+        document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
       }
       for(var met in meteorites){
         if(meteorite_move(meteorites[met]))meteorites.splice(met,1);
-        document.getElementById("meteorite").innerHTML=meteorites.length;
+        document.getElementById("meteorite").innerHTML=meteorites.length+"/10";
       }
 
       angle += 0.0005;
@@ -908,6 +908,7 @@ function meteorite_move(meteorite1){
   </script>
   <script>
     function hideMe() {
+      document.getElementById("esc").style.display = "none";
       $("#content").fadeOut(1500);
       $("#blocker").fadeOut(1500);
       $("#secondBlocker").delay(1200).fadeIn(1000);
