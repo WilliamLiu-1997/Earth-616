@@ -643,20 +643,21 @@
       for (i = 0; i < num; i++) {
         if (i == 0) {
           var meteorite = new THREE.Sprite(material);
-          if (size > osize * 0.7) meteorite.scale.set(size * 0.4, size * 0.4, 1);
-          else if (size > osize * 0.4) meteorite.scale.set(size * 0.3, size * 0.3, 1);
-          else meteorite.scale.set(size * 0.25, size * 0.25, 1)
+          if (size > osize * 0.8) meteorite.scale.set(size * 0.7, size * 0.7, 1);
+          else if (size > osize * 0.6) meteorite.scale.set(size * 0.55, size * 0.55, 1);
+          else if (size > osize * 0.3) meteorite.scale.set(size * 0.4, size * 0.4, 1);
+          else meteorite.scale.set(size * 0.3, size * 0.3, 1)
           meteorite.position.set(x, y, z);
         }
         else if (i % 2 == 0) {
           var meteorite = new THREE.Sprite(material1r);
-          var ran = Math.random() / 2;
+          var ran = Math.random();
           meteorite.scale.set(size, size, 1)
           meteorite.position.set(x - size * v1.x * ran, y - size * v1.y * ran, z - size * v1.z * ran);
         }
         else {
           var meteorite = new THREE.Sprite(material1);
-          var ran = Math.random() / 2;
+          var ran = Math.random();
           meteorite.scale.set(size, size, 1)
           meteorite.position.set(x - size * v1.x * ran, y - size * v1.y * ran, z - size * v1.z * ran);
         }
