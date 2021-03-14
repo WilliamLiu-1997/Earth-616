@@ -74,6 +74,7 @@
 
 <script src="./three.js/build/three.js"></script>
 <script src="./JS/jquery.js"></script>
+<script src="./JS/stats.min.js"></script>
 
 <script type="module">
   import {
@@ -85,6 +86,9 @@
   var camera;
   var renderer;
   var rotatespeed = 5;
+  var stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
 
   var moveForward = false;
   var moveBackward = false;
@@ -149,9 +153,25 @@
   var meteoritetailr = new THREE.TextureLoader().load("img/start00.png");
 
 
+  var material = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: meteoriteball,
+      color: 0xffffff,
+    }));
+    var materialr = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: meteoriteballr,
+      color: 0xffffff,
+    }));
+    var material1 = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: meteoritetail,
+      color: 0xffffff,
+    }));
 
+    var material1r = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: meteoritetailr,
+      color: 0xffffff,
+    }));
 
-
+    var meteorite_group=new THREE.Object3D();
 
 
   function init() {
@@ -183,8 +203,8 @@
           star_s_speed[i] = Math.random() - 0.5;
           i++;
           particle.position.x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2 + (Math.random() * SEPARATION);
-          particle.position.z = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2 + (Math.random() * SEPARATION);
-          particle.position.y = iz * SEPARATION - (AMOUNTZ * SEPARATION) / 2 + (Math.random() * SEPARATION);
+          particle.position.y = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2 + (Math.random() * SEPARATION);
+          particle.position.z = iz * SEPARATION - (AMOUNTZ * SEPARATION) / 2 + (Math.random() * SEPARATION);
           scene.add(particle);
         }
       }
@@ -563,25 +583,8 @@
   function generate_meteoritegroup(size) {
     size = size * (Math.random() * 0.6 + 0.7)
     var osize = size;
-    var material = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: meteoriteball,
-      color: 0xffffff,
-    }));
-    var materialr = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: meteoriteballr,
-      color: 0xffffff,
-    }));
-    var material1 = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: meteoritetail,
-      color: 0xffffff,
-    }));
 
-    var material1r = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: meteoritetailr,
-      color: 0xffffff,
-    }));
-
-    var meteoritegroup = new THREE.Object3D();
+    var meteoritegroup = meteorite_group.clone();
 
     var ran = Math.random() * 3;
     var x, y, z;
@@ -672,6 +675,8 @@
 
 
   function animate() {
+    stats.begin();
+
     if (addmet) {
       var meteorite1 = generate_meteoritegroup(60);
       meteorites.push(meteorite1);
@@ -805,7 +810,7 @@
     if (countstep) {
       for (var i = 0; i < particles.length; i++) {
         particle = particles[i];
-        particle.scale.x = particle.scale.y = Math.max(Math.sin(star_s_speed[i] * count * 150) * 2 + 2, 2);
+        particle.scale.x = particle.scale.y = Math.sin(star_s_speed[i] * count * 150) * 2 + 3;
         var d = star_d[i];
         var ds = star_d_speed[i];
         particle.position.x += d.x * Math.cos(ds.x * count) / 3;
@@ -826,6 +831,9 @@
     );
     camera.updateProjectionMatrix();
     renderer.render(scene, camera);
+
+    
+stats.end();
     requestAnimationFrame(animate);
   }
 
