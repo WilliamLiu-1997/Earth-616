@@ -80,7 +80,7 @@
     LensflareElement,
   } from "./three.js/examples/jsm/objects/Lensflare.js";
   
-  var FPS = 120;
+  var FPS = 144;
   var singleFrameTime = (1 / FPS);
   var timeStamp = 0;
 
@@ -165,11 +165,11 @@
   var sunmaterial2 = new THREE.SpriteMaterial({ map: textureFlare0a, transparent: true, opacity: 0.1 });
   var sunbackground2 = new THREE.Sprite(sunmaterial2);
   sunbackground2.position.set(0, 0, 0);
-  sunbackground2.scale.set(1000 * 0.6, 1000 * 0.6, 1);
+  sunbackground2.scale.set(600 * 0.6, 600 * 0.6, 0.1);
   var sunmaterial3 = new THREE.SpriteMaterial({ map: textureFlare0b, transparent: true, opacity: 0.1 });
   var sunbackground3 = new THREE.Sprite(sunmaterial3);
   sunbackground3.position.set(0, 0, 0);
-  sunbackground3.scale.set(1000 * 0.6, 1000 * 0.6, 1);
+  sunbackground3.scale.set(900 * 0.6, 900 * 0.6, 0.1);
 
 
   var material = new THREE.Sprite(new THREE.SpriteMaterial({
@@ -624,7 +624,7 @@
     }
 
     var v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.922 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.923) {
+    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.927 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.928) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
 
