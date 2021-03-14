@@ -624,7 +624,7 @@
     }
 
     var v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.92 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.921) {
+    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.922 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.923) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
 
