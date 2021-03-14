@@ -103,10 +103,10 @@
   var cameraPosition = vec.clone().set(0, 75, 750);
   var cameraDirection = vec.clone().set(0, 0, 0);
 
-  var SEPARATION = 150,
+  var SEPARATION = 100,
     AMOUNTX = 120,
     AMOUNTY = 80,
-    AMOUNTZ = 2;
+    AMOUNTZ = 1;
   var particles,
     particle,
     star_d,
@@ -821,7 +821,7 @@
     if (countstep) {
       for (var i = 0; i < particles.length; i++) {
         particle = particles[i];
-        particle.scale.x = particle.scale.y = Math.sin(star_s_speed[i] * count * 150) + 3;
+        particle.scale.x = particle.scale.y = 4;
         var d = star_d[i];
         var ds = star_d_speed[i];
         particle.position.x += d.x * Math.cos(ds.x * count) / 6;
