@@ -48,11 +48,7 @@
 <body>
   <div id="container"></div>
   <div id="esc"></div>
-  <div id="secondBlocker" style="display: none">
-    Press W A S D to move, Shift to speed up. Use Mouse to look around.
-    Press ESC to disable mouse direction.</br>Press P/O to speed up/down the plants rotation and
-    moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span>%</span>
-  </div>
+
   <div id="blocker">
     <div id="content">
       <h1>Explore the Galaxy</h1>
@@ -86,7 +82,7 @@
   var rotatespeed = 5;
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.body.appendChild(stats.dom);
+  //document.body.appendChild(stats.dom);
 
   var moveForward = false;
   var moveBackward = false;
@@ -97,6 +93,7 @@
   var esc = true;
   var speedup = false;
   var speeddown = false;
+  var addmet = false;
   var meteorites = [];
   var countstep = true;
 
@@ -107,9 +104,9 @@
   var cameraDirection = vec.clone().set(0, 0, 0);
 
   var SEPARATION = 150,
-    AMOUNTX = 12,
-    AMOUNTY = 4,
-    AMOUNTZ = 12;
+    AMOUNTX = 120,
+    AMOUNTY = 80,
+    AMOUNTZ = 2;
   var particles,
     particle,
     star_d,
@@ -188,22 +185,29 @@
   var meteorite_group = new THREE.Object3D();
 
   function init() {
+
+    let sides = ['./img/bg.jpg','./img/bg.jpg','./img/bg.jpg','./img/bg.jpg','./img/bg.jpg','./img/bg.jpg'];
     
     scene = new THREE.Scene();
-    var skyGeometry = new THREE.BoxGeometry( 10000, 5000, 10000 );
-    var materialArray = [];
-    for (var i = 0; i < 6; i++){
-    var map= new THREE.TextureLoader().load('img/bg2.png');
-    map.wrapS = THREE.RepeatWrapping;
-    map.wrapT = THREE.RepeatWrapping;
-    map.repeat.set(6,6);
-        materialArray.push( new THREE.MeshBasicMaterial({
-            map: map,
-            side: THREE.BackSide
-        }));}
-    var skyBox = new THREE.Mesh( skyGeometry, materialArray );
-    scene.add( skyBox );
-    
+    var skyGeometry = new THREE.BoxGeometry( 10000, 10000, 10000 );
+        //设置盒子材质
+        var materialArray = [];
+        for (var i = 0; i < 6; i++){
+        var map= new THREE.TextureLoader().load('img/bg.jpg');
+        map.wrapS = THREE.RepeatWrapping;
+        map.wrapT = THREE.RepeatWrapping;
+        map.repeat.set(10,10);
+            materialArray.push( new THREE.MeshBasicMaterial({
+                map: map,
+                side: THREE.BackSide/*镜像翻转，如果设置镜像翻转，那么只会看到黑漆漆的一片，因为你身处在盒子的内部，所以一定要设置镜像翻转。*/
+            }));}
+        var skyBox = new THREE.Mesh( skyGeometry, materialArray );//创建一个完整的天空盒，填入几何模型和材质的参数
+        //scene.add( skyBox );//在场景中加入天空盒
+    //scene.add(skyBox);
+    //scene.background = new THREE.CubeTextureLoader().load(urls);
+    //scene.add( makeSkybox( ['./img/bg.jpg','./img/bg.jpg','./img/bg.jpg','./img/bg.jpg','./img/bg.jpg','./img/bg.jpg'], 5000));
+    //var background = new THREE.TextureLoader().load('./img/bg.jpg');
+    scene.background = new THREE.Color(0xa000000);
     camera = new THREE.PerspectiveCamera(
       45, // fov 45 degree
       window.innerWidth / window.innerHeight, //aspect (width/height ratio)
@@ -282,6 +286,9 @@
           speeddown = true;
           break;
 
+        case 32:
+          if (meteorites.length < 10) addmet = true;
+          break;
       }
     };
 
@@ -328,28 +335,28 @@
 
     scene.add(new THREE.AmbientLight(0x181818));
 
-    const light = new THREE.PointLight(0xffdd88, 2, 1500);
+    const light = new THREE.PointLight(0xffdd88, 2, 2500);
 
     scene.add(light);
 
-    scene.add(sunbackground);
-    scene.add(sunbackground1);
-    scene.add(sunbackground2);
-    scene.add(sunbackground3);
-    scene.add(sun);
-    scene.add(star1);
-    scene.add(star2);
-    scene.add(star3);
-    scene.add(starlite3);
-    scene.add(star4);
-    scene.add(ring4);
-    scene.add(star5);
-    scene.add(star6);
-    scene.add(starlite6);
-    scene.add(star7);
-    scene.add(star8);
-    scene.add(ring8);
-    scene.add(star9);
+    //scene.add(sunbackground);
+    //scene.add(sunbackground1);
+    //scene.add(sunbackground2);
+    //scene.add(sunbackground3);
+    // scene.add(sun);
+    // scene.add(star1);
+    // scene.add(star2);
+    // scene.add(star3);
+    // scene.add(starlite3);
+    // scene.add(star4);
+    // scene.add(ring4);
+    // scene.add(star5);
+    // scene.add(star6);
+    // scene.add(starlite6);
+    // scene.add(star7);
+    // scene.add(star8);
+    // scene.add(ring8);
+    // scene.add(star9);
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -584,7 +591,9 @@
   }
 
   var angle = 0;
-  document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
+  //document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
+
+  //document.getElementById("meteorite").innerHTML = meteorites.length + "/10";
 
 
 
@@ -684,20 +693,23 @@
       var meteorite1 = generate_meteoritegroup(15);
       meteorites.push(meteorite1);
       scene.add(meteorite1[0]);
+      addmet = false;
+      //document.getElementById("meteorite").innerHTML = meteorites.length + "/10";
     }
     for (var met in meteorites) {
       if (meteorite_move(meteorites[met])) meteorites.splice(met, 1);
+      //document.getElementById("meteorite").innerHTML = meteorites.length + "/10";
     }
 
     var rotate = angle * Math.PI * rotatespeed;
     if (speedup) {
       rotatespeed = Math.min(rotatespeed * 1.0101010101, 50);
-      document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
+      //document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
       if (rotatespeed < 50) angle *= 0.99
     }
     if (speeddown) {
       rotatespeed = Math.max(rotatespeed * 0.99, 0.5);
-      document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
+      //document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
       if (rotatespeed > 0.5) angle *= 1.0101010101
     }
 
@@ -729,7 +741,7 @@
     star3.position.z = Math.cos(position3) * 250*0.6;
     var position3 = 10 * rotate / 5;
     starlite3.rotateOnWorldAxis(
-      vec.clone().set(0.1, 1, 0).normalize(),
+      vec.clone().set(-1, 1, 1.5).normalize(),
       (0.4 / Math.PI) * rotatespeed / 5
     );
     starlite3.position.x = Math.sin(position3) * 13*0.6 + star3.position.x;
