@@ -110,9 +110,9 @@
   var cameraDirection = vec.clone().set(0, 0, 0);
 
   var SEPARATION = 250,
-    AMOUNTX = 30,
+    AMOUNTX = 25,
     AMOUNTY = 8,
-    AMOUNTZ = 30;
+    AMOUNTZ = 25;
   var particles,
     particle,
     star_d,
@@ -121,16 +121,15 @@
     count = 0;
 
   const sunlight = new THREE.TextureLoader().load("img/lensflare2.png");
-  var sunmaterial = new THREE.SpriteMaterial({ map: sunlight });
+  var sunmaterial = new THREE.SpriteMaterial({ map: sunlight  ,transparent: true,opacity: 0.1});
   const sunbackground = new THREE.Sprite(sunmaterial);
   sunbackground.position.set(0, 0, 0);
-  sunbackground.scale.set(450, 360, 1);
-  const sunlight1 = new THREE.TextureLoader().load("img/lensflare1.png");
-  var sunmaterial1 = new THREE.SpriteMaterial({ map: sunlight1 });
+  sunbackground.scale.set(1000, 800, 1);
+  const sunlight1 = new THREE.TextureLoader().load("img/ball.png");
+  var sunmaterial1 = new THREE.SpriteMaterial({ map: sunlight1  ,transparent: true,opacity: 0.02});
   const sunbackground1 = new THREE.Sprite(sunmaterial1);
   sunbackground1.position.set(0, 0, 0);
-  sunbackground1.scale.set(380, 280, 1);
-
+  sunbackground1.scale.set(1000, 800, 1);
   var sun = obj_lighting("./texture/j025.jpg", 100, 0, 0, 0);
   var star1 = obj("./texture/j022.jpg", 8, 200, 0, 0);
   var star2 = obj("./texture/j006.jpg", 12, 300, 0, 0);
@@ -150,7 +149,25 @@
   var meteoritetail = new THREE.TextureLoader().load("img/start0.png");
 
   var meteoriteballr = new THREE.TextureLoader().load("img/star00.png");
-  var meteoritetailr = new THREE.TextureLoader().load("img/start00.png");
+  var meteoritetailr = new THREE.TextureLoader().load("img/start00.png");    
+
+  var textureFlare0 = new THREE.TextureLoader().load(
+      "img/lensflare0.png"
+    );
+    var textureFlare0a = new THREE.TextureLoader().load(
+      "img/lensflare0a.png"
+    );
+    var textureFlare0b = new THREE.TextureLoader().load(
+      "img/lensflare0b.png"
+    );
+  var sunmaterial2 = new THREE.SpriteMaterial({ map: textureFlare0a ,transparent: true,opacity: 0.1});
+  var sunbackground2 = new THREE.Sprite(sunmaterial2);
+  sunbackground2.position.set(0, 0, 0);
+  sunbackground2.scale.set(2000, 2000, 1);  
+  var sunmaterial3 = new THREE.SpriteMaterial({ map: textureFlare0b ,transparent: true,opacity: 0.1});
+  var sunbackground3 = new THREE.Sprite(sunmaterial3);
+  sunbackground3.position.set(0, 0, 0);
+  sunbackground3.scale.set(2000, 2000, 1);
 
 
   var material = new THREE.Sprite(new THREE.SpriteMaterial({
@@ -306,23 +323,12 @@
 
     const light = new THREE.PointLight(0xffdd88, 2.5, 5000);
 
-    const textureFlare0 = new THREE.TextureLoader().load(
-      "img/lensflare0.png"
-    );
-    const textureFlare0a = new THREE.TextureLoader().load(
-      "img/lensflare0a.png"
-    );
-
-    const lensflare = new Lensflare();
-
-    lensflare.addElement(new LensflareElement(textureFlare0a, 4500, 0));
-    lensflare.addElement(new LensflareElement(textureFlare0, 1500, 0));
-
-    light.add(lensflare);
     scene.add(light);
 
     scene.add(sunbackground);
     scene.add(sunbackground1);
+    scene.add(sunbackground2);
+    scene.add(sunbackground3);
     scene.add(sun);
     scene.add(star1);
     scene.add(star2);
@@ -672,8 +678,6 @@
 
     
     var delta = clock.getDelta();
-    timeS = timeS +delta;
-    if (timeS > renderT) {
 
     stats.update()
     if (addmet) {
@@ -703,7 +707,6 @@
     angle += 0.0005;
 
     sun.rotation.y -= (0.005 / Math.PI) * rotatespeed / 5;
-
     var position1 = 2 * rotate / 5;
     star1.rotateOnWorldAxis(
       vec.clone().set(-1, 1, 0).normalize(),
@@ -831,8 +834,7 @@
     camera.updateProjectionMatrix();
     renderer.render(scene, camera);
 
-    timeS = 0;
-  }
+
     requestAnimationFrame(animate);
   }
 
