@@ -90,7 +90,7 @@
   var scene;
   var camera;
   var renderer;
-  var rotatespeed = 5;
+  var rotatespeed = 50;
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild(stats.dom);
@@ -350,6 +350,26 @@
     scene.add(sunbackground1);
     scene.add(sunbackground2);
     scene.add(sunbackground3);
+
+    scene.add(sun);
+    scene.add(star1);
+    scene.add(star2);
+    scene.add(star3);
+    scene.add(starlite3);
+    scene.add(star4);
+    scene.add(ring4);
+    scene.add(star5);
+    scene.add(star6);
+    scene.add(starlite6);
+    scene.add(star7);
+    scene.add(star8);
+    scene.add(ring8);
+    scene.add(star9);
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById("container").appendChild(renderer.domElement);
+    document.body.appendChild(renderer.domElement);
     const mtlLoader = new MTLLoader();
   mtlLoader.load('UFO2/UFO2.mtl', (mtl) => {
     mtl.preload();
@@ -376,29 +396,13 @@ white_light.scale.set(0.06,0.05);
       ufo.position.y-=0.12;
       scene.add(ufo);
     });
+
+animate();
   });
   ufo.position.set(0,75, 750);
-    scene.add(sun);
-    scene.add(star1);
-    scene.add(star2);
-    scene.add(star3);
-    scene.add(starlite3);
-    scene.add(star4);
-    scene.add(ring4);
-    scene.add(star5);
-    scene.add(star6);
-    scene.add(starlite6);
-    scene.add(star7);
-    scene.add(star8);
-    scene.add(ring8);
-    scene.add(star9);
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    document.getElementById("container").appendChild(renderer.domElement);
-    document.body.appendChild(renderer.domElement);
   }
   init();
+  
 
   function obj_lighting(url, size, x, y, z) {
     var startTexture = THREE.ImageUtils.loadTexture(url);
@@ -491,7 +495,7 @@ white_light.scale.set(0.06,0.05);
     }
   }
 
-  var maxSpeed = 0.5;
+  var maxSpeed = 0.6;
   var acc = 0.5;
   var currentSpeedForward = 0;
   var currentSpeedRight = 0;
@@ -507,14 +511,13 @@ white_light.scale.set(0.06,0.05);
     cameraPosition.x = Math.max(-900, Math.min(900, cameraPosition.x));
     cameraPosition.z = Math.max(-900, Math.min(900, cameraPosition.z));
     cameraPosition.y = Math.max(-300, Math.min(300, cameraPosition.y));
-    if(crash_detect(ufo,sun)&&crash_detect(ufo,star1)&&crash_detect(ufo,star2)&&crash_detect(ufo,star3)&&crash_detect(ufo,star4)&&crash_detect(ufo,star5)&&crash_detect(ufo,star6)&&crash_detect(ufo,star7)&&crash_detect(ufo,star8)&&crash_detect(ufo,star9)&&crash_detect(ufo,starlite3)&&crash_detect(ufo,starlite6))return false;
-    else return true;
+    //if(crash_detect(ufo,sun)&&crash_detect(ufo,star1)&&crash_detect(ufo,star2)&&crash_detect(ufo,star3)&&crash_detect(ufo,star4)&&crash_detect(ufo,star5)&&crash_detect(ufo,star6)&&crash_detect(ufo,star7)&&crash_detect(ufo,star8)&&crash_detect(ufo,star9)&&crash_detect(ufo,starlite3)&&crash_detect(ufo,starlite6))return false;
+    //else return true;
   }
   function crash_detect(a,b){
     var x=a.position.x-b.position.x;
     var y=a.position.y-b.position.y;
     var z=a.position.z-b.position.z;
-    console.log(b.size);
     if(b.size*b.size>x*x+y*y+z*z)return false;
     else return true;
   }
@@ -528,7 +531,7 @@ white_light.scale.set(0.06,0.05);
       esc = false;
       display = document.getElementById("content").style.display;
     }
-    if (fast) maxSpeed = 1;
+    if (fast) maxSpeed = 1.2;
     else maxSpeed = Math.max(maxSpeed-0.05,0.6);
 
     if ((moveForward ||moveBackward||moveRight ||moveLeft)&&!fast){
@@ -914,8 +917,6 @@ var z1=z;
       timeStamp = (timeStamp % singleFrameTime);
     }
   }
-
-  animate();
   var MyResize = function () {
     //get the new sizes
     var width = window.innerWidth;
