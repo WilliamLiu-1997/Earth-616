@@ -507,6 +507,16 @@ white_light.scale.set(0.06,0.05);
     cameraPosition.x = Math.max(-900, Math.min(900, cameraPosition.x));
     cameraPosition.z = Math.max(-900, Math.min(900, cameraPosition.z));
     cameraPosition.y = Math.max(-300, Math.min(300, cameraPosition.y));
+    if(crash_detect(ufo,sun)&&crash_detect(ufo,star1)&&crash_detect(ufo,star2)&&crash_detect(ufo,star3)&&crash_detect(ufo,star4)&&crash_detect(ufo,star5)&&crash_detect(ufo,star6)&&crash_detect(ufo,star7)&&crash_detect(ufo,star8)&&crash_detect(ufo,star9)&&crash_detect(ufo,starlite3)&&crash_detect(ufo,starlite6))return false;
+    else return true;
+  }
+  function crash_detect(a,b){
+    var x=a.position.x-b.position.x;
+    var y=a.position.y-b.position.y;
+    var z=a.position.z-b.position.z;
+    console.log(b.size);
+    if(b.size*b.size>x*x+y*y+z*z)return false;
+    else return true;
   }
 
   var speed=1;
@@ -629,15 +639,15 @@ white_light.scale.set(0.06,0.05);
       }
     }
 
-    angleX += left / 8.5 / Math.PI - right / 8.5 / Math.PI;
+    angleX += left / 15 / Math.PI - right / 15 / Math.PI;
     cameraDirection.x -= Math.sin(angleX);
     cameraDirection.z -= Math.cos(angleX);
 
     if (cameraDirection.y < 0.15) {
-      angleY += up / 20 / Math.PI;
+      angleY += up / 75 / Math.PI;
     }
     if (cameraDirection.y > -0.15) {
-      angleY -= down / 20 / Math.PI;
+      angleY -= down / 50 / Math.PI;
     }
     cameraDirection.y += Math.sin(angleY) * 2;
     cameraDirection.setLength(0.48);
@@ -679,7 +689,7 @@ white_light.scale.set(0.06,0.05);
     }
 
     var v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.93 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.931) {
+    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.932 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.933) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
 var x1=x;
@@ -884,7 +894,8 @@ var z1=z;
       count += 0.0005;
 
       var ufo_rotate_speed=operation_method_1(delta);
-      bounder_detect();
+      var is_crashed=bounder_detect();
+      console.log(is_crashed);
       camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y+0.12, cameraPosition.z - cameraDirection.z);
       
       camera.lookAt(cameraPosition.x,cameraPosition.y+0.12,cameraPosition.z);
