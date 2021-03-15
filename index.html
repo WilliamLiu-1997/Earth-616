@@ -51,7 +51,7 @@
   <div id="secondBlocker" style="display: none">
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
     Press ESC to disable mouse direction.</br>Press P/O to speed up/down the plants rotation and
-    moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span>%</span>
+    moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span>
   </div>
   <div id="blocker">
     <div id="content">
@@ -90,7 +90,7 @@
   var scene;
   var camera;
   var renderer;
-  var rotatespeed = 10;
+  var rotatespeed = 15;
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild(stats.dom);
@@ -343,7 +343,7 @@
     document.addEventListener("keydown", onKeyDown, false);
     document.addEventListener("keyup", onKeyUp, false);
 
-    scene.add(new THREE.AmbientLight(0x222222));
+    scene.add(new THREE.AmbientLight(0x181818));
 
     const light = new THREE.PointLight(0xffdd88, 2, 1500);
     scene.add(light);
@@ -414,7 +414,7 @@
         emissiveMap: startTexture,
       })
     );
-    star_radius.push(size);
+    star_radius.push(size*1.1);
     starBall.position.set(x, y, z);
     return starBall;
   }
@@ -498,7 +498,7 @@
     }
   }
 
-  var maxSpeed = 0.6;
+  var maxSpeed = 0.5;
   var acc = 0.5;
   var currentSpeedForward = 0;
   var currentSpeedRight = 0;
@@ -522,7 +522,7 @@
     var y = a.position.y - b.position.y;
     var z = a.position.z - b.position.z;
     var sr = star_radius[i];
-    if(hit_frame>100)return true;
+    if(hit_frame>200)return true;
     if (sr * sr + 1 > x * x + y * y + z * z) {
       hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
       return false;
@@ -541,8 +541,8 @@
       esc = false;
       display = document.getElementById("content").style.display;
     }
-    if (fast) maxSpeed = 1.2;
-    else maxSpeed = Math.max(maxSpeed - 0.05, 0.6);
+    if (fast) maxSpeed = 0.8;
+    else maxSpeed = Math.max(maxSpeed - 0.05, 0.5);
 
     if ((moveForward || moveBackward || moveRight || moveLeft) && !fast) {
       ufo.children[1].scale.set((0.12 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.06 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
@@ -668,7 +668,10 @@
   }
 
   var angle = 0;
-  document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
+  var showspeed="["
+  for(var i = 0;i<Math.floor(rotatespeed/3);i++){showspeed+="#";}
+  while(showspeed.length<11)showspeed+="_"
+  document.getElementById("plantspeed").innerHTML = showspeed+"]";
 
 
 
@@ -779,14 +782,20 @@
 
       var rotate = angle * Math.PI * rotatespeed;
       if (speedup) {
-        rotatespeed = Math.min(rotatespeed * 1.0101010101, 50);
-        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
-        if (rotatespeed < 50) angle *= 0.99
+        rotatespeed = Math.min(rotatespeed * 1.005025, 30);
+  var showspeed="["
+  for(var i = 0;i<Math.floor(rotatespeed/3);i++){showspeed+="#";}
+  while(showspeed.length<11)showspeed+="_"
+  document.getElementById("plantspeed").innerHTML = showspeed+"]";
+        if (rotatespeed < 30) angle *= 0.995;
       }
       if (speeddown) {
-        rotatespeed = Math.max(rotatespeed * 0.99, 0.5);
-        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
-        if (rotatespeed > 0.5) angle *= 1.0101010101
+        rotatespeed = Math.max(rotatespeed * 0.995, 3);
+  var showspeed="["
+  for(var i = 0;i<Math.floor(rotatespeed/3);i++){showspeed+="#";}
+  while(showspeed.length<11)showspeed+="_"
+  document.getElementById("plantspeed").innerHTML = showspeed+"]";
+        if (rotatespeed > 3) angle *= 1.00502;
       }
 
       angle += 0.0005;
@@ -908,15 +917,15 @@
 
       var ufo_rotate_speed = 1;
       if (bounder_detect()) {
-        hit_frame = 500;
+        hit_frame = 300;
       };
       if (hit_frame > 0) {
         moveForward = moveLeft = moveRight = moveBackward = false;
         currentSpeedForward = 0;
         currentSpeedRight = 0;
-        cameraPosition.x += hit_direction.x * hit_frame * rotatespeed * 0.0001;
-        cameraPosition.y += hit_direction.y * hit_frame * rotatespeed * 0.0001;
-        cameraPosition.z += hit_direction.z * hit_frame * rotatespeed * 0.0001;
+        cameraPosition.x += hit_direction.x * hit_frame * rotatespeed /100000;
+        cameraPosition.y += hit_direction.y * hit_frame * rotatespeed /100000;
+        cameraPosition.z += hit_direction.z * hit_frame * rotatespeed /100000;
 
         
       ufo.children[1].scale.set(0,0);
