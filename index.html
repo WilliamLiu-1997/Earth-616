@@ -79,9 +79,9 @@
     Lensflare,
     LensflareElement,
   } from "./three.js/examples/jsm/objects/Lensflare.js";
-  import {OBJLoader} from './three.js/examples/jsm/loaders/OBJLoader.js';
-  import {MTLLoader} from './three.js/examples/jsm/loaders/MTLLoader.js';
-  
+  import { OBJLoader } from './three.js/examples/jsm/loaders/OBJLoader.js';
+  import { MTLLoader } from './three.js/examples/jsm/loaders/MTLLoader.js';
+
   var FPS = 120;
   var singleFrameTime = (1 / FPS);
   var timeStamp = 0;
@@ -90,10 +90,11 @@
   var scene;
   var camera;
   var renderer;
-  var rotatespeed = 50;
+  var rotatespeed = 10;
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild(stats.dom);
+  var star_radius = new Array();
 
   var moveForward = false;
   var moveBackward = false;
@@ -111,6 +112,8 @@
   var vec = new THREE.Vector3();
   var cameraPosition = vec.clone().set(0, 75, 750);
   var cameraDirection = vec.clone().set(0, 0, 0);
+  var hit_direction = vec.clone().set(0, 0, 0);
+  var hit_frame = 0;
 
   var SEPARATION = 150,
     AMOUNTX = 15,
@@ -124,10 +127,10 @@
     count = 0;
 
   const sunlight = new THREE.TextureLoader().load("img/lensflare2.png");
-  
+
   const ufolight = new THREE.TextureLoader().load("img/ufo_light.png");
-  
-  var light_for_ufo = new THREE.PointLight(0xffffee,0.7, 0.5);
+
+  var light_for_ufo = new THREE.PointLight(0xffffee, 0.7, 0.5);
 
 
   var sunmaterial = new THREE.SpriteMaterial({ map: sunlight, transparent: true, opacity: 0.1 });
@@ -198,7 +201,7 @@
   }));
 
   var meteorite_group = new THREE.Object3D();
-  var ufo=meteorite_group.clone();
+  var ufo = meteorite_group.clone();
 
   function init() {
 
@@ -209,7 +212,7 @@
       var map = new THREE.TextureLoader().load('img/bg5.png');
       map.wrapS = THREE.RepeatWrapping;
       map.wrapT = THREE.RepeatWrapping;
-      map.repeat.set(4,8);
+      map.repeat.set(4, 8);
       materialArray.push(new THREE.MeshBasicMaterial({
         map: map,
         side: THREE.BackSide
@@ -371,38 +374,36 @@
     document.getElementById("container").appendChild(renderer.domElement);
     document.body.appendChild(renderer.domElement);
     const mtlLoader = new MTLLoader();
-  mtlLoader.load('UFO2/UFO2.mtl', (mtl) => {
-    mtl.preload();
-    const objLoader = new OBJLoader();
-    objLoader.setMaterials(mtl);
-    objLoader.load('UFO2/UFO2.obj', (root) => {
-      root.position.set(0,0,0);
-      root.scale.set(0.02,0.02,0.02);
-      var ufo_light_material = new THREE.SpriteMaterial({ map: ufolight, transparent: true, opacity: 0.5 });
-      var ufo_light = new THREE.Sprite(ufo_light_material);
+    mtlLoader.load('UFO2/UFO2.mtl', (mtl) => {
+      mtl.preload();
+      const objLoader = new OBJLoader();
+      objLoader.setMaterials(mtl);
+      objLoader.load('UFO2/UFO2.obj', (root) => {
+        root.position.set(0, 0, 0);
+        root.scale.set(0.02, 0.02, 0.02);
+        var ufo_light_material = new THREE.SpriteMaterial({ map: ufolight, transparent: true, opacity: 0.5 });
+        var ufo_light = new THREE.Sprite(ufo_light_material);
 
-var ufo_top_light = new THREE.Mesh( new THREE.SphereGeometry( 0.017, 32, 32 ), new THREE.MeshBasicMaterial( {color: 0xffffee} ) );
-var white_light=littlestar.clone();
-ufo_top_light.position.set(0,0.032,0);
-white_light.position.set(0,0.035,0);
-white_light.scale.set(0.06,0.05);
-      ufo_light.position.set(0,-0.008,0);
-      ufo_light.scale.set(0.1,0.05)
-      ufo.add(root);
-      ufo.add(ufo_light);
-      ufo.add(ufo_top_light);
-      ufo.add(white_light);
-      ufo.position.z-=0.48;
-      ufo.position.y-=0.12;
-      scene.add(ufo);
+        var ufo_top_light = new THREE.Mesh(new THREE.SphereGeometry(0.017, 32, 32), new THREE.MeshBasicMaterial({ color: 0xffffee }));
+        var white_light = littlestar.clone();
+        ufo_top_light.position.set(0, 0.032, 0);
+        white_light.position.set(0, 0.035, 0);
+        white_light.scale.set(0.06, 0.05);
+        ufo_light.position.set(0, -0.008, 0);
+        ufo_light.scale.set(0.1, 0.05)
+        ufo.add(root);
+        ufo.add(ufo_light);
+        ufo.add(ufo_top_light);
+        ufo.add(white_light);
+        ufo.position.z -= 0.48;
+        ufo.position.y -= 0.12;
+        scene.add(ufo);
+      });
     });
-
-animate();
-  });
-  ufo.position.set(0,75, 750);
+    ufo.position.set(0, 75, 750);
   }
   init();
-  
+
 
   function obj_lighting(url, size, x, y, z) {
     var startTexture = THREE.ImageUtils.loadTexture(url);
@@ -413,17 +414,19 @@ animate();
         emissiveMap: startTexture,
       })
     );
+    star_radius.push(size);
     starBall.position.set(x, y, z);
     return starBall;
   }
   function obj(url, size, x, y, z) {
     var startTexture = THREE.ImageUtils.loadTexture(url);
     var starBall = new THREE.Mesh(
-      new THREE.SphereGeometry(size, size * 10, size * 10),
+      new THREE.SphereGeometry(size, size * 20, size * 20),
       new THREE.MeshLambertMaterial({
         map: startTexture,
       })
     );
+    star_radius.push(size);
     starBall.position.set(x, y, z);
     return starBall;
   }
@@ -511,18 +514,25 @@ animate();
     cameraPosition.x = Math.max(-900, Math.min(900, cameraPosition.x));
     cameraPosition.z = Math.max(-900, Math.min(900, cameraPosition.z));
     cameraPosition.y = Math.max(-300, Math.min(300, cameraPosition.y));
-    //if(crash_detect(ufo,sun)&&crash_detect(ufo,star1)&&crash_detect(ufo,star2)&&crash_detect(ufo,star3)&&crash_detect(ufo,star4)&&crash_detect(ufo,star5)&&crash_detect(ufo,star6)&&crash_detect(ufo,star7)&&crash_detect(ufo,star8)&&crash_detect(ufo,star9)&&crash_detect(ufo,starlite3)&&crash_detect(ufo,starlite6))return false;
-    //else return true;
-  }
-  function crash_detect(a,b){
-    var x=a.position.x-b.position.x;
-    var y=a.position.y-b.position.y;
-    var z=a.position.z-b.position.z;
-    if(b.size*b.size>x*x+y*y+z*z)return false;
+    if (crash_detect(ufo, sun, 0) && crash_detect(ufo, star1, 1) && crash_detect(ufo, star2, 2) && crash_detect(ufo, star3, 3) && crash_detect(ufo, starlite3, 4) && crash_detect(ufo, star4, 5) && crash_detect(ufo, star5, 6) && crash_detect(ufo, star6, 7) && crash_detect(ufo, starlite6, 8) && crash_detect(ufo, star7, 9) && crash_detect(ufo, star8, 10) && crash_detect(ufo, star9, 11)) return false;
     else return true;
   }
+  function crash_detect(a, b, i) {
+    var x = a.position.x - b.position.x;
+    var y = a.position.y - b.position.y;
+    var z = a.position.z - b.position.z;
+    var sr = star_radius[i];
+    if(hit_frame>100)return true;
+    if (sr * sr + 1 > x * x + y * y + z * z) {
+      hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
 
-  var speed=1;
+  var speed = 1;
   function operation_method_1(delta) {
     if (
       display != "none" &&
@@ -532,25 +542,25 @@ animate();
       display = document.getElementById("content").style.display;
     }
     if (fast) maxSpeed = 1.2;
-    else maxSpeed = Math.max(maxSpeed-0.05,0.6);
+    else maxSpeed = Math.max(maxSpeed - 0.05, 0.6);
 
-    if ((moveForward ||moveBackward||moveRight ||moveLeft)&&!fast){
-      ufo.children[1].scale.set((0.12-ufo.children[1].scale.x)/50+ufo.children[1].scale.x,(0.06-ufo.children[1].scale.y)/50+ufo.children[1].scale.y);
-      ufo.children[1].material.opacity=(0.6-ufo.children[1].material.opacity)/50+ufo.children[1].material.opacity;
-      ufo.children[1].position.y=(-0.012-ufo.children[1].position.y)/50+ufo.children[1].position.y;
-      speed=(2-speed)/50+speed;
+    if ((moveForward || moveBackward || moveRight || moveLeft) && !fast) {
+      ufo.children[1].scale.set((0.12 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.06 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.6 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.012 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      speed = (2 - speed) / 50 + speed;
     }
-    else if ((moveForward ||moveBackward||moveRight ||moveLeft)&&fast){
-      ufo.children[1].scale.set((0.15-ufo.children[1].scale.x)/50+ufo.children[1].scale.x,(0.07-ufo.children[1].scale.y)/50+ufo.children[1].scale.y);
-      ufo.children[1].material.opacity=(1-ufo.children[1].material.opacity)/50+ufo.children[1].material.opacity;
-      ufo.children[1].position.y=(-0.015-ufo.children[1].position.y)/50+ufo.children[1].position.y;
-      speed=(4-speed)/50+speed;
+    else if ((moveForward || moveBackward || moveRight || moveLeft) && fast) {
+      ufo.children[1].scale.set((0.15 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.07 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.015 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      speed = (4 - speed) / 50 + speed;
     }
-    else{
-      ufo.children[1].scale.set((0.1-ufo.children[1].scale.x)/50+ufo.children[1].scale.x,(0.05-ufo.children[1].scale.y)/50+ufo.children[1].scale.y);
-      ufo.children[1].material.opacity=(0.5-ufo.children[1].material.opacity)/50+ufo.children[1].material.opacity;
-      ufo.children[1].position.y=(-0.008-ufo.children[1].position.y)/50+ufo.children[1].position.y;
-      speed=(1-speed)/50+speed;
+    else {
+      ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      speed = (1 - speed) / 50 + speed;
     }
     // Mouse Move
 
@@ -695,14 +705,14 @@ animate();
     while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.932 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.933) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
-var x1=x;
-var y1=y;
-var z1=z;
+    var x1 = x;
+    var y1 = y;
+    var z1 = z;
 
     for (var i = 0; i < 2; i++) {
       if (i % 2 == 0) var meteorite = material.clone();
       else var meteorite = materialr.clone();
-      meteorite.position.set(x-x1, y-y1, z-z1);
+      meteorite.position.set(x - x1, y - y1, z - z1);
       meteorite.scale.set(size, size, 1)
       meteoritegroup.add(meteorite)
       x = x - size * v1.x / 5;
@@ -716,17 +726,17 @@ var z1=z;
       else if (size > osize * 0.5) meteorite.scale.set(size * 0.55, size * 0.55, 1);
       else if (size > osize * 0.2) meteorite.scale.set(size * 0.4, size * 0.4, 1);
       else meteorite.scale.set(size * 0.3, size * 0.3, 1)
-      meteorite.position.set(x-x1, y-y1, z-z1);
+      meteorite.position.set(x - x1, y - y1, z - z1);
       meteoritegroup.add(meteorite)
       var meteorite = material1r.clone();
       var ran = Math.random();
       meteorite.scale.set(size, size, 1)
-      meteorite.position.set(x-x1 - size * v1.x * ran, y-y1 - size * v1.y * ran, z-z1 - size * v1.z * ran);
+      meteorite.position.set(x - x1 - size * v1.x * ran, y - y1 - size * v1.y * ran, z - z1 - size * v1.z * ran);
       meteoritegroup.add(meteorite)
       var meteorite = material1.clone();
       var ran = Math.random();
       meteorite.scale.set(size, size, 1)
-      meteorite.position.set(x-x1 - size * v1.x * ran, y-y1 - size * v1.y * ran, z-z1 - size * v1.z * ran);
+      meteorite.position.set(x - x1 - size * v1.x * ran, y - y1 - size * v1.y * ran, z - z1 - size * v1.z * ran);
       meteoritegroup.add(meteorite)
 
       x = x - size * v1.x / 5;
@@ -734,7 +744,7 @@ var z1=z;
       z = z - size * v1.z / 5;
       size *= 0.982;
     }
-    meteoritegroup.position.set(x1,y1,z1);
+    meteoritegroup.position.set(x1, y1, z1);
     return [meteoritegroup, v1];
 
   }
@@ -885,31 +895,51 @@ var z1=z;
       //Ball Maving
 
 
-        for (var i = 0; i < particles.length; i++) {
-          particle = particles[i];
-          particle.scale.x = particle.scale.y = Math.sin(star_s_speed[i] * count * 150) + 3;
-          var d = star_d[i];
-          var ds = star_d_speed[i];
-          particle.position.x += d.x * Math.cos(ds.x * count) / 6;
-          particle.position.y += d.y * Math.cos(ds.y * count) / 6;
-          particle.position.z += d.z * Math.cos(ds.z * count) / 6;
-        }
+      for (var i = 0; i < particles.length; i++) {
+        particle = particles[i];
+        particle.scale.x = particle.scale.y = Math.sin(star_s_speed[i] * count * 150) + 3;
+        var d = star_d[i];
+        var ds = star_d_speed[i];
+        particle.position.x += d.x * Math.cos(ds.x * count) / 6;
+        particle.position.y += d.y * Math.cos(ds.y * count) / 6;
+        particle.position.z += d.z * Math.cos(ds.z * count) / 6;
+      }
       count += 0.0005;
 
-      var ufo_rotate_speed=operation_method_1(delta);
-      var is_crashed=bounder_detect();
-      console.log(is_crashed);
-      camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y+0.12, cameraPosition.z - cameraDirection.z);
-      
-      camera.lookAt(cameraPosition.x,cameraPosition.y+0.12,cameraPosition.z);
+      var ufo_rotate_speed = 1;
+      if (bounder_detect()) {
+        hit_frame = 500;
+      };
+      if (hit_frame > 0) {
+        moveForward = moveLeft = moveRight = moveBackward = false;
+        currentSpeedForward = 0;
+        currentSpeedRight = 0;
+        cameraPosition.x += hit_direction.x * hit_frame * rotatespeed * 0.0001;
+        cameraPosition.y += hit_direction.y * hit_frame * rotatespeed * 0.0001;
+        cameraPosition.z += hit_direction.z * hit_frame * rotatespeed * 0.0001;
 
-      light_for_ufo.position.set(cameraPosition.x, cameraPosition.y+0.08, cameraPosition.z);
+        
+      ufo.children[1].scale.set(0,0);
+      ufo.children[1].material.opacity = 0;
+      ufo.children[1].position.y = 0.03;
+
+        hit_frame--;
+        
+        speed = -speed/20+speed;
+      }
+        ufo_rotate_speed=operation_method_1(delta);
+      
+      camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y + 0.12, cameraPosition.z - cameraDirection.z);
+
+      camera.lookAt(cameraPosition.x, cameraPosition.y + 0.12, cameraPosition.z);
+
+      light_for_ufo.position.set(cameraPosition.x, cameraPosition.y + 0.08, cameraPosition.z);
       ufo.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-      ufo.rotation.y+=0.01/Math.PI*ufo_rotate_speed;
-      ufo.position.y+=Math.sin(count*50)*0.003*ufo_rotate_speed;
-      light_for_ufo.position.y+=Math.sin(count*50)*0.01;
+      ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed;
+      ufo.position.y += Math.sin(count * 50) * 0.003 * ufo_rotate_speed;
+      light_for_ufo.position.y += Math.sin(count * 50) * 0.01;
 
-      
+
       camera.updateProjectionMatrix();
       renderer.render(scene, camera);
 
@@ -917,6 +947,8 @@ var z1=z;
       timeStamp = (timeStamp % singleFrameTime);
     }
   }
+  
+  animate();
   var MyResize = function () {
     //get the new sizes
     var width = window.innerWidth;
