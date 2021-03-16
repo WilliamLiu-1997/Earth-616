@@ -52,7 +52,7 @@
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
     Press ESC to disable mouse direction.</br>Press Q/E to speed up/down the plants rotation and
     moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span><span>/10</span>
-    Click a planet and then you will chase it!
+    </br>Click a planet and then you will chase it!
   </div>
   <div id="blocker">
     <div id="content">
@@ -115,8 +115,8 @@
   var cameraDirection = vec.clone().set(0, 0, 0);
   var hit_direction = vec.clone().set(0, 0, 0);
   var hit_frame = 0;
-var catchspeed=0;
-var ufo_starlight=0.06;
+  var catchspeed = 0;
+  var ufo_starlight = 0.06;
 
   var SEPARATION = 150,
     AMOUNTX = 15,
@@ -145,35 +145,35 @@ var ufo_starlight=0.06;
   const sunbackground1 = new THREE.Sprite(sunmaterial1);
   sunbackground1.position.set(0, 0, 0);
   sunbackground1.scale.set(500 * 0.6, 400 * 0.6, 1);
-  var sun = obj_lighting("./texture/j025.jpg", 50, 0, 0, 0,"sun");
-  var star1 = obj("./texture/j022.jpg", 4 * 0.6, 100 * 0.6, 0, 0,"star1");
-  var star2 = obj("./texture/j006.jpg", 6 * 0.6, 150 * 0.6, 0, 0,"star2");
-  var star3 = obj("./texture/j011.jpg", 10 * 0.6, 250 * 0.6, 0, 0,"star3");
-  var starlite3 = obj("./texture/j029.jpg", 1.5 * 0.6, 263 * 0.6, 15 * 0.6, 0,"starlite3");
-  var star4 = obj("./texture/j008.jpg", 12 * 0.6, 400 * 0.6, 0, 0,"star4");
+  var sun = obj_lighting("./texture/j025.jpg", 50, 0, 0, 0, "sun");
+  var star1 = obj("./texture/j022.jpg", 4 * 0.6, 100 * 0.6, 0, 0, "star1");
+  var star2 = obj("./texture/j006.jpg", 6 * 0.6, 150 * 0.6, 0, 0, "star2");
+  var star3 = obj("./texture/j011.jpg", 10 * 0.6, 250 * 0.6, 0, 0, "star3");
+  var starlite3 = obj("./texture/j029.jpg", 1.5 * 0.6, 263 * 0.6, 15 * 0.6, 0, "starlite3");
+  var star4 = obj("./texture/j008.jpg", 12 * 0.6, 400 * 0.6, 0, 0, "star4");
   var ring4 = ring1("./texture/ring6.png", 15 * 0.6, 12 * 0.6, 400 * 0.6, 0, 0);
-  var star5 = obj("./texture/j016.jpg", 15 * 0.6, 550 * 0.6, 0, 0,"star5");
-  var star6 = obj("./texture/j021.jpg", 18 * 0.6, 750 * 0.6, 0, 0,"star6");
-  var starlite6 = obj("./texture/j024.jpg", 3 * 0.6, 778 * 0.6, 15 * 0.6, 0,"starlite6");
-  var star7 = obj("./texture/j009.jpg", 10 * 0.6, 900 * 0.6, 0, 0,"star7");
-  var star8 = obj("./texture/j012.jpg", 12 * 0.6, 1000 * 0.6, 0, 0,"star8");
+  var star5 = obj("./texture/j016.jpg", 15 * 0.6, 550 * 0.6, 0, 0, "star5");
+  var star6 = obj("./texture/j021.jpg", 18 * 0.6, 750 * 0.6, 0, 0, "star6");
+  var starlite6 = obj("./texture/j024.jpg", 3 * 0.6, 778 * 0.6, 15 * 0.6, 0, "starlite6");
+  var star7 = obj("./texture/j009.jpg", 10 * 0.6, 900 * 0.6, 0, 0, "star7");
+  var star8 = obj("./texture/j012.jpg", 12 * 0.6, 1000 * 0.6, 0, 0, "star8");
   var ring8 = ring2("./texture/ring5.png", 20 * 0.6, 2 * 0.6, 1000 * 0.6, 0, 0);
-  var star9 = obj("./texture/j030.jpg", 7 * 0.6, 1200 * 0.6, 0, 0,"star9");
+  var star9 = obj("./texture/j030.jpg", 7 * 0.6, 1200 * 0.6, 0, 0, "star9");
 
 
 
-  sun.name="sun";
-  star1.name="star1";
-  star2.name="star2";
-  star3.name="star3";
-  starlite3.name="starlite3";
-  star4.name="star4";
-  star5.name="star5";
-  star6.name="star6";
-  starlite6.name="starlite6";
-  star7.name="star7";
-  star8.name="star8";
-  star9.name="star9";
+  sun.name = "sun";
+  star1.name = "star1";
+  star2.name = "star2";
+  star3.name = "star3";
+  starlite3.name = "starlite3";
+  star4.name = "star4";
+  star5.name = "star5";
+  star6.name = "star6";
+  starlite6.name = "starlite6";
+  star7.name = "star7";
+  star8.name = "star8";
+  star9.name = "star9";
 
 
 
@@ -427,7 +427,7 @@ var ufo_starlight=0.06;
   init();
 
 
-  function obj_lighting(url, size, x, y, z,name) {
+  function obj_lighting(url, size, x, y, z, name) {
     var startTexture = THREE.ImageUtils.loadTexture(url);
     var starBall = new THREE.Mesh(
       new THREE.SphereGeometry(size, size * 5, size * 5),
@@ -436,11 +436,11 @@ var ufo_starlight=0.06;
         emissiveMap: startTexture,
       })
     );
-    star_radius[name]=size*1.01;
+    star_radius[name] = size * 1.01;
     starBall.position.set(x, y, z);
     return starBall;
   }
-  function obj(url, size, x, y, z,name) {
+  function obj(url, size, x, y, z, name) {
     var startTexture = THREE.ImageUtils.loadTexture(url);
     var starBall = new THREE.Mesh(
       new THREE.SphereGeometry(size, size * 20, size * 20),
@@ -448,7 +448,7 @@ var ufo_starlight=0.06;
         map: startTexture,
       })
     );
-    star_radius[name]=size;
+    star_radius[name] = size;
     starBall.position.set(x, y, z);
     return starBall;
   }
@@ -792,9 +792,9 @@ var ufo_starlight=0.06;
 
     raycaster.setFromCamera(mouse, camera);
     raycaster.far = 2000; var intersects = raycaster.intersectObjects(scene.children);
-    for ( var i = 0; i < intersects.length; i ++ ) {if(intersects[i].object.type!="Sprite")break;}
-    if (i<intersects.length) {
-      selected_object = intersects[i].object;catchspeed=0;
+    for (var i = 0; i < intersects.length; i++) { if (intersects[i].object.type != "Sprite") break; }
+    if (i < intersects.length) {
+      selected_object = intersects[i].object; catchspeed = 0;
     }
     else { selected_object = false; }
   }
@@ -832,12 +832,12 @@ var ufo_starlight=0.06;
       }
 
       var rotate = angle * Math.PI * rotatespeed;
-      if (speedup&&rotatespeed < 20) {
+      if (speedup && rotatespeed < 20) {
         rotatespeed = rotatespeed * 1.003009;
         document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
         angle *= 0.997;
       }
-      if (speeddown&&rotatespeed > 2) {
+      if (speeddown && rotatespeed > 2) {
         rotatespeed = Math.max(rotatespeed * 0.997, 2);
         document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
         angle *= 1.003009;
@@ -984,32 +984,32 @@ var ufo_starlight=0.06;
       else { ufo.rotation.x = 0; ufo.rotation.x = 0; }
       var ufo_rotate_speed = operation_method_1(delta);
 
-      if(selected_object&&document.getElementById("esc").style.display == "none"){
-        catchspeed=Math.min(catchspeed+0.01,1)
-        var delx=selected_object.position.x-cameraPosition.x;
-        var dely=selected_object.position.y-cameraPosition.y;
-        var delz=selected_object.position.z-cameraPosition.z;
-        var di=vec.clone().set(delx,dely,delz).normalize();
-        if(Math.pow(delx-di.x*star_radius[selected_object.name],2)+Math.pow(dely-di.y*star_radius[selected_object.name],2)+Math.pow(delz-di.z*star_radius[selected_object.name],2)>900){
-          ufo_starlight=Math.min(ufo_starlight+0.0002,0.08);
-          ufo.children[3].scale.set(ufo_starlight,ufo_starlight*5/6);
-          light_for_ufo.intensity=(ufo_starlight+0.025)*10;
-      ufo.children[1].scale.set((0.2 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.14 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
-      ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
-      ufo.children[1].position.y = (-0.04 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
-      ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed*(ufo_starlight-0.06)*200;
-        }else{
-          ufo_starlight=Math.max(ufo_starlight-0.0002,0.06);
-          ufo.children[3].scale.set(ufo_starlight,ufo_starlight*5/6);
-          light_for_ufo.intensity=(ufo_starlight+0.01)*10;
-      ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
-      ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
-      ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
-      ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed*(ufo_starlight-0.06)*200;
+      if (selected_object && document.getElementById("esc").style.display == "none") {
+        catchspeed = Math.min(catchspeed + 0.01, 1)
+        var delx = selected_object.position.x - cameraPosition.x;
+        var dely = selected_object.position.y - cameraPosition.y;
+        var delz = selected_object.position.z - cameraPosition.z;
+        var di = vec.clone().set(delx, dely, delz).normalize();
+        if (Math.pow(delx - di.x * star_radius[selected_object.name], 2) + Math.pow(dely - di.y * star_radius[selected_object.name], 2) + Math.pow(delz - di.z * star_radius[selected_object.name], 2) > 900) {
+          ufo_starlight = Math.min(ufo_starlight + 0.0002, 0.08);
+          ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
+          light_for_ufo.intensity = (ufo_starlight + 0.025) * 10;
+          ufo.children[1].scale.set((0.2 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.14 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+          ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+          ufo.children[1].position.y = (-0.04 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+          ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed * (ufo_starlight - 0.06) * 200;
+        } else {
+          ufo_starlight = Math.max(ufo_starlight - 0.0002, 0.06);
+          ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
+          light_for_ufo.intensity = (ufo_starlight + 0.01) * 10;
+          ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
+          ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
+          ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
+          ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed * (ufo_starlight - 0.06) * 200;
         }
-        cameraPosition.x=(delx-di.x*star_radius[selected_object.name]*1.1)*catchspeed/30+cameraPosition.x;
-        cameraPosition.y=(dely-di.y*star_radius[selected_object.name]*1.1)*catchspeed/30+cameraPosition.y;
-        cameraPosition.z=(delz-di.z*star_radius[selected_object.name]*1.1)*catchspeed/30+cameraPosition.z;
+        cameraPosition.x = (delx - di.x * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.x;
+        cameraPosition.y = (dely - di.y * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.y;
+        cameraPosition.z = (delz - di.z * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.z;
       }
       camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y + 0.12, cameraPosition.z - cameraDirection.z);
 
