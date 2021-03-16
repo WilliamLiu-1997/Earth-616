@@ -522,7 +522,7 @@
     var y = a.position.y - b.position.y;
     var z = a.position.z - b.position.z;
     var sr = star_radius[i];
-    if (hit_frame > 200) return true;
+    if (hit_frame > 100) return true;
     if (sr * sr + 1 > x * x + y * y + z * z) {
       hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
       return false;
@@ -907,15 +907,15 @@
       count += 0.0005;
 
       if (bounder_detect()) {
-        hit_frame = 300;
+        hit_frame = 200;
       };
       if (hit_frame > 0) {
         moveForward = moveLeft = moveRight = moveBackward = false;
         currentSpeedForward = 0;
         currentSpeedRight = 0;
-        cameraPosition.x += hit_direction.x * hit_frame * rotatespeed / 100000;
-        cameraPosition.y += hit_direction.y * hit_frame * rotatespeed / 100000;
-        cameraPosition.z += hit_direction.z * hit_frame * rotatespeed / 100000;
+        cameraPosition.x += hit_direction.x * hit_frame * rotatespeed / 50000;
+        cameraPosition.y += hit_direction.y * hit_frame * rotatespeed / 50000;
+        cameraPosition.z += hit_direction.z * hit_frame * rotatespeed / 50000;
 
 
         ufo.rotation.x = Math.cos(hit_frame*Math.PI /6) * (hit_frame / 1500);
