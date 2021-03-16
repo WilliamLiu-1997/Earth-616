@@ -50,8 +50,9 @@
   <div id="esc"></div>
   <div id="secondBlocker" style="display: none">
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
-    Press ESC to disable mouse direction.</br>Press P/O to speed up/down the plants rotation and
+    Press ESC to disable mouse direction.</br>Press Q/E to speed up/down the plants rotation and
     moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span><span>/10</span>
+    Click a planet and then you will chase it!
   </div>
   <div id="blocker">
     <div id="content">
@@ -312,11 +313,11 @@ var ufo_starlight=0.06;
           esc = !esc;
           break;
 
-        case 80:
+        case 81:
           speedup = true;
           break;
 
-        case 79:
+        case 69:
           speeddown = true;
           break;
 
@@ -349,11 +350,11 @@ var ufo_starlight=0.06;
           fast = false;
           break;
 
-        case 80:
+        case 81:
           speedup = false;
           break;
 
-        case 79:
+        case 69:
           speeddown = false;
           break;
 
