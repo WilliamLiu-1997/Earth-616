@@ -90,7 +90,7 @@
   var scene;
   var camera;
   var renderer;
-  var rotatespeed = 15;
+  var rotatespeed = 10;
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild(stats.dom);
@@ -668,7 +668,7 @@
   }
 
   var angle = 0;
-  document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 3);
+  document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
 
 
 
@@ -779,14 +779,14 @@
 
       var rotate = angle * Math.PI * rotatespeed;
       if (speedup) {
-        rotatespeed = Math.min(rotatespeed * 1.005025, 30);
-        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 3);
-        if (rotatespeed < 30) angle *= 0.995;
+        rotatespeed = Math.min(rotatespeed * 1.005025, 20);
+        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
+        if (rotatespeed < 20) angle *= 0.995;
       }
       if (speeddown) {
-        rotatespeed = Math.max(rotatespeed * 0.995, 3);
-        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 3);
-        if (rotatespeed > 3) angle *= 1.00502;
+        rotatespeed = Math.max(rotatespeed * 0.995, 2);
+        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
+        if (rotatespeed > 2) angle *= 1.00502;
       }
 
       angle += 0.0005;
