@@ -115,6 +115,7 @@
   var hit_direction = vec.clone().set(0, 0, 0);
   var hit_frame = 0;
 var catchspeed=0;
+var ufo_starlight=0.06;
 
   var SEPARATION = 150,
     AMOUNTX = 15,
@@ -434,7 +435,7 @@ var catchspeed=0;
         emissiveMap: startTexture,
       })
     );
-    star_radius[name]=size*1.1;
+    star_radius[name]=size*1.01;
     starBall.position.set(x, y, z);
     return starBall;
   }
@@ -543,7 +544,7 @@ var catchspeed=0;
     var z = a.position.z - b.position.z;
     var sr = star_radius[i];
     if (hit_frame > 100) return true;
-    if (sr * sr + 1 > x * x + y * y + z * z) {
+    if (sr * sr + 2 > x * x + y * y + z * z) {
       hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
       return false;
     }
@@ -561,19 +562,19 @@ var catchspeed=0;
       esc = false;
       display = document.getElementById("content").style.display;
     }
-    if (fast) maxSpeed = 1;
+    if (fast) maxSpeed = 1.5;
     else maxSpeed = Math.max(maxSpeed - 0.05, 0.5);
 
     if ((moveForward || moveBackward || moveRight || moveLeft) && !fast) {
-      ufo.children[1].scale.set((0.12 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.06 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
-      ufo.children[1].material.opacity = (0.6 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
-      ufo.children[1].position.y = (-0.012 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      ufo.children[1].scale.set((0.12 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.08 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.7 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.018 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
       speed = (2 - speed) / 50 + speed;
     }
     else if ((moveForward || moveBackward || moveRight || moveLeft) && fast) {
-      ufo.children[1].scale.set((0.15 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.07 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
-      ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
-      ufo.children[1].position.y = (-0.015 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      ufo.children[1].scale.set((0.16 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.08 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.9 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.019 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
       speed = (4 - speed) / 50 + speed;
     }
     else {
@@ -789,7 +790,7 @@ var catchspeed=0;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
-    raycaster.far = 1000; var intersects = raycaster.intersectObjects(scene.children);
+    raycaster.far = 2000; var intersects = raycaster.intersectObjects(scene.children);
     for ( var i = 0; i < intersects.length; i ++ ) {if(intersects[i].object.type!="Sprite")break;}
     if (i<intersects.length) {
       selected_object = intersects[i].object;catchspeed=0;
@@ -797,8 +798,24 @@ var catchspeed=0;
     else { selected_object = false; }
   }
   window.addEventListener('click', onMouseClick, false);
-  function animate() {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function animate() {
     var delta = clock.getDelta();
     requestAnimationFrame(animate);
     timeStamp += delta;
@@ -814,15 +831,15 @@ var catchspeed=0;
       }
 
       var rotate = angle * Math.PI * rotatespeed;
-      if (speedup) {
-        rotatespeed = Math.min(rotatespeed * 1.005025, 20);
+      if (speedup&&rotatespeed < 20) {
+        rotatespeed = rotatespeed * 1.003009;
         document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
-        if (rotatespeed < 20) angle *= 0.995;
+        angle *= 0.997;
       }
-      if (speeddown) {
-        rotatespeed = Math.max(rotatespeed * 0.995, 2);
+      if (speeddown&&rotatespeed > 2) {
+        rotatespeed = Math.max(rotatespeed * 0.997, 2);
         document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
-        if (rotatespeed > 2) angle *= 1.00502;
+        angle *= 1.003009;
       }
 
       angle += 0.0005;
@@ -966,17 +983,33 @@ var catchspeed=0;
       else { ufo.rotation.x = 0; ufo.rotation.x = 0; }
       var ufo_rotate_speed = operation_method_1(delta);
 
-      if(selected_object){
+      if(selected_object&&document.getElementById("esc").style.display == "none"){
         catchspeed=Math.min(catchspeed+0.01,1)
         var delx=selected_object.position.x-cameraPosition.x;
         var dely=selected_object.position.y-cameraPosition.y;
         var delz=selected_object.position.z-cameraPosition.z;
         var di=vec.clone().set(delx,dely,delz).normalize();
-        cameraPosition.x=(delx-di.x*star_radius[selected_object.name]-1)*catchspeed/30+cameraPosition.x;
-        cameraPosition.y=(dely-di.y*star_radius[selected_object.name]-1)*catchspeed/30+cameraPosition.y;
-        cameraPosition.z=(delz-di.z*star_radius[selected_object.name]-1)*catchspeed/30+cameraPosition.z;
+        if(Math.pow(delx-di.x*star_radius[selected_object.name],2)+Math.pow(dely-di.y*star_radius[selected_object.name],2)+Math.pow(delz-di.z*star_radius[selected_object.name],2)>900){
+          ufo_starlight=Math.min(ufo_starlight+0.0002,0.08);
+          ufo.children[3].scale.set(ufo_starlight,ufo_starlight*5/6);
+          light_for_ufo.intensity=(ufo_starlight+0.025)*10;
+      ufo.children[1].scale.set((0.2 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.14 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.04 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed*(ufo_starlight-0.06)*200;
+        }else{
+          ufo_starlight=Math.max(ufo_starlight-0.0002,0.06);
+          ufo.children[3].scale.set(ufo_starlight,ufo_starlight*5/6);
+          light_for_ufo.intensity=(ufo_starlight+0.01)*10;
+      ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
+      ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed*(ufo_starlight-0.06)*200;
+        }
+        cameraPosition.x=(delx-di.x*star_radius[selected_object.name]*1.1)*catchspeed/30+cameraPosition.x;
+        cameraPosition.y=(dely-di.y*star_radius[selected_object.name]*1.1)*catchspeed/30+cameraPosition.y;
+        cameraPosition.z=(delz-di.z*star_radius[selected_object.name]*1.1)*catchspeed/30+cameraPosition.z;
       }
-
       camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y + 0.12, cameraPosition.z - cameraDirection.z);
 
       camera.lookAt(cameraPosition.x, cameraPosition.y + 0.12, cameraPosition.z);
