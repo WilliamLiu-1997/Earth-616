@@ -838,7 +838,8 @@
       selected_object = intersects[i].object; catchspeed = 0;
       t_in=true;
     }
-    else { selected_object = false; }
+    else { selected_object = false; 
+      t_in=false;}
   }
   window.addEventListener('click', onMouseClick, false);
 
@@ -1035,7 +1036,8 @@
         var dely = selected_object.position.y - cameraPosition.y;
         var delz = selected_object.position.z - cameraPosition.z;
         var di = vec.clone().set(delx, dely, delz).normalize();
-        if (t_in&&Math.pow(delx - di.x * star_radius[selected_object.name], 2) + Math.pow(dely - di.y * star_radius[selected_object.name], 2) + Math.pow(delz - di.z * star_radius[selected_object.name], 2) > 900) {
+        if(Math.pow(delx - di.x * star_radius[selected_object.name], 2) + Math.pow(dely - di.y * star_radius[selected_object.name], 2) + Math.pow(delz - di.z * star_radius[selected_object.name], 2) < 3600){t_in=false;}
+        if (t_in) {
           ufo_starlight = Math.min(ufo_starlight + 0.0002, 0.08);
           ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
           light_for_ufo.intensity = (ufo_starlight + 0.025) * 10;
@@ -1044,14 +1046,13 @@
           ufo.children[1].position.y = (-0.04 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
           tranfer_speed = Math.min(tranfer_speed + 1, 20/ufo_rotate_speed);
         } else {
-          t_in=false;
           ufo_starlight = Math.max(ufo_starlight - 0.0002, 0.06);
           ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
           light_for_ufo.intensity = (ufo_starlight + 0.01) * 10;
           ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
           ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
           ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
-          tranfer_speed = Math.max(tranfer_speed - 0.05, 1/ufo_rotate_speed);
+          tranfer_speed = Math.max(tranfer_speed - 0.1, 1);
         }
         cameraPosition.x = (delx - di.x * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.x;
         cameraPosition.y = (dely - di.y * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.y;
@@ -1068,7 +1069,7 @@
         ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
         ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
         ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
-        tranfer_speed = Math.max(tranfer_speed - 0.05, 1);
+        tranfer_speed = Math.max(tranfer_speed - 0.1, 1);
       }
       camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y + 0.12, cameraPosition.z - cameraDirection.z);
 
