@@ -1040,7 +1040,7 @@
           ufo.children[1].scale.set((0.2 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.14 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
           ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
           ufo.children[1].position.y = (-0.04 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
-          tranfer_speed = Math.min(tranfer_speed + 1, 10);
+          tranfer_speed = Math.min(tranfer_speed + 0.5, 10);
         } else {
           ufo_starlight = Math.max(ufo_starlight - 0.0002, 0.06);
           ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
