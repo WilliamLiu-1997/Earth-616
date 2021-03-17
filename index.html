@@ -50,10 +50,9 @@
   <div id="esc"></div>
   <div id="secondBlocker" style="display: none">
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
-    Press ESC to disable mouse direction.</br>Press P/O to speed up/down the plants rotation and
-    moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span>%
-    </br>
-    Smash the Space, and then a meteorite will show up!&nbsp;&nbsp;&nbsp;Meteorites: <span id="meteorite"></span>
+    Press ESC to disable mouse direction.</br>Press Q/E to speed up/down the plants rotation and
+    moving!&nbsp;&nbsp;&nbsp;Current speed: <span id="plantspeed"></span><span>/10</span>
+    </br>Click a planet and then you will chase it!
   </div>
   <div id="blocker">
     <div id="content">
@@ -81,14 +80,22 @@
     Lensflare,
     LensflareElement,
   } from "./three.js/examples/jsm/objects/Lensflare.js";
+  import { OBJLoader } from './three.js/examples/jsm/loaders/OBJLoader.js';
+  import { MTLLoader } from './three.js/examples/jsm/loaders/MTLLoader.js';
+
+  var FPS = 120;
+  var singleFrameTime = (1 / FPS);
+  var timeStamp = 0;
+
   var display = document.getElementById("content").style.display;
   var scene;
   var camera;
   var renderer;
-  var rotatespeed = 5;
+  var rotatespeed = 10;
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild(stats.dom);
+  var star_radius = new Array();
 
   var moveForward = false;
   var moveBackward = false;
@@ -99,20 +106,23 @@
   var esc = true;
   var speedup = false;
   var speeddown = false;
-  var addmet = false;
   var meteorites = [];
-  var countstep = true;
 
   var color = new THREE.Color();
   var spotLight;
   var vec = new THREE.Vector3();
-  var cameraPosition = vec.clone().set(0, 150, 1500);
+  var cameraPosition = vec.clone().set(0, 75, 750);
   var cameraDirection = vec.clone().set(0, 0, 0);
+  var hit_direction = vec.clone().set(0, 0, 0);
+  var hit_frame = 0;
+  var catchspeed = 0;
+  var ufo_starlight = 0.06;
+  var tranfer_speed = 1;
 
-  var SEPARATION = 250,
-    AMOUNTX = 25,
-    AMOUNTY = 8,
-    AMOUNTZ = 25;
+  var SEPARATION = 150,
+    AMOUNTX = 15,
+    AMOUNTY = 4,
+    AMOUNTZ = 15;
   var particles,
     particle,
     star_d,
@@ -121,53 +131,80 @@
     count = 0;
 
   const sunlight = new THREE.TextureLoader().load("img/lensflare2.png");
-  var sunmaterial = new THREE.SpriteMaterial({ map: sunlight  ,transparent: true,opacity: 0.1});
+
+  const ufolight = new THREE.TextureLoader().load("img/ufo_light.png");
+
+  var light_for_ufo = new THREE.PointLight(0xffffee, 0.7, 0.5);
+
+
+  var sunmaterial = new THREE.SpriteMaterial({ map: sunlight, transparent: true, opacity: 0.1 });
   const sunbackground = new THREE.Sprite(sunmaterial);
   sunbackground.position.set(0, 0, 0);
-  sunbackground.scale.set(1000, 800, 1);
+  sunbackground.scale.set(500 * 0.6, 400 * 0.6, 1);
   const sunlight1 = new THREE.TextureLoader().load("img/ball.png");
-  var sunmaterial1 = new THREE.SpriteMaterial({ map: sunlight1  ,transparent: true,opacity: 0.02});
+  var sunmaterial1 = new THREE.SpriteMaterial({ map: sunlight1, transparent: true, opacity: 0.02 });
   const sunbackground1 = new THREE.Sprite(sunmaterial1);
   sunbackground1.position.set(0, 0, 0);
-  sunbackground1.scale.set(1000, 800, 1);
-  var sun = obj_lighting("./texture/j025.jpg", 100, 0, 0, 0);
-  var star1 = obj("./texture/j022.jpg", 8, 200, 0, 0);
-  var star2 = obj("./texture/j006.jpg", 12, 300, 0, 0);
-  var star3 = obj("./texture/j011.jpg", 20, 500, 0, 0);
-  var starlite3 = obj("./texture/j029.jpg", 3, 525, 30, 0);
-  var star4 = obj("./texture/j008.jpg", 25, 800, 0, 0);
-  var ring4 = ring1("./texture/ring6.png", 30, 25, 800, 0, 0);
-  var star5 = obj("./texture/j016.jpg", 30, 1100, 0, 0);
-  var star6 = obj("./texture/j021.jpg", 35, 1500, 0, 0);
-  var starlite6 = obj("./texture/j024.jpg", 4, 1555, 30, 0);
-  var star7 = obj("./texture/j009.jpg", 20, 1800, 0, 0);
-  var star8 = obj("./texture/j012.jpg", 25, 2000, 0, 0);
-  var ring8 = ring2("./texture/ring5.png", 40, 5, 2000, 0, 0);
-  var star9 = obj("./texture/j030.jpg", 15, 2300, 0, 0);
+  sunbackground1.scale.set(500 * 0.6, 400 * 0.6, 1);
+  var sun = obj_lighting("./texture/j025.jpg", 50, 0, 0, 0, "sun");
+  var star1 = obj("./texture/j022.jpg", 4 * 0.6, 100 * 0.6, 0, 0, "star1");
+  var star2 = obj("./texture/j006.jpg", 6 * 0.6, 150 * 0.6, 0, 0, "star2");
+  var star3 = obj("./texture/j011.jpg", 10 * 0.6, 250 * 0.6, 0, 0, "star3");
+  var starlite3 = obj("./texture/j029.jpg", 1.5 * 0.6, 263 * 0.6, 15 * 0.6, 0, "starlite3");
+  var star4 = obj("./texture/j008.jpg", 12 * 0.6, 400 * 0.6, 0, 0, "star4");
+  var ring4 = ring1("./texture/ring6.png", 15 * 0.6, 12 * 0.6, 400 * 0.6, 0, 0);
+  var star5 = obj("./texture/j016.jpg", 15 * 0.6, 550 * 0.6, 0, 0, "star5");
+  var star6 = obj("./texture/j021.jpg", 18 * 0.6, 750 * 0.6, 0, 0, "star6");
+  var starlite6 = obj("./texture/j024.jpg", 3 * 0.6, 778 * 0.6, 15 * 0.6, 0, "starlite6");
+  var star7 = obj("./texture/j009.jpg", 10 * 0.6, 900 * 0.6, 0, 0, "star7");
+  var star8 = obj("./texture/j012.jpg", 12 * 0.6, 1000 * 0.6, 0, 0, "star8");
+  var ring8 = ring2("./texture/ring5.png", 20 * 0.6, 2 * 0.6, 1000 * 0.6, 0, 0);
+  var star9 = obj("./texture/j030.jpg", 7 * 0.6, 1200 * 0.6, 0, 0, "star9");
+
+
+
+  sun.name = "sun";
+  star1.name = "star1";
+  star2.name = "star2";
+  star3.name = "star3";
+  starlite3.name = "starlite3";
+  star4.name = "star4";
+  ring4.name = "ring";
+  star5.name = "star5";
+  star6.name = "star6";
+  starlite6.name = "starlite6";
+  star7.name = "star7";
+  star8.name = "star8";
+  ring8.name = "ring";
+  star9.name = "star9";
+
+
+
+
   const starball = new THREE.TextureLoader().load("img/ball.png");
   var meteoriteball = new THREE.TextureLoader().load("img/star0.png");
   var meteoritetail = new THREE.TextureLoader().load("img/start0.png");
 
   var meteoriteballr = new THREE.TextureLoader().load("img/star00.png");
-  var meteoritetailr = new THREE.TextureLoader().load("img/start00.png");    
+  var meteoritetailr = new THREE.TextureLoader().load("img/start00.png");
 
   var textureFlare0 = new THREE.TextureLoader().load(
-      "img/lensflare0.png"
-    );
-    var textureFlare0a = new THREE.TextureLoader().load(
-      "img/lensflare0a.png"
-    );
-    var textureFlare0b = new THREE.TextureLoader().load(
-      "img/lensflare0b.png"
-    );
-  var sunmaterial2 = new THREE.SpriteMaterial({ map: textureFlare0a ,transparent: true,opacity: 0.1});
+    "img/lensflare0.png"
+  );
+  var textureFlare0a = new THREE.TextureLoader().load(
+    "img/lensflare0a.png"
+  );
+  var textureFlare0b = new THREE.TextureLoader().load(
+    "img/lensflare0b.png"
+  );
+  var sunmaterial2 = new THREE.SpriteMaterial({ map: textureFlare0a, transparent: true, opacity: 0.1 });
   var sunbackground2 = new THREE.Sprite(sunmaterial2);
   sunbackground2.position.set(0, 0, 0);
-  sunbackground2.scale.set(2000, 2000, 1);  
-  var sunmaterial3 = new THREE.SpriteMaterial({ map: textureFlare0b ,transparent: true,opacity: 0.1});
+  sunbackground2.scale.set(600 * 0.6, 600 * 0.6, 0.1);
+  var sunmaterial3 = new THREE.SpriteMaterial({ map: textureFlare0b, transparent: true, opacity: 0.1 });
   var sunbackground3 = new THREE.Sprite(sunmaterial3);
   sunbackground3.position.set(0, 0, 0);
-  sunbackground3.scale.set(2000, 2000, 1);
+  sunbackground3.scale.set(900 * 0.6, 900 * 0.6, 0.1);
 
 
   var material = new THREE.Sprite(new THREE.SpriteMaterial({
@@ -189,15 +226,30 @@
   }));
 
   var meteorite_group = new THREE.Object3D();
-
+  var ufo = meteorite_group.clone();
 
   function init() {
+
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xa000000);
+    var skyGeometry = new THREE.BoxGeometry(8000, 8000, 8000);
+    var materialArray = [];
+    for (var i = 0; i < 6; i++) {
+      var map = new THREE.TextureLoader().load('img/bg5.png');
+      map.wrapS = THREE.RepeatWrapping;
+      map.wrapT = THREE.RepeatWrapping;
+      map.repeat.set(4, 8);
+      materialArray.push(new THREE.MeshBasicMaterial({
+        map: map,
+        side: THREE.BackSide
+      }));
+    }
+    var skyBox = new THREE.Mesh(skyGeometry, materialArray);
+    scene.add(skyBox);
+
     camera = new THREE.PerspectiveCamera(
       45, // fov 45 degree
       window.innerWidth / window.innerHeight, //aspect (width/height ratio)
-      0.5, //near
+      0.1, //near
       10000 // far
     );
 
@@ -219,9 +271,9 @@
           star_d_speed[i] = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
           star_s_speed[i] = Math.random() - 0.5;
           i++;
-          particle.position.x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2 + ((Math.random()-0.5) * SEPARATION*16);
-          particle.position.y = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2 + ((Math.random()-0.5) * SEPARATION*16);
-          particle.position.z = iz * SEPARATION - (AMOUNTZ * SEPARATION) / 2 + ((Math.random()-0.5) * SEPARATION*8);
+          particle.position.x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2 + ((Math.random() - 0.5) * SEPARATION * 16);
+          particle.position.y = iy * SEPARATION / 2 - (AMOUNTY * SEPARATION) / 4 + ((Math.random() - 0.5) * SEPARATION * 16);
+          particle.position.z = iz * SEPARATION - (AMOUNTZ * SEPARATION) / 2 + ((Math.random() - 0.5) * SEPARATION * 16);
           scene.add(particle);
         }
       }
@@ -264,17 +316,14 @@
           esc = !esc;
           break;
 
-        case 80:
+        case 69:
           speedup = true;
           break;
 
-        case 79:
+        case 81:
           speeddown = true;
           break;
 
-        case 32:
-          if (meteorites.length < 10) addmet = true;
-          break;
       }
     };
 
@@ -304,11 +353,11 @@
           fast = false;
           break;
 
-        case 80:
+        case 69:
           speedup = false;
           break;
 
-        case 79:
+        case 81:
           speeddown = false;
           break;
 
@@ -321,14 +370,15 @@
 
     scene.add(new THREE.AmbientLight(0x181818));
 
-    const light = new THREE.PointLight(0xffdd88, 2.5, 5000);
-
+    const light = new THREE.PointLight(0xffdd88, 2, 1500);
     scene.add(light);
 
+    scene.add(light_for_ufo);
     scene.add(sunbackground);
     scene.add(sunbackground1);
     scene.add(sunbackground2);
     scene.add(sunbackground3);
+
     scene.add(sun);
     scene.add(star1);
     scene.add(star2);
@@ -348,10 +398,76 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     document.getElementById("container").appendChild(renderer.domElement);
     document.body.appendChild(renderer.domElement);
+    const mtlLoader = new MTLLoader();
+    mtlLoader.load('UFO2/UFO2.mtl', (mtl) => {
+      mtl.preload();
+      const objLoader = new OBJLoader();
+      objLoader.setMaterials(mtl);
+      objLoader.load('UFO2/UFO2.obj', (root) => {
+        root.position.set(0, 0, 0);
+        root.scale.set(0.02, 0.02, 0.02);
+        var ufo_light_material = new THREE.SpriteMaterial({ map: ufolight, transparent: true, opacity: 0.5 });
+        var ufo_light = new THREE.Sprite(ufo_light_material);
+        var ufo_top_light = new THREE.Mesh(new THREE.SphereGeometry(0.017, 32, 32), new THREE.MeshBasicMaterial({ color: 0xffffee }));
+        var white_light = littlestar.clone();
+
+
+        var ufo_ring1 = new THREE.Mesh(new THREE.TorusGeometry(0.09085, 0.0005, 144, 144, Math.PI / 5.45), new THREE.MeshPhongMaterial({ color: 0xFF51AA, specular: 0xFF51AA, side: THREE.DoubleSide, emissive: 0xFF51AA }));
+        ufo_ring1.rotation.x = Math.PI / 2;
+        ufo_ring1.rotation.z = Math.PI / 15.4;
+        ufo_ring1.position.y = 0.021;
+        var ufo_ring2 = ufo_ring1.clone();
+        ufo_ring2.rotation.x = Math.PI / 2;
+        ufo_ring2.rotation.z = Math.PI / 9.42 + Math.PI / 3;
+        ufo_ring2.position.y = 0.021;
+        var ufo_ring3 = ufo_ring1.clone();
+        ufo_ring3.rotation.x = Math.PI / 2;
+        ufo_ring3.rotation.z = Math.PI / 8.7 + Math.PI * 2 / 3;
+        ufo_ring3.position.y = 0.021;
+        var ufo_ring4 = ufo_ring1.clone();
+        ufo_ring4.rotation.x = Math.PI / 2;
+        ufo_ring4.rotation.z = Math.PI / 10.7 + Math.PI;
+        ufo_ring4.position.y = 0.021;
+        var ufo_ring5 = ufo_ring1.clone();
+        ufo_ring5.rotation.x = Math.PI / 2;
+        ufo_ring5.rotation.z = Math.PI / 13.7 + Math.PI * 4 / 3;
+        ufo_ring5.position.y = 0.021;
+        var ufo_ring6 = new THREE.Mesh(new THREE.TorusGeometry(0.09085, 0.0005, 144, 144, Math.PI / 4.65), new THREE.MeshPhongMaterial({ color: 0xFF51AA, specular: 0xFF51AA, side: THREE.DoubleSide, emissive: 0xFF51AA }));
+        ufo_ring6.rotation.x = Math.PI / 2;
+        ufo_ring6.rotation.z = Math.PI / 18.7 + Math.PI * 5 / 3;
+        ufo_ring6.position.y = 0.021;
+
+        var ufo_ring0 = new THREE.Mesh(new THREE.TorusGeometry(0.0565, 0.0077, 72, 72), new THREE.MeshPhongMaterial({ color: 0x44E0FF, specular: 0x44E0FF, side: THREE.DoubleSide, emissive: 0x44E0FF }));
+        ufo_top_light.position.set(0, 0.033, 0);
+        white_light.position.set(0, 0.036, 0);
+        white_light.scale.set(0.063, 0.0525);
+        ufo_light.position.set(0, -0.008, 0);
+        ufo_light.scale.set(0.1, 0.05);
+
+        ufo_ring0.rotation.x = Math.PI / 2;
+        ufo_ring0.position.y = 0.0205;
+        ufo.add(root);
+        ufo.add(ufo_light);
+        ufo.add(ufo_top_light);
+        ufo.add(white_light);
+        ufo.add(ufo_ring1);
+        ufo.add(ufo_ring2);
+        ufo.add(ufo_ring3);
+        ufo.add(ufo_ring4);
+        ufo.add(ufo_ring5);
+        ufo.add(ufo_ring6);
+        ufo.add(ufo_ring0);
+        ufo.position.z -= 0.48;
+        ufo.position.y -= 0.12;
+        scene.add(ufo);
+      });
+    });
+    ufo.position.set(0, 75, 750);
   }
   init();
 
-  function obj_lighting(url, size, x, y, z) {
+
+  function obj_lighting(url, size, x, y, z, name) {
     var startTexture = THREE.ImageUtils.loadTexture(url);
     var starBall = new THREE.Mesh(
       new THREE.SphereGeometry(size, size * 5, size * 5),
@@ -360,17 +476,19 @@
         emissiveMap: startTexture,
       })
     );
+    star_radius[name] = size * 1.01;
     starBall.position.set(x, y, z);
     return starBall;
   }
-  function obj(url, size, x, y, z) {
+  function obj(url, size, x, y, z, name) {
     var startTexture = THREE.ImageUtils.loadTexture(url);
     var starBall = new THREE.Mesh(
-      new THREE.SphereGeometry(size, size * 5, size * 5),
+      new THREE.SphereGeometry(size, size * 20, size * 20),
       new THREE.MeshLambertMaterial({
         map: startTexture,
       })
     );
+    star_radius[name] = size;
     starBall.position.set(x, y, z);
     return starBall;
   }
@@ -420,13 +538,13 @@
     if (esc)
       var mouseP = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     else var mouseP = getMousePosition(e);
-    if (mouseP["y"] / window.innerHeight < 0.42) {
-      up = 0.42 - mouseP["y"] / window.innerHeight;
+    if (mouseP["y"] / window.innerHeight < 0.50) {
+      up = 0.50 - mouseP["y"] / window.innerHeight;
     } else {
       up = 0;
     }
-    if (mouseP["y"] / window.innerHeight > 0.58) {
-      down = mouseP["y"] / window.innerHeight - 0.58;
+    if (mouseP["y"] / window.innerHeight > 0.70) {
+      down = mouseP["y"] / window.innerHeight - 0.70;
     } else {
       down = 0;
     }
@@ -442,8 +560,8 @@
     }
   }
 
-  var maxSpeed = 2;
-  var acc = 10;
+  var maxSpeed = 0.5;
+  var acc = 0.5;
   var currentSpeedForward = 0;
   var currentSpeedRight = 0;
   var Forward = true;
@@ -455,11 +573,28 @@
   var angleZY = 0;
 
   function bounder_detect() {
-    cameraPosition.x = Math.max(-3000, Math.min(3000, cameraPosition.x));
-    cameraPosition.z = Math.max(-3000, Math.min(3000, cameraPosition.z));
-    cameraPosition.y = Math.max(-1000, Math.min(1000, cameraPosition.y));
+    cameraPosition.x = Math.max(-900, Math.min(900, cameraPosition.x));
+    cameraPosition.z = Math.max(-900, Math.min(900, cameraPosition.z));
+    cameraPosition.y = Math.max(-300, Math.min(300, cameraPosition.y));
+    if (crash_detect(ufo, sun, "sun") && crash_detect(ufo, star1, "star1") && crash_detect(ufo, star2, "star2") && crash_detect(ufo, star3, "star3") && crash_detect(ufo, starlite3, "starlite3") && crash_detect(ufo, star4, "star4") && crash_detect(ufo, star5, "star5") && crash_detect(ufo, star6, "star6") && crash_detect(ufo, starlite6, "starlite6") && crash_detect(ufo, star7, "star7") && crash_detect(ufo, star8, "star8") && crash_detect(ufo, star9, "star9")) return false;
+    else return true;
+  }
+  function crash_detect(a, b, i) {
+    var x = a.position.x - b.position.x;
+    var y = a.position.y - b.position.y;
+    var z = a.position.z - b.position.z;
+    var sr = star_radius[i];
+    if (hit_frame > 100) return true;
+    if (sr * sr + 2 > x * x + y * y + z * z) {
+      hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
+  var speed = 1;
   function operation_method_1(delta) {
     if (
       display != "none" &&
@@ -468,10 +603,27 @@
       esc = false;
       display = document.getElementById("content").style.display;
     }
-    if (fast) maxSpeed = 6;
-    else maxSpeed = 2;
+    if (fast) maxSpeed = 1.5;
+    else maxSpeed = Math.max(maxSpeed - 0.05, 0.5);
 
-
+    if ((moveForward || moveBackward || moveRight || moveLeft) && !fast) {
+      ufo.children[1].scale.set((0.12 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.08 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.7 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.018 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      speed = (2 - speed) / 50 + speed;
+    }
+    else if ((moveForward || moveBackward || moveRight || moveLeft) && fast) {
+      ufo.children[1].scale.set((0.16 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.08 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.9 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.019 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      speed = (4 - speed) / 50 + speed;
+    }
+    else {
+      ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      speed = (1 - speed) / 50 + speed;
+    }
     // Mouse Move
 
     if (moveForward && !moveBackward) {
@@ -562,24 +714,23 @@
       }
     }
 
-    angleX += left / 8.5 / Math.PI - right / 8.5 / Math.PI;
+    angleX += left / 15 / Math.PI - right / 15 / Math.PI;
     cameraDirection.x -= Math.sin(angleX);
     cameraDirection.z -= Math.cos(angleX);
 
-    if (cameraDirection.y < 0.75) {
-      angleY += up / 20 / Math.PI;
+    if (cameraDirection.y < 0.15) {
+      angleY += up / 75 / Math.PI;
     }
-    if (cameraDirection.y > -0.75) {
-      angleY -= down / 20 / Math.PI;
+    if (cameraDirection.y > -0.15) {
+      angleY -= down / 50 / Math.PI;
     }
     cameraDirection.y += Math.sin(angleY) * 2;
-    cameraDirection.normalize();
+    cameraDirection.setLength(0.48);
+    return speed;
   }
 
   var angle = 0;
-  document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
-
-  document.getElementById("meteorite").innerHTML = meteorites.length + "/10";
+  document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
 
 
 
@@ -594,34 +745,36 @@
     var ran = Math.random() * 3;
     var x, y, z;
     if (ran > 2) {
-      if (ran > 2.5) x = 10000;
-      else x = -10000;
-      y = (Math.random() - 0.5) * 20000;
-      z = (Math.random() - 0.5) * 20000;
+      if (ran > 2.5) x = 5000;
+      else x = -5000;
+      y = (Math.random() - 0.5) * 10000;
+      z = (Math.random() - 0.5) * 10000;
     }
     else if (ran > 1) {
-      if (ran > 1.5) y = 10000;
-      else y = -10000;
-      x = (Math.random() - 0.5) * 20000;
-      z = (Math.random() - 0.5) * 20000;
+      if (ran > 1.5) y = 5000;
+      else y = -5000;
+      x = (Math.random() - 0.5) * 10000;
+      z = (Math.random() - 0.5) * 10000;
     }
     else {
-      if (ran > 0.5) z = 10000;
-      else z = -10000;
-      y = (Math.random() - 0.5) * 20000;
-      x = (Math.random() - 0.5) * 20000;
+      if (ran > 0.5) z = 5000;
+      else z = -5000;
+      y = (Math.random() - 0.5) * 10000;
+      x = (Math.random() - 0.5) * 10000;
     }
 
     var v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.78 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.82) {
+    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.932 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.933) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
-
+    var x1 = x;
+    var y1 = y;
+    var z1 = z;
 
     for (var i = 0; i < 2; i++) {
       if (i % 2 == 0) var meteorite = material.clone();
       else var meteorite = materialr.clone();
-      meteorite.position.set(x, y, z);
+      meteorite.position.set(x - x1, y - y1, z - z1);
       meteorite.scale.set(size, size, 1)
       meteoritegroup.add(meteorite)
       x = x - size * v1.x / 5;
@@ -632,210 +785,305 @@
     while (size > 1) {
       var meteorite = material.clone();
       if (size > osize * 0.8) meteorite.scale.set(size * 0.7, size * 0.7, 1);
-      else if (size > osize * 0.6) meteorite.scale.set(size * 0.55, size * 0.55, 1);
-      else if (size > osize * 0.3) meteorite.scale.set(size * 0.4, size * 0.4, 1);
+      else if (size > osize * 0.5) meteorite.scale.set(size * 0.55, size * 0.55, 1);
+      else if (size > osize * 0.2) meteorite.scale.set(size * 0.4, size * 0.4, 1);
       else meteorite.scale.set(size * 0.3, size * 0.3, 1)
-      meteorite.position.set(x, y, z);
+      meteorite.position.set(x - x1, y - y1, z - z1);
       meteoritegroup.add(meteorite)
       var meteorite = material1r.clone();
       var ran = Math.random();
       meteorite.scale.set(size, size, 1)
-      meteorite.position.set(x - size * v1.x * ran, y - size * v1.y * ran, z - size * v1.z * ran);
+      meteorite.position.set(x - x1 - size * v1.x * ran, y - y1 - size * v1.y * ran, z - z1 - size * v1.z * ran);
       meteoritegroup.add(meteorite)
       var meteorite = material1.clone();
       var ran = Math.random();
       meteorite.scale.set(size, size, 1)
-      meteorite.position.set(x - size * v1.x * ran, y - size * v1.y * ran, z - size * v1.z * ran);
+      meteorite.position.set(x - x1 - size * v1.x * ran, y - y1 - size * v1.y * ran, z - z1 - size * v1.z * ran);
       meteoritegroup.add(meteorite)
 
-      x = x - size * v1.x / 7;
-      y = y - size * v1.y / 7;
-      z = z - size * v1.z / 7;
-      size *= 0.985;
+      x = x - size * v1.x / 5;
+      y = y - size * v1.y / 5;
+      z = z - size * v1.z / 5;
+      size *= 0.982;
     }
+    meteoritegroup.position.set(x1, y1, z1);
     return [meteoritegroup, v1];
 
   }
 
   function meteorite_move(meteorite1) {
-    if (Math.pow(meteorite1[0].position.x, 2) + Math.pow(meteorite1[0].position.y, 2) + Math.pow(meteorite1[0].position.z, 2) > Math.pow(25000, 2)) {
-      renderer.renderLists.dispose();
+    if (Math.pow(meteorite1[0].position.x, 2) + Math.pow(meteorite1[0].position.y, 2) + Math.pow(meteorite1[0].position.z, 2) > Math.pow(15000, 2)) {
       scene.remove(meteorite1[0]);
       return true;
     }
-    meteorite1[0].position.x += meteorite1[1].x * 20;
-    meteorite1[0].position.y += meteorite1[1].y * 20;
-    meteorite1[0].position.z += meteorite1[1].z * 20;
+    meteorite1[0].position.x += meteorite1[1].x * 3;
+    meteorite1[0].position.y += meteorite1[1].y * 3;
+    meteorite1[0].position.z += meteorite1[1].z * 3;
     return false;
   }
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  var selected_object = false;
+
+  function onMouseClick(event) {
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    raycaster.far = 2000; var intersects = raycaster.intersectObjects(scene.children);
+    for (var i = 0; i < intersects.length; i++) { if (intersects[i].object.type != "Sprite" && intersects[i].object.name != "ring") break; }
+    if (i < intersects.length) {
+      selected_object = intersects[i].object; catchspeed = 0;
+    }
+    else { selected_object = false; }
+  }
+  window.addEventListener('click', onMouseClick, false);
 
 
-  var FPS = 100;
-  var renderT = 1 / FPS; 
-  var timeS = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   function animate() {
-
-    
     var delta = clock.getDelta();
+    requestAnimationFrame(animate);
+    timeStamp += delta;
+    if (timeStamp > singleFrameTime) {
+      stats.update()
+      if (meteorites.length < 5) {
+        var meteorite1 = generate_meteoritegroup(15);
+        meteorites.push(meteorite1);
+        scene.add(meteorite1[0]);
+      }
+      for (var met in meteorites) {
+        if (meteorite_move(meteorites[met])) meteorites.splice(met, 1);
+      }
 
-    stats.update()
-    if (addmet) {
-      var meteorite1 = generate_meteoritegroup(60);
-      meteorites.push(meteorite1);
-      scene.add(meteorite1[0]);
-      addmet = false;
-      document.getElementById("meteorite").innerHTML = meteorites.length + "/10";
-    }
-    for (var met in meteorites) {
-      if (meteorite_move(meteorites[met])) meteorites.splice(met, 1);
-      document.getElementById("meteorite").innerHTML = meteorites.length + "/10";
-    }
+      var rotate = angle * Math.PI * rotatespeed;
+      if (speedup && rotatespeed < 20) {
+        rotatespeed = rotatespeed * 1.003009;
+        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
+        angle *= 0.997;
+      }
+      if (speeddown && rotatespeed > 2) {
+        rotatespeed = Math.max(rotatespeed * 0.997, 2);
+        document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed / 2);
+        angle *= 1.003009;
+      }
 
-    var rotate = angle * Math.PI * rotatespeed;
-    if (speedup) {
-      rotatespeed = Math.min(rotatespeed * 1.0101010101, 50);
-      document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
-      if (rotatespeed < 50) angle *= 0.99
-    }
-    if (speeddown) {
-      rotatespeed = Math.max(rotatespeed * 0.99, 0.5);
-      document.getElementById("plantspeed").innerHTML = Math.floor(rotatespeed * 2);
-      if (rotatespeed > 0.5) angle *= 1.0101010101
-    }
+      angle += 0.0005;
 
-    angle += 0.0005;
+      sun.rotation.y -= (0.005 / Math.PI) * rotatespeed / 5;
+      var position1 = 2 * rotate / 5;
+      star1.rotateOnWorldAxis(
+        vec.clone().set(-1, 1, 0).normalize(),
+        (0.2 / Math.PI) * rotatespeed / 5
+      );
+      star1.position.x = Math.sin(position1) * 100 * 0.6;
+      star1.position.z = Math.cos(position1) * 100 * 0.6;
 
-    sun.rotation.y -= (0.005 / Math.PI) * rotatespeed / 5;
-    var position1 = 2 * rotate / 5;
-    star1.rotateOnWorldAxis(
-      vec.clone().set(-1, 1, 0).normalize(),
-      (0.2 / Math.PI) * rotatespeed / 5
-    );
-    star1.position.x = Math.sin(position1) * 200;
-    star1.position.z = Math.cos(position1) * 200;
+      var position2 = 1.2 * rotate / 5;
+      star2.rotateOnWorldAxis(
+        vec.clone().set(-1, 2, 1).normalize(),
+        (0.02 / Math.PI) * rotatespeed / 5
+      );
+      star2.position.x = Math.sin(position2) * 150 * 0.6;
+      star2.position.z = Math.cos(position2) * 150 * 0.6;
 
-    var position2 = 1.2 * rotate / 5;
-    star2.rotateOnWorldAxis(
-      vec.clone().set(-1, 2, 1).normalize(),
-      (0.02 / Math.PI) * rotatespeed / 5
-    );
-    star2.position.x = Math.sin(position2) * 300;
-    star2.position.z = Math.cos(position2) * 300;
+      var position3 = 1.5 * rotate / 5;
+      star3.rotateOnWorldAxis(
+        vec.clone().set(0.2, 1, 0).normalize(),
+        (0.04 / Math.PI) * rotatespeed / 5
+      );
+      star3.position.x = Math.sin(position3) * 250 * 0.6;
+      star3.position.z = Math.cos(position3) * 250 * 0.6;
+      var position3 = 10 * rotate / 5;
+      starlite3.rotateOnWorldAxis(
+        vec.clone().set(0.1, 1, 0).normalize(),
+        (0.4 / Math.PI) * rotatespeed / 5
+      );
+      starlite3.position.x = Math.sin(position3) * 13 * 0.6 + star3.position.x;
+      starlite3.position.z = Math.cos(position3) * 13 * 0.6 + star3.position.z;
+      starlite3.position.y = Math.sin(position3) * 15 * 0.6 + star3.position.y;
 
-    var position3 = 1.5 * rotate / 5;
-    star3.rotateOnWorldAxis(
-      vec.clone().set(-1, 1, 1).normalize(),
-      (0.04 / Math.PI) * rotatespeed / 5
-    );
-    star3.position.x = Math.sin(position3) * 500;
-    star3.position.z = Math.cos(position3) * 500;
-    var position3 = 10 * rotate / 5;
-    starlite3.rotateOnWorldAxis(
-      vec.clone().set(-1, 1, 1.5).normalize(),
-      (0.4 / Math.PI) * rotatespeed / 5
-    );
-    starlite3.position.x = Math.sin(position3) * 25 + star3.position.x;
-    starlite3.position.z = Math.cos(position3) * 25 + star3.position.z;
-    starlite3.position.y = Math.sin(position3) * 30 + star3.position.y;
+      var position4 = -0.7 * rotate / 5;
+      star4.rotateOnWorldAxis(
+        vec.clone().set(0, 1, 0).normalize(),
+        (0.06 / Math.PI) * rotatespeed / 5
+      );
+      star4.position.x = Math.cos(position4) * 400 * 0.6;
+      star4.position.z = Math.sin(position4) * 400 * 0.6;
+      ring4.rotateOnWorldAxis(
+        vec.clone().set(0, 1, 0).normalize(),
+        ((0.7 * 0.0005) / Math.PI) * rotatespeed / 5 * 10
+      );
+      ring4.position.x = Math.cos(position4) * 400 * 0.6;
+      ring4.position.z = Math.sin(position4) * 400 * 0.6;
 
-    var position4 = -0.7 * rotate / 5;
-    star4.rotateOnWorldAxis(
-      vec.clone().set(0, 1, 0).normalize(),
-      (0.06 / Math.PI) * rotatespeed / 5
-    );
-    star4.position.x = Math.cos(position4) * 800;
-    star4.position.z = Math.sin(position4) * 800;
-    ring4.rotateOnWorldAxis(
-      vec.clone().set(0, 1, 0).normalize(),
-      ((0.7 * 0.0005) / Math.PI) * rotatespeed / 5 * 10
-    );
-    ring4.position.x = Math.cos(position4) * 800;
-    ring4.position.z = Math.sin(position4) * 800;
+      var position5 = 0.5 * rotate / 5;
+      star5.rotateOnWorldAxis(
+        vec.clone().set(1, 4, 1).normalize(),
+        (0.03 / Math.PI) * rotatespeed / 5
+      );
+      star5.position.x = Math.sin(position5) * 550 * 0.6;
+      star5.position.z = Math.cos(position5) * 550 * 0.6;
 
-    var position5 = 0.5 * rotate / 5;
-    star5.rotateOnWorldAxis(
-      vec.clone().set(1, 4, 1).normalize(),
-      (0.03 / Math.PI) * rotatespeed / 5
-    );
-    star5.position.x = Math.sin(position5) * 1100;
-    star5.position.z = Math.cos(position5) * 1100;
+      var position6 = 0.3 * rotate / 5;
+      star6.rotateOnWorldAxis(
+        vec.clone().set(0, 5, 1).normalize(),
+        (0.02 / Math.PI) * rotatespeed / 5
+      );
+      star6.position.x = Math.sin(position6) * 750 * 0.6;
+      star6.position.z = Math.cos(position6) * 750 * 0.6;
+      position6 = 2 * rotate / 5;
+      starlite6.rotateOnWorldAxis(
+        vec.clone().set(1, 1, 1.5).normalize(),
+        (0.2 / Math.PI) * rotatespeed / 5
+      );
+      starlite6.position.x = Math.sin(position6) * 28 * 0.6 + star6.position.x;
+      starlite6.position.z = Math.cos(position6) * 28 * 0.6 + star6.position.z;
+      starlite6.position.y = Math.sin(position6) * 15 * 0.6 + star6.position.y;
 
-    var position6 = 0.3 * rotate / 5;
-    star6.rotateOnWorldAxis(
-      vec.clone().set(0, 5, 1).normalize(),
-      (0.02 / Math.PI) * rotatespeed / 5
-    );
-    star6.position.x = Math.sin(position6) * 1500;
-    star6.position.z = Math.cos(position6) * 1500;
-    position6 = 2 * rotate / 5;
-    starlite6.rotateOnWorldAxis(
-      vec.clone().set(1, 1, 1.5).normalize(),
-      (0.2 / Math.PI) * rotatespeed / 5
-    );
-    starlite6.position.x = Math.sin(position6) * 55 + star6.position.x;
-    starlite6.position.z = Math.cos(position6) * 55 + star6.position.z;
-    starlite6.position.y = Math.sin(position6) * 30 + star6.position.y;
+      var position7 = 0.4 * rotate / 5;
+      star7.rotateOnWorldAxis(
+        vec.clone().set(0.5, 3, 1).normalize(),
+        (0.015 / Math.PI) * rotatespeed / 5
+      );
+      star7.position.x = Math.sin(position7) * 900 * 0.6;
+      star7.position.z = Math.cos(position7) * 900 * 0.6;
 
-    var position7 = 0.4 * rotate / 5;
-    star7.rotateOnWorldAxis(
-      vec.clone().set(0.5, 3, 1).normalize(),
-      (0.015 / Math.PI) * rotatespeed / 5
-    );
-    star7.position.x = Math.sin(position7) * 1800;
-    star7.position.z = Math.cos(position7) * 1800;
+      var position8 = -0.2 * rotate / 5;
+      star8.rotateOnWorldAxis(
+        vec.clone().set(0, 1, 0).normalize(),
+        (0.1 / Math.PI) * rotatespeed / 5
+      );
+      star8.position.x = Math.cos(position8) * 1000 * 0.6;
+      star8.position.z = Math.sin(position8) * 1000 * 0.6;
+      ring8.rotateOnWorldAxis(
+        vec.clone().set(0, 1, 0).normalize(),
+        ((0.2 * 0.0005) / Math.PI) * rotatespeed / 5 * 10
+      );
+      ring8.position.x = Math.cos(position8) * 1000 * 0.6;
+      ring8.position.z = Math.sin(position8) * 1000 * 0.6;
 
-    var position8 = -0.2 * rotate / 5;
-    star8.rotateOnWorldAxis(
-      vec.clone().set(0, 1, 0).normalize(),
-      (0.1 / Math.PI) * rotatespeed / 5
-    );
-    star8.position.x = Math.cos(position8) * 2000;
-    star8.position.z = Math.sin(position8) * 2000;
-    ring8.rotateOnWorldAxis(
-      vec.clone().set(0, 1, 0).normalize(),
-      ((0.2 * 0.0005) / Math.PI) * rotatespeed / 5 * 10
-    );
-    ring8.position.x = Math.cos(position8) * 2000;
-    ring8.position.z = Math.sin(position8) * 2000;
+      var position9 = 0.1 * rotate / 5;
+      star9.rotateOnWorldAxis(
+        vec.clone().set(0, 10, 1).normalize(),
+        (0.01 / Math.PI) * rotatespeed / 5
+      );
+      star9.position.x = Math.sin(position9) * 1200 * 0.6;
+      star9.position.z = Math.cos(position9) * 1200 * 0.6;
 
-    var position9 = 0.1 * rotate / 5;
-    star9.rotateOnWorldAxis(
-      vec.clone().set(0, 10, 1).normalize(),
-      (0.01 / Math.PI) * rotatespeed / 5
-    );
-    star9.position.x = Math.sin(position9) * 2300;
-    star9.position.z = Math.cos(position9) * 2300;
+      //Ball Maving
 
-    //Ball Maving
 
-    if (countstep) {
       for (var i = 0; i < particles.length; i++) {
         particle = particles[i];
-        particle.scale.x = particle.scale.y = Math.sin(star_s_speed[i] * count * 150) * 2 + 3.5;
+        particle.scale.x = particle.scale.y = Math.sin(star_s_speed[i] * count * 150) + 3;
         var d = star_d[i];
         var ds = star_d_speed[i];
-        particle.position.x += d.x * Math.cos(ds.x * count) / 3;
-        particle.position.y += d.y * Math.cos(ds.y * count) / 3;
-        particle.position.z += d.z * Math.cos(ds.z * count) / 3;
+        particle.position.x += d.x * Math.cos(ds.x * count) / 6;
+        particle.position.y += d.y * Math.cos(ds.y * count) / 6;
+        particle.position.z += d.z * Math.cos(ds.z * count) / 6;
       }
+      count += 0.0005;
+
+      if (bounder_detect()) {
+        hit_frame = 200;
+      };
+      if (hit_frame > 0) {
+        moveForward = moveLeft = moveRight = moveBackward = false;
+        currentSpeedForward = 0;
+        currentSpeedRight = 0;
+        cameraPosition.x += hit_direction.x * hit_frame * rotatespeed / 50000;
+        cameraPosition.y += hit_direction.y * hit_frame * rotatespeed / 50000;
+        cameraPosition.z += hit_direction.z * hit_frame * rotatespeed / 50000;
+
+
+        ufo.rotation.x = Math.cos(hit_frame * Math.PI / 6) * (hit_frame / 1500);
+        ufo.rotation.z = Math.sin(hit_frame * Math.PI / 6) * (hit_frame / 1500);
+        ufo.children[1].scale.set(0, 0);
+        ufo.children[1].material.opacity = 0;
+        ufo.children[1].position.y = 0.03;
+
+        hit_frame--;
+        speed = -speed / 20 + speed;
+      }
+      else { ufo.rotation.x = 0; ufo.rotation.x = 0; }
+      var ufo_rotate_speed = operation_method_1(delta);
+
+      if (selected_object && document.getElementById("esc").style.display == "none") {
+        ufo.children[10].material.color.set(0xFFFF33);
+        ufo.children[10].material.specular.set(0xFFFF33);
+        ufo.children[10].material.emissive.set(0xFFFF33);
+        catchspeed = Math.min(catchspeed + 0.01, 1)
+        var delx = selected_object.position.x - cameraPosition.x;
+        var dely = selected_object.position.y - cameraPosition.y;
+        var delz = selected_object.position.z - cameraPosition.z;
+        var di = vec.clone().set(delx, dely, delz).normalize();
+        if (Math.pow(delx - di.x * star_radius[selected_object.name], 2) + Math.pow(dely - di.y * star_radius[selected_object.name], 2) + Math.pow(delz - di.z * star_radius[selected_object.name], 2) > 900) {
+          ufo_starlight = Math.min(ufo_starlight + 0.0002, 0.08);
+          ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
+          light_for_ufo.intensity = (ufo_starlight + 0.025) * 10;
+          ufo.children[1].scale.set((0.2 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.14 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+          ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+          ufo.children[1].position.y = (-0.04 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+          tranfer_speed = Math.min(tranfer_speed + 1, 10);
+        } else {
+          ufo_starlight = Math.max(ufo_starlight - 0.0002, 0.06);
+          ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
+          light_for_ufo.intensity = (ufo_starlight + 0.01) * 10;
+          ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
+          ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
+          ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
+          tranfer_speed = Math.max(tranfer_speed - 0.05, 1);
+        }
+        cameraPosition.x = (delx - di.x * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.x;
+        cameraPosition.y = (dely - di.y * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.y;
+        cameraPosition.z = (delz - di.z * star_radius[selected_object.name] * 1.1) * catchspeed / 30 + cameraPosition.z;
+      }
+      else {
+
+        ufo.children[10].material.color.set(0x44E0FF);
+        ufo.children[10].material.specular.set(0x44E0FF);
+        ufo.children[10].material.emissive.set(0x44E0FF);
+        ufo_starlight = Math.max(ufo_starlight - 0.0002, 0.06);
+        ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
+        light_for_ufo.intensity = (ufo_starlight + 0.01) * 10;
+        ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
+        ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
+        ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
+        tranfer_speed = Math.max(tranfer_speed - 0.05, 1);
+      }
+      camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y + 0.12, cameraPosition.z - cameraDirection.z);
+
+      camera.lookAt(cameraPosition.x, cameraPosition.y + 0.12, cameraPosition.z);
+
+      light_for_ufo.position.set(cameraPosition.x, cameraPosition.y + 0.08, cameraPosition.z);
+      ufo.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+      ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed * tranfer_speed;
+      ufo.position.y += Math.sin(count * 50) * 0.003 * ufo_rotate_speed;
+      light_for_ufo.position.y += Math.sin(count * 50) * 0.003 * ufo_rotate_speed;
+
+
+      camera.updateProjectionMatrix();
+      renderer.render(scene, camera);
+
+
+      timeStamp = (timeStamp % singleFrameTime);
     }
-    count += 0.0005;
-    countstep = !countstep;
-
-    operation_method_1(delta);
-    bounder_detect();
-    camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-    camera.lookAt(
-      cameraPosition.x + cameraDirection.x,
-      cameraPosition.y + cameraDirection.y,
-      cameraPosition.z + cameraDirection.z
-    );
-    camera.updateProjectionMatrix();
-    renderer.render(scene, camera);
-
-
-    requestAnimationFrame(animate);
   }
 
   animate();
