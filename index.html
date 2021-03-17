@@ -412,33 +412,33 @@
         var ufo_top_light = new THREE.Mesh(new THREE.SphereGeometry(0.017, 32, 32), new THREE.MeshBasicMaterial({ color: 0xffffee }));
         var white_light = littlestar.clone();
 
-
-        var ufo_ring1 = new THREE.Mesh(new THREE.TorusGeometry(0.09085, 0.0005, 144, 144, Math.PI / 5.45), new THREE.MeshPhongMaterial({ color: 0xFF51AA, specular: 0xFF51AA, side: THREE.DoubleSide, emissive: 0xFF51AA }));
+        var ring_m= new THREE.MeshPhongMaterial({ color: 0xFF51AA, specular: 0xFF51AA, side: THREE.DoubleSide, emissive: 0xFF51AA });
+        var ufo_ring1 = new THREE.Mesh(new THREE.TorusGeometry(0.0909, 0.0005, 3, 144, Math.PI / 5.455),ring_m);
         ufo_ring1.rotation.x = Math.PI / 2;
-        ufo_ring1.rotation.z = Math.PI / 15.4;
+        ufo_ring1.rotation.z = Math.PI / 15.35;
         ufo_ring1.position.y = 0.021;
-        var ufo_ring2 = ufo_ring1.clone();
+        var ufo_ring2 = new THREE.Mesh(new THREE.TorusGeometry(0.092, 0.0005, 3, 144, Math.PI / 5.455),ring_m);
         ufo_ring2.rotation.x = Math.PI / 2;
-        ufo_ring2.rotation.z = Math.PI / 9.42 + Math.PI / 3;
+        ufo_ring2.rotation.z = Math.PI / 9.35 + Math.PI / 3;
         ufo_ring2.position.y = 0.021;
-        var ufo_ring3 = ufo_ring1.clone();
+        var ufo_ring3 = new THREE.Mesh(new THREE.TorusGeometry(0.09095, 0.0005, 3, 144, Math.PI / 5.455),ring_m);
         ufo_ring3.rotation.x = Math.PI / 2;
-        ufo_ring3.rotation.z = Math.PI / 8.7 + Math.PI * 2 / 3;
+        ufo_ring3.rotation.z = Math.PI / 8.65 + Math.PI * 2 / 3;
         ufo_ring3.position.y = 0.021;
-        var ufo_ring4 = ufo_ring1.clone();
+        var ufo_ring4 = new THREE.Mesh(new THREE.TorusGeometry(0.09085, 0.0005, 3, 144, Math.PI / 5.455),ring_m);
         ufo_ring4.rotation.x = Math.PI / 2;
-        ufo_ring4.rotation.z = Math.PI / 10.7 + Math.PI;
+        ufo_ring4.rotation.z = Math.PI / 10.65 + Math.PI;
         ufo_ring4.position.y = 0.021;
-        var ufo_ring5 = ufo_ring1.clone();
+        var ufo_ring5 = new THREE.Mesh(new THREE.TorusGeometry(0.09085, 0.0005, 3, 144, Math.PI / 5.455),ring_m);
         ufo_ring5.rotation.x = Math.PI / 2;
-        ufo_ring5.rotation.z = Math.PI / 13.7 + Math.PI * 4 / 3;
+        ufo_ring5.rotation.z = Math.PI / 13.65 + Math.PI * 4 / 3;
         ufo_ring5.position.y = 0.021;
-        var ufo_ring6 = new THREE.Mesh(new THREE.TorusGeometry(0.09085, 0.0005, 144, 144, Math.PI / 4.65), new THREE.MeshPhongMaterial({ color: 0xFF51AA, specular: 0xFF51AA, side: THREE.DoubleSide, emissive: 0xFF51AA }));
+        var ufo_ring6 = new THREE.Mesh(new THREE.TorusGeometry(0.09085, 0.0005, 3, 144, Math.PI / 4.655),ring_m);
         ufo_ring6.rotation.x = Math.PI / 2;
-        ufo_ring6.rotation.z = Math.PI / 18.7 + Math.PI * 5 / 3;
+        ufo_ring6.rotation.z = Math.PI / 18.65 + Math.PI * 5 / 3;
         ufo_ring6.position.y = 0.021;
 
-        var ufo_ring0 = new THREE.Mesh(new THREE.TorusGeometry(0.0565, 0.0077, 72, 72), new THREE.MeshPhongMaterial({ color: 0x44E0FF, specular: 0x44E0FF, side: THREE.DoubleSide, emissive: 0x44E0FF }));
+        var ufo_ring0 = new THREE.Mesh(new THREE.TorusGeometry(0.0566, 0.012, 3, 72), new THREE.MeshPhongMaterial({ color: 0x44E0FF, specular: 0x44E0FF, side: THREE.DoubleSide, emissive: 0x44E0FF }));
         ufo_top_light.position.set(0, 0.033, 0);
         white_light.position.set(0, 0.036, 0);
         white_light.scale.set(0.063, 0.0525);
@@ -446,7 +446,7 @@
         ufo_light.scale.set(0.1, 0.05);
 
         ufo_ring0.rotation.x = Math.PI / 2;
-        ufo_ring0.position.y = 0.0205;
+        ufo_ring0.position.y = 0.0222;
         ufo.add(root);
         ufo.add(ufo_light);
         ufo.add(ufo_top_light);
