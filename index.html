@@ -123,7 +123,7 @@
   var t_in = true;
   var chasing = vec.clone();
   var chaseing_frame = 50;
-  var safe_dis = 1;
+  var safe_dis = 2.25;
 
   var SEPARATION = 150,
     AMOUNTX = 15,
@@ -593,7 +593,7 @@
   }
   function crash_detect(a, b, i) {
     if (hit_frame > 400) return true;
-    if (star_radius[i] + 1 > a.position.distanceTo(b.position)) {
+    if (star_radius[i] + 0.25 > a.position.distanceTo(b.position)) {
       hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
       return false;
     }
@@ -1049,7 +1049,7 @@
 
       if (selected_object && document.getElementById("esc").style.display == "none") {
         if (selected_object.name == "sun") safe_dis = 25;
-        else safe_dis = 4;
+        else safe_dis = 2.25;
         chaseing_frame = 50;
         ufo.children[10].material.color.set(0xFFFF33);
         ufo.children[10].material.specular.set(0xFFFF33);
@@ -1114,7 +1114,6 @@
       ufo.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
       ufo.rotation.y += 0.01 / Math.PI * ufo_rotate_speed * tranfer_speed;
       ufo.position.y += Math.sin(count * 50) * 0.015 * ufo_rotate_speed;
-
 
       camera.updateProjectionMatrix();
       renderer.render(scene, camera);
