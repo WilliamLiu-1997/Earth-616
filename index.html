@@ -373,9 +373,9 @@
     document.addEventListener("keydown", onKeyDown, false);
     document.addEventListener("keyup", onKeyUp, false);
 
-    scene.add(new THREE.AmbientLight(0x181818));
+    scene.add(new THREE.AmbientLight(0x222222));
 
-    const light = new THREE.PointLight(0xffdd88, 2, 1500);
+    const light = new THREE.PointLight(0xffdd88, 2, 2500);
     scene.add(light);
 
     scene.add(light_for_ufo);
@@ -625,7 +625,7 @@
     }
     else {
       ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
-      ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
+      ufo.children[1].material.opacity = (0.6 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
       ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
       speed = (1 - speed) / 50 + speed;
     }
@@ -723,10 +723,10 @@
     cameraDirection.x -= Math.sin(angleX);
     cameraDirection.z -= Math.cos(angleX);
 
-    if (cameraDirection.y < 0.15) {
-      angleY += up / 75 / Math.PI;
+    if (cameraDirection.y < 0.16) {
+      angleY += up / 60 / Math.PI;
     }
-    if (cameraDirection.y > -0.15) {
+    if (cameraDirection.y > -0.18) {
       angleY -= down / 50 / Math.PI;
     }
     cameraDirection.y += Math.sin(angleY) * 2;
@@ -1071,7 +1071,7 @@
           ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
           light_for_ufo.intensity = (ufo_starlight + 0.01) * 10;
           ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
-          ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
+          ufo.children[1].material.opacity = (0.6 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
           ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
           tranfer_speed = Math.max(tranfer_speed - 0.1, 1);
         }
@@ -1093,7 +1093,7 @@
         ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
         light_for_ufo.intensity = (ufo_starlight + 0.01) * 10;
         ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
-        ufo.children[1].material.opacity = (0.5 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
+        ufo.children[1].material.opacity = (0.6 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
         ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
         tranfer_speed = Math.max(tranfer_speed - 0.1, 1);
       }
