@@ -138,7 +138,7 @@
 
   const sunlight = new THREE.TextureLoader().load("img/lensflare2.png");
 
-  const ufolight = new THREE.TextureLoader().load("img/ufo_light.png");
+  const ufolight = new THREE.TextureLoader().load("img/ufo_light1.png");
 
 
 
@@ -446,7 +446,7 @@
         white_light.position.set(0, 0.036, 0);
         white_light.scale.set(0.063, 0.0525);
         ufo_light.position.set(0, -0.008, 0);
-        ufo_light.scale.set(0.1, 0.05);
+        ufo_light.scale.set(0.05, 0.05);
 
 
         var light_for_ufo = new THREE.PointLight(0xffffee, 0.7, 0.5);
@@ -615,19 +615,19 @@
     else maxSpeed = Math.max(maxSpeed - 0.05, 0.5);
 
     if ((moveForward || moveBackward || moveRight || moveLeft) && !fast) {
-      ufo.children[1].scale.set((0.12 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.08 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].scale.y = (0.08 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y;
       ufo.children[1].material.opacity = (0.7 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
       ufo.children[1].position.y = (-0.018 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
       speed = (2 - speed) / 50 + speed;
     }
     else if ((moveForward || moveBackward || moveRight || moveLeft) && fast) {
-      ufo.children[1].scale.set((0.16 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.08 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].scale.y = (0.12 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y;
       ufo.children[1].material.opacity = (0.9 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
-      ufo.children[1].position.y = (-0.019 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
+      ufo.children[1].position.y = (-0.03 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
       speed = (4 - speed) / 50 + speed;
     }
     else {
-      ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+      ufo.children[1].scale.y = (0.05 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y;
       ufo.children[1].material.opacity = (0.6 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
       ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
       speed = (1 - speed) / 50 + speed;
@@ -834,21 +834,21 @@
   var selected_object = false;
 
   function onMouseClick(event) {
-
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-    raycaster.far = 2000; var intersects = raycaster.intersectObjects(scene.children);
-    for (var i = 0; i < intersects.length; i++) { if (intersects[i].object.type != "Sprite" && intersects[i].object.name != "ring" && intersects[i].object.name != "starlite3" && intersects[i].object.name != "starlite6") break; }
-    if (i < intersects.length) {
-      selected_object = intersects[i].object;
-      catchspeed = 0;
-      t_in = true;
-    }
-    else {
-      selected_object = false;
-      t_in = false;
+    if (document.getElementById("content").style.display == "none" && !esc) {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      raycaster.far = 2000; var intersects = raycaster.intersectObjects(scene.children);
+      for (var i = 0; i < intersects.length; i++) { if (intersects[i].object.type != "Sprite" && intersects[i].object.name != "ring" && intersects[i].object.name != "starlite3" && intersects[i].object.name != "starlite6") break; }
+      if (i < intersects.length) {
+        selected_object = intersects[i].object;
+        catchspeed = 0;
+        t_in = true;
+      }
+      else {
+        selected_object = false;
+        t_in = false;
+      }
     }
   }
   window.addEventListener('click', onMouseClick, false);
@@ -1065,7 +1065,7 @@
           ufo_starlight = Math.min(ufo_starlight + 0.0002, 0.08);
           ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
           ufo.children[11].intensity = ufo_starlight * 20 - 0.5;
-          ufo.children[1].scale.set((0.2 - ufo.children[1].scale.x) / 50 + ufo.children[1].scale.x, (0.14 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y);
+          ufo.children[1].scale.y = (0.18 - ufo.children[1].scale.y) / 50 + ufo.children[1].scale.y;
           ufo.children[1].material.opacity = (1 - ufo.children[1].material.opacity) / 50 + ufo.children[1].material.opacity;
           ufo.children[1].position.y = (-0.04 - ufo.children[1].position.y) / 50 + ufo.children[1].position.y;
           tranfer_speed = Math.min(tranfer_speed + 1, 10 / ufo_rotate_speed);
@@ -1073,7 +1073,7 @@
           ufo_starlight = Math.max(ufo_starlight - 0.0002, 0.06);
           ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
           ufo.children[11].intensity = ufo_starlight * 20 - 0.5;
-          ufo.children[1].scale.set((0.1 - ufo.children[1].scale.x) / 100 + ufo.children[1].scale.x, (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y);
+          ufo.children[1].scale.y = (0.05 - ufo.children[1].scale.y) / 100 + ufo.children[1].scale.y;
           ufo.children[1].material.opacity = (0.6 - ufo.children[1].material.opacity) / 100 + ufo.children[1].material.opacity;
           ufo.children[1].position.y = (-0.008 - ufo.children[1].position.y) / 100 + ufo.children[1].position.y;
           tranfer_speed = Math.max(tranfer_speed - 0.1, 1);
