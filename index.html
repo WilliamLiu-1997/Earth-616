@@ -112,6 +112,7 @@
   var color = new THREE.Color();
   var spotLight;
   var vec = new THREE.Vector3();
+  var start_point = new THREE.Vector3(0, 0, 0);
   var cameraPosition = vec.clone().set(0, 75, 750);
   var cameraDirection = vec.clone().set(0, 0, 0);
   var hit_direction = vec.clone().set(0, 0, 0);
@@ -591,12 +592,8 @@
     else return true;
   }
   function crash_detect(a, b, i) {
-    var x = a.position.x - b.position.x;
-    var y = a.position.y - b.position.y;
-    var z = a.position.z - b.position.z;
-    var sr = star_radius[i];
     if (hit_frame > 400) return true;
-    if (sr * sr + 2 > x * x + y * y + z * z) {
+    if (star_radius[i] + 0.1 > a.position.distanceTo(b.position)) {
       hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
       return false;
     }
@@ -823,7 +820,7 @@
   }
 
   function meteorite_move(meteorite1) {
-    if (Math.pow(meteorite1[0].position.x, 2) + Math.pow(meteorite1[0].position.y, 2) + Math.pow(meteorite1[0].position.z, 2) > Math.pow(15000, 2)) {
+    if (meteorite1[0].position.distanceTo(start_point) > 11000) {
       scene.remove(meteorite1[0]);
       return true;
     }
@@ -1063,7 +1060,7 @@
         var delz = selected_object.position.z - cameraPosition.z;
         var di = vec.clone().set(delx, dely, delz).normalize();
         chasing.set(delx - di.x * (star_radius[selected_object.name] + safe_dis), dely - di.y * (star_radius[selected_object.name] + safe_dis), delz - di.z * (star_radius[selected_object.name] + safe_dis));
-        if (Math.pow(chasing.x, 2) + Math.pow(chasing.y, 2) + Math.pow(chasing.z, 2) < 3600) { t_in = false; }
+        if (chasing.distanceTo(start_point) < 50) { t_in = false; }
         if (t_in) {
           ufo_starlight = Math.min(ufo_starlight + 0.0002, 0.08);
           ufo.children[3].scale.set(ufo_starlight, ufo_starlight * 5 / 6);
