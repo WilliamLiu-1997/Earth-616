@@ -769,7 +769,7 @@
     }
 
     var v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.932 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.933) {
+    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.933 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.9335) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
     var x1 = x;
@@ -789,8 +789,8 @@
     }
     while (size > 1) {
       var meteorite = material.clone();
-      if (size > osize * 0.8) meteorite.scale.set(size * 0.7, size * 0.7, 1);
-      else if (size > osize * 0.5) meteorite.scale.set(size * 0.55, size * 0.55, 1);
+      if (size > osize * 0.8) meteorite.scale.set(size * 0.8, size * 0.8, 1);
+      else if (size > osize * 0.5) meteorite.scale.set(size * 0.6, size * 0.6, 1);
       else if (size > osize * 0.2) meteorite.scale.set(size * 0.4, size * 0.4, 1);
       else meteorite.scale.set(size * 0.3, size * 0.3, 1)
       meteorite.position.set(x - x1, y - y1, z - z1);
@@ -872,7 +872,7 @@
     timeStamp += delta;
     if (timeStamp > singleFrameTime) {
       stats.update()
-      if (meteorites.length < 5) {
+      if (meteorites.length < 10) {
         var meteorite1 = generate_meteoritegroup(15);
         meteorites.push(meteorite1);
         scene.add(meteorite1[0]);
