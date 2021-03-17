@@ -122,7 +122,7 @@
   var t_in = true;
   var chasing=vec.clone();
   var chaseing_frame=50;
-  var safe_dis=0.25;
+  var safe_dis=1;
 
   var SEPARATION = 150,
     AMOUNTX = 15,
@@ -1046,7 +1046,7 @@
 
       if (selected_object && document.getElementById("esc").style.display == "none") {
         if(selected_object.name=="sun")safe_dis=25;
-        else safe_dis=0.25;
+        else safe_dis=1;
         chaseing_frame=50;
         ufo.children[10].material.color.set(0xFFFF33);
         ufo.children[10].material.specular.set(0xFFFF33);
