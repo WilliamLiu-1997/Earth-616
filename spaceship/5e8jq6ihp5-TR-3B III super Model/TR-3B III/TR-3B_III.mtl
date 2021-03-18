@@ -1,0 +1,64 @@
+newmtl default
+d 1
+Ns 0.75
+Ni 0
+Ka 0 0 0
+Kd 0 0 0
+Ks 1 1 1
+Km 0
+
+newmtl default_dome
+d 1
+Ns 0.75
+Ni 0
+Ka 0 0 0
+Kd 0.247059 0.501961 0.501961
+Ks 1 1 1
+Km 0
+
+newmtl default_propulsion
+d 1
+Ns 1
+Ni 0
+Ka 1 1 1
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+
+newmtl default_side_p
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 0.27451 0.27451 0.27451
+Ks 1 1 1
+Km 0
+
+newmtl default_body1
+d 1
+Ns 1
+Ni 0
+Ka 0.501961 1 1
+Kd 0 1 1
+Ks 1 1 1
+Km 0
+
+newmtl default_red_light
+d 1
+Ns 1
+Ni 0
+Ka 1 0 0
+Kd 1 0 0
+Ks 1 1 1
+Km 0
+
+newmtl default_TR-3B
+d 1
+Ns 1
+Ni 0
+Ka 0 0 0
+Kd 1 1 1
+Ks 1 1 1
+Km 0
+map_Kd /Maps/c5b.jpg
+
