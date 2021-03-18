@@ -986,7 +986,7 @@
     if (document.getElementById("content").style.display == "none" && !esc) {
       raycaster.setFromCamera(mouse, camera);
       raycaster.far = 2000; var intersects = raycaster.intersectObjects(scene.children);
-      for (var i = 0; i < intersects.length; i++) { if (intersects[i].object.type != "Sprite" && intersects[i].object.name != "ring" && intersects[i].object.name != "starlite3" && intersects[i].object.name != "starlite6") break; }
+      for (var i = 0; i < intersects.length; i++) { if (intersects[i].object.type != "Sprite" && intersects[i].object.name != "ring") break; }
       if (i < intersects.length) {
         selected_object = intersects[i].object;
         catchspeed = 0;
