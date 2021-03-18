@@ -17,7 +17,30 @@
     transition: box-shadow 0.3s ease-in-out;
     user-select: none;
   }
-
+  #aiming1 {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    left:50%;
+    top:50%;
+    position: absolute;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    pointer-events:none;
+  }
+  #aiming2 {
+    margin: 0;
+    width: 30px;
+    height: 30px;
+    left:50%;
+    top:50%;
+    position: absolute;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    pointer-events:none;
+  }
   h1 {
     font-size: 5.5vh;
     margin-bottom: 3%;

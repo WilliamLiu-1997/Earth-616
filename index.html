@@ -40,6 +40,10 @@
       text-align: center;
       color: #ffffffcc;
       background-color: rgba(0, 0, 0, 0);
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    pointer-events:none;
     }
   </style>
   <title>Planetary System</title>
@@ -48,6 +52,9 @@
 <body>
   <div id="container"></div>
   <div id="esc"></div>
+  
+  <div id="aiming1"><img src="img/aiming4.png" width="20px" height="20px"></div>
+  <div id="aiming2"><img src="img/aiming5.png" width="30px" height="30px"></div>
   <div id="secondBlocker" style="display: none">
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
     Press ESC to disable mouse direction.</br>Press Q/E to speed up/down the plants rotation and
@@ -82,6 +89,9 @@
   } from "./three.js/examples/jsm/objects/Lensflare.js";
   import { OBJLoader } from './three.js/examples/jsm/loaders/OBJLoader.js';
   import { MTLLoader } from './three.js/examples/jsm/loaders/MTLLoader.js';
+
+  document.getElementById("aiming2").style.left=document.getElementById("aiming2").offsetLeft-15+"px";
+  document.getElementById("aiming2").style.top=document.getElementById("aiming2").offsetTop-15+"px";
 
   var FPS = 144;
   var singleFrameTime = (1 / FPS);
@@ -161,6 +171,13 @@
   var angleZY = 0;
 
   var speed = 1;
+
+  
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  var selected_object = false;
+
+
 
   const sunlight = new THREE.TextureLoader().load("img/lensflare2.png");
 
@@ -589,15 +606,23 @@
   }
 
 
-  function getMousePosition(e) {
-    var x = e.clientX;
-    var y = e.clientY;
+  function getMousePosition() {
+    var x = document.getElementById("aiming1").offsetLeft+10;
+    var y = document.getElementById("aiming1").offsetTop+10;
     return { x: x, y: y };
   }
   function mouseMove(e) {
+    
+    mouse.x = ((document.getElementById("aiming1").offsetLeft+10) / window.innerWidth) * 2 - 1;
+    mouse.y = - ((document.getElementById("aiming1").offsetTop+10) / window.innerHeight) * 2 + 1;
+
+
+
+    document.getElementById("aiming1").style.left=e.clientX-10+"px";
+    document.getElementById("aiming1").style.top=e.clientY-10+"px";
     if (esc)
       var mouseP = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    else var mouseP = getMousePosition(e);
+    else var mouseP = getMousePosition();
     if (mouseP["y"] / window.innerHeight < 0.50) {
       up = 0.50 - mouseP["y"] / window.innerHeight;
     } else {
@@ -907,7 +932,7 @@
     }
 
     var v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.75 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.76) {
+    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.8 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.81) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
     var x1 = x;
@@ -956,14 +981,9 @@
     meteorite1[0].position.z += meteorite1[1].z * 3;
     return false;
   }
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-  var selected_object = false;
 
   function onMouseClick(event) {
     if (document.getElementById("content").style.display == "none" && !esc) {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
       raycaster.far = 2000; var intersects = raycaster.intersectObjects(scene.children);
       for (var i = 0; i < intersects.length; i++) { if (intersects[i].object.type != "Sprite" && intersects[i].object.name != "ring" && intersects[i].object.name != "starlite3" && intersects[i].object.name != "starlite6") break; }
@@ -978,7 +998,8 @@
       }
     }
   }
-  window.addEventListener('click', onMouseClick, false);
+
+  window.addEventListener('mousedown', onMouseClick, false);
 
 
 
@@ -997,6 +1018,14 @@
 
 
   function animate() {
+    if(esc){
+      document.querySelector("body").style.cursor = 'url("chrome-extension://jlgkpaicikihijadgifklkbpdajbkhjo/image/cursors/001.png"),default';
+    document.getElementById("aiming1").style.display = "none";
+    document.getElementById("aiming2").style.display = "none";
+    }
+    else{document.querySelector("body").style.cursor = "none";
+    document.getElementById("aiming1").style.display = "block";
+    document.getElementById("aiming2").style.display = "block";}
     var delta = clock.getDelta();
     requestAnimationFrame(animate);
     timeStamp += delta;
