@@ -868,7 +868,7 @@
 
     ufo.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
     ufo.rotation.y += 0.01 / Math.PI * speed * tranfer_speed;
-    ufo.position.y += Math.sin(count * 50) * 0.015 * speed;
+    ufo.position.y += Math.sin(count * 60) * 0.01 * speed;
 
     camera.position.set(cameraPosition.x - cameraDirection.x, cameraPosition.y - cameraDirection.y + 0.6, cameraPosition.z - cameraDirection.z);
     camera.lookAt(cameraPosition.x, cameraPosition.y + 0.6, cameraPosition.z);
