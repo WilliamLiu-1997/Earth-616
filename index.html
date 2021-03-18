@@ -53,8 +53,8 @@
   <div id="container"></div>
   <div id="esc"></div>
   
-  <div id="aiming1"><img src="img/aiming4.png" width="20px" height="20px"></div>
-  <div id="aiming2"><img src="img/aiming5.png" width="30px" height="30px"></div>
+  <div id="aiming1"><img src="img/aiming4.png" width="21px" height="21px"></div>
+  <div id="aiming2"><img src="img/aiming5.png" width="31px" height="31px"></div>
   <div id="secondBlocker" style="display: none">
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
     Press ESC to disable mouse direction.</br>Press Q/E to speed up/down the plants rotation and
@@ -1021,11 +1021,12 @@
     if(esc){
       document.querySelector("body").style.cursor = 'url("chrome-extension://jlgkpaicikihijadgifklkbpdajbkhjo/image/cursors/001.png"),default';
     document.getElementById("aiming1").style.display = "none";
-    document.getElementById("aiming2").style.display = "none";
     }
     else{document.querySelector("body").style.cursor = "none";
     document.getElementById("aiming1").style.display = "block";
     document.getElementById("aiming2").style.display = "block";}
+    
+    if(document.getElementById("esc").style.display != "none"){document.getElementById("aiming2").style.display = "none";};
     var delta = clock.getDelta();
     requestAnimationFrame(animate);
     timeStamp += delta;
