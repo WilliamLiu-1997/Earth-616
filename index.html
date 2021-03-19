@@ -943,12 +943,11 @@
       if (i % 2 == 0) var meteorite = material.clone();
       else var meteorite = materialr.clone();
       meteorite.position.set(x - x1, y - y1, z - z1);
-      meteorite.scale.set(size*1.2, size*1.2, 1)
+      meteorite.scale.set(size*1.15, size*1.15, 1)
       meteoritegroup.add(meteorite)
       x = x - size * v1.x / 3;
       y = y - size * v1.y / 3;
       z = z - size * v1.z / 3;
-      size *= 0.98;
     }
     while (size > 1) {
       var meteorite = material.clone();
@@ -972,7 +971,7 @@
   }
 
   function meteorite_move(meteorite1) {
-    if (meteorite1[0].position.distanceTo(start_point) > 11000) {
+    if (meteorite1[0].position.distanceTo(start_point) > 8000) {
       scene.remove(meteorite1[0]);
       return true;
     }
