@@ -215,7 +215,7 @@
   var ring4 = ring1("./texture/ring6.png", 15 * 0.6, 12 * 0.6, 420 * 0.6, 0, 0);
   var star5 = obj("./texture/j016.jpg", 15 * 0.6, 550 * 0.6, 0, 0, "star5");
   var star6 = obj("./texture/j021.jpg", 18 * 0.6, 750 * 0.6, 0, 0, "star6");
-  var starlite6 = obj("./texture/j024.jpg", 3 * 0.6, 778 * 0.6, 15 * 0.6, 0, "starlite6");
+  var starlite6 = obj("./texture/j024.jpg", 3 * 0.6, 780 * 0.6, 15 * 0.6, 0, "starlite6");
   var star7 = obj("./texture/j009.jpg", 10 * 0.6, 900 * 0.6, 0, 0, "star7");
   var star8 = obj("./texture/j012.jpg", 12 * 0.6, 1000 * 0.6, 0, 0, "star8");
   var ring8 = ring2("./texture/ring5.png", 20 * 0.6, 2 * 0.6, 1000 * 0.6, 0, 0);
@@ -1122,9 +1122,9 @@
         vec.clone().set(1, 1, 1.5).normalize(),
         (0.2 / Math.PI) * rotatespeed / 5
       );
-      starlite6.position.x = Math.sin(position6) * 28 * 0.6 + star6.position.x;
-      starlite6.position.z = Math.cos(position6) * 28 * 0.6 + star6.position.z;
-      starlite6.position.y = Math.sin(position6) * 15 * 0.6 + star6.position.y;
+      starlite6.position.x = Math.sin(position6) * 30 * 0.6 + star6.position.x;
+      starlite6.position.z = Math.cos(position6) * 30 * 0.6 + star6.position.z;
+      starlite6.position.y = Math.sin(position6) * 20 * 0.6 + star6.position.y;
 
       var position7 = 0.4 * rotate / 5;
       star7.rotateOnWorldAxis(
