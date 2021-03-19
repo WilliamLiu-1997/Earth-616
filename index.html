@@ -440,7 +440,7 @@
 
     scene.add(new THREE.AmbientLight(0x222222));
 
-    const light = new THREE.PointLight(0xffdd88, 2, 2500);
+    const light = new THREE.PointLight(0xffdd88, 2, 3000);
     scene.add(light);
 
     scene.add(sunbackground);
@@ -704,7 +704,7 @@
       esc = false;
       display = document.getElementById("content").style.display;
     }
-    if (fast) maxSpeed = 0.2;
+    if (fast) maxSpeed = 0.15;
     else maxSpeed = Math.max(maxSpeed - 0.005, 0.1);
 
     if ((moveForward || moveBackward || moveRight || moveLeft) && !fast) {
