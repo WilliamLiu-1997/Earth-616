@@ -53,8 +53,8 @@
   <div id="container"></div>
   <div id="esc"></div>
   
-  <div id="aiming1"><img src="img/aiming4.png" width="21px" height="21px"></div>
-  <div id="aiming2"><img src="img/aiming5.png" width="31px" height="31px"></div>
+  <div id="aiming1"><img src="img/aiming4.png" width="19px" height="19px"></div>
+  <div id="aiming2"><img src="img/aiming5.png" width="29px" height="29px"></div>
   <div id="secondBlocker" style="display: none">
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
     Press ESC to disable mouse direction.</br>Press Q/E to speed up/down the plants rotation and
@@ -910,29 +910,15 @@
 
     var meteoritegroup = meteorite_group.clone();
 
-    var ran = Math.random() * 3;
+
     var x, y, z;
-    if (ran > 2) {
-      if (ran > 2.5) x = 5000;
-      else x = -5000;
-      y = (Math.random() - 0.5) * 5000;
-      z = (Math.random() - 0.5) * 5000;
-    }
-    else if (ran > 1) {
-      if (ran > 1.5) y = 5000;
-      else y = -5000;
-      x = (Math.random() - 0.5) * 5000;
-      z = (Math.random() - 0.5) * 5000;
-    }
-    else {
-      if (ran > 0.5) z = 5000;
-      else z = -5000;
-      y = (Math.random() - 0.5) * 5000;
-      x = (Math.random() - 0.5) * 5000;
-    }
+    x = (Math.random() - 0.5) * 12000;
+    y = (Math.random() - 0.5) * 12000;
+    z = Math.sqrt(8490*8490-x*x-y*y)*(Math.random()>0.5?1:-1);
+  
 
     var v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.8 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.81) {
+    while (vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.922 || vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.923) {
       v1 = vec.clone().set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
     }
     var x1 = x;
@@ -971,7 +957,7 @@
   }
 
   function meteorite_move(meteorite1) {
-    if (meteorite1[0].position.distanceTo(start_point) > 8000) {
+    if (meteorite1[0].position.distanceTo(start_point) > 8500) {
       scene.remove(meteorite1[0]);
       return true;
     }
