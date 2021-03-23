@@ -54,7 +54,6 @@
   <div id="esc"></div>
   
   <div id="aiming1"><img src="img/aiming4.png" width="19px" height="19px"></div>
-  <div id="aiming2"><img src="img/aiming5.png" width="29px" height="29px"></div>
   <div id="secondBlocker" style="display: none">
     Press W A S D to move, Shift to speed up. Use Mouse to look around.
     Press ESC to disable mouse direction.</br>Press Q/E to speed up/down the plants rotation and
@@ -90,8 +89,6 @@
   import { OBJLoader } from './three.js/examples/jsm/loaders/OBJLoader.js';
   import { MTLLoader } from './three.js/examples/jsm/loaders/MTLLoader.js';
 
-  document.getElementById("aiming2").style.left=window.innerWidth / 2-15+"px";
-  document.getElementById("aiming2").style.top=window.innerHeight / 2-14+"px";
 
   var FPS = 144;
   var singleFrameTime = (1 / FPS);
@@ -1008,10 +1005,8 @@
     document.getElementById("aiming1").style.display = "none";
     }
     else{document.querySelector("body").style.cursor = "none";
-    document.getElementById("aiming1").style.display = "block";
-    document.getElementById("aiming2").style.display = "block";}
+    document.getElementById("aiming1").style.display = "block";}
     
-    if(document.getElementById("esc").style.display != "none"){document.getElementById("aiming2").style.display = "none";};
     var delta = clock.getDelta();
     requestAnimationFrame(animate);
     timeStamp += delta;
@@ -1174,8 +1169,6 @@
     var width = window.innerWidth;
     var height = window.innerHeight;
     
-  document.getElementById("aiming2").style.left=width / 2-15+"px";
-  document.getElementById("aiming2").style.top=height / 2-14+"px";
     //then update the renderer
     renderer.setSize(width, height);
     //and update the aspect ratio of the camera
