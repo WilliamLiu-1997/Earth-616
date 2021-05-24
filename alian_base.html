@@ -321,7 +321,7 @@ waterColor: 0x001e1f,
       opacity:0.5
     }
     )
-  var jupiter=new THREE.Mesh(new THREE.PlaneGeometry(6000,5750),jupiter_m)
+  var jupiter=new THREE.Mesh(new THREE.PlaneGeometry(3250,3000),jupiter_m)
   jupiter.name="jupiter"
   const normalMap2 = new THREE.TextureLoader().load("./three.js/examples/textures/water/Water_1_M_Normal.jpg");
   const clearcoatNormaMap = new THREE.TextureLoader().load("./three.js/examples/textures/pbr/Scratched_gold/Scratched_gold_01_1K_Normal.png");
@@ -776,7 +776,7 @@ waterColor: 0x001e1f,
     // new_light7.position.set(-0.2, -143.45, -31.65);
     // new_light7.scale.set(1.2, 3.6, 1.2);
     // if(add_base)all_obj2.add(new_light7);
-    jupiter.position.set(0,3750,-6000)
+    jupiter.position.set(0,3750,-6500)
     //jupiter.rotation.z=Math.PI/4
     jupiter.rotation.x=Math.PI/6
     scene.add(jupiter)
@@ -983,7 +983,7 @@ waterColor: 0x001e1f,
     // cameraPosition.x = Math.max(-1500, Math.min(1500, cameraPosition.x));
     // cameraPosition.z = Math.max(-1500, Math.min(1500, cameraPosition.z));
     cameraPosition.y = Math.max(-508 + 0.55 * ufo_scale, Math.min(1200, cameraPosition.y));
-    if(cameraPosition.y>800){
+    if(cameraPosition.y>500){
       selected_object=false;
       document.getElementById("blocker1").style.backgroundColor="rgba(0, 0, 0, 1)";
       $("#blocker1").fadeIn(2500);
