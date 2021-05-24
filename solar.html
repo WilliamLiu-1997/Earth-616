@@ -364,10 +364,10 @@
       });
       var sunbackground1 = new THREE.Sprite(sunmaterial1);
       sunbackground1.position.set(0, 0, 0);
-      sunbackground1.scale.set(500, 400, 1);
+      sunbackground1.scale.set(625, 500, 1);
       var sun = obj_lighting(
         "./texture/fluid1-original.png",
-        80,
+        100,
         0,
         0,
         0,
@@ -397,7 +397,7 @@
       var star5 = obj("./texture/j006.jpg", 6, 420, 0, 0, "star5");
       var star6 = obj(
         "./texture/TDVC_Jupiter_Texture_Map.jpg",
-        20,
+        25,
         600,
         0,
         0,
@@ -406,48 +406,48 @@
       var starlite6 = obj(
         "./texture/opura1.jpg",
         0.8,
-        640,
-        200 + 30,
+        650,
+        200 + 40,
         0,
         "starlite6"
       );
       var starlite61 = obj(
         "./texture/TDVC_Venus_Texture_Map.jpg",
         1.1,
-        630,
-        200 + 20,
+        640,
+        200 + 35,
         0,
         "starlite61"
       );
       var starlite62 = obj(
         "./texture/TDVC_Uranus_Moon_Texture_Map.jpg",
         1.3,
-        645,
-        200 + 35,
+        655,
+        200 + 45,
         0,
         "starlite62"
       );
       var starlite63 = obj(
         "./texture/j029.jpg",
         1.2,
-        650,
-        200 + 40,
+        660,
+        200 + 50,
         0,
         "starlite63"
       );
       var starlite64 = obj(
         "./texture/j019.jpg",
         1.5,
-        655,
-        200 + 45,
+        665,
+        200 + 55,
         0,
         "starlite64"
       );
       var starlite65 = obj(
         "./texture/j008.jpg",
         1.4,
-        660,
-        200 + 50,
+        670,
+        200 + 60,
         0,
         "starlite65"
       );
@@ -2100,64 +2100,64 @@ go_alian_base()
             vec.clone().set(0.1, 1, 0.3).normalize(),
             ((0.2 / Math.PI) * rotatespeed) / 50
           );
-          starlite6.position.x = Math.sin(position6) * 40 + star6.position.x;
-          starlite6.position.z = Math.cos(position6) * 40 + star6.position.z;
-          starlite6.position.y = Math.sin(position6) * 30 + star6.position.y;
+          starlite6.position.x = Math.sin(position6) * 50 + star6.position.x;
+          starlite6.position.z = Math.cos(position6) * 50 + star6.position.z;
+          starlite6.position.y = Math.sin(position6) * 40 + star6.position.y;
 
           starlite61.rotateOnWorldAxis(
             vec.clone().set(0.5, 1, 0.2).normalize(),
             ((0.2 / Math.PI) * rotatespeed) / 50
           );
           starlite61.position.x =
-            Math.sin(position6*2) * 30 + star6.position.x;
+            Math.sin(position6*2) * 40 + star6.position.x;
           starlite61.position.z =
-            Math.cos(position6*2) * 30 + star6.position.z;
+            Math.cos(position6*2) * 40 + star6.position.z;
           starlite61.position.y =
-            Math.sin(position6*2) * 25 + star6.position.y;
+            Math.sin(position6*2) * 35 + star6.position.y;
 
           starlite62.rotateOnWorldAxis(
             vec.clone().set(0.2, 1, 0.6).normalize(),
             ((0.2 / Math.PI) * rotatespeed) / 50
           );
           starlite62.position.x =
-            Math.sin(position6*1.2) * 45 + star6.position.x;
+            Math.sin(position6*1.2) * 55 + star6.position.x;
           starlite62.position.z =
-            Math.cos(position6*1.2) * 45 + star6.position.z;
+            Math.cos(position6*1.2) * 55 + star6.position.z;
           starlite62.position.y =
-            Math.sin(position6*1.2) * 35 + star6.position.y;
+            Math.sin(position6*1.2) * 45 + star6.position.y;
 
           starlite63.rotateOnWorldAxis(
             vec.clone().set(0.1, 1, 0.5).normalize(),
             ((0.2 / Math.PI) * rotatespeed) / 50
           );
           starlite63.position.x =
-            Math.sin(position6*1.5) * 50 + star6.position.x;
+            Math.sin(position6*1.5) * 60 + star6.position.x;
           starlite63.position.z =
-            Math.cos(position6*1.5) * 50 + star6.position.z;
+            Math.cos(position6*1.5) * 60 + star6.position.z;
           starlite63.position.y =
-            Math.sin(position6*1.5) * 40 + star6.position.y;
+            Math.sin(position6*1.5) * 50 + star6.position.y;
 
           starlite64.rotateOnWorldAxis(
             vec.clone().set(0.2, 1, 0.3).normalize(),
             ((0.2 / Math.PI) * rotatespeed) / 50
           );
           starlite64.position.x =
-            Math.sin(position6*0.8) * 55 + star6.position.x;
+            Math.sin(position6*0.8) * 65 + star6.position.x;
           starlite64.position.z =
-            Math.cos(position6*0.8) * 55 + star6.position.z;
+            Math.cos(position6*0.8) * 65 + star6.position.z;
           starlite64.position.y =
-            Math.sin(position6*0.8) * 45 + star6.position.y;
+            Math.sin(position6*0.8) * 55 + star6.position.y;
 
           starlite65.rotateOnWorldAxis(
             vec.clone().set(0.6, 1, 0.3).normalize(),
             ((0.2 / Math.PI) * rotatespeed) / 50
           );
           starlite65.position.x =
-            Math.sin(position6*0.18) * 60 + star6.position.x;
+            Math.sin(position6*0.18) * 70 + star6.position.x;
           starlite65.position.z =
-            Math.cos(position6*0.18) * 60 + star6.position.z;
+            Math.cos(position6*0.18) * 70 + star6.position.z;
           starlite65.position.y =
-            Math.sin(position6*0.18) * 50 + star6.position.y;
+            Math.sin(position6*0.18) * 60 + star6.position.y;
 
           var position7 = (0.4 * rotate) / 5;
           star7.rotateOnWorldAxis(
