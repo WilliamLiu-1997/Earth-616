@@ -321,7 +321,7 @@ waterColor: 0x001e1f,
       opacity:0.5
     }
     )
-  var jupiter=new THREE.Mesh(new THREE.PlaneGeometry(3250,3000),jupiter_m)
+  var jupiter=new THREE.Mesh(new THREE.PlaneGeometry(3500,3250),jupiter_m)
   jupiter.name="jupiter"
   const normalMap2 = new THREE.TextureLoader().load("./three.js/examples/textures/water/Water_1_M_Normal.jpg");
   const clearcoatNormaMap = new THREE.TextureLoader().load("./three.js/examples/textures/pbr/Scratched_gold/Scratched_gold_01_1K_Normal.png");
@@ -778,7 +778,7 @@ waterColor: 0x001e1f,
     // if(add_base)all_obj2.add(new_light7);
     jupiter.position.set(0,3750,-6500)
     //jupiter.rotation.z=Math.PI/4
-    jupiter.rotation.x=Math.PI/6
+    jupiter.rotation.x=Math.PI/7
     scene.add(jupiter)
 
 
