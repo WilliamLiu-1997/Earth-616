@@ -191,7 +191,7 @@
     var scene;
     var camera;
     var renderer;
-    var rotatespeed = 5 * fps_speed;
+    var rotatespeed = 3 * fps_speed;
     var stats = new Stats();
     stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild(stats.dom);
@@ -354,7 +354,7 @@
       });
       var sunbackground = new THREE.Sprite(sunmaterial);
       sunbackground.position.set(0, 0, 0);
-      sunbackground.scale.set(500, 400, 1);
+      sunbackground.scale.set(500,400, 1);
       var sunlight1 = new THREE.TextureLoader().load("img/ball.png");
       var sunmaterial1 = new THREE.SpriteMaterial({
         blending: THREE.AdditiveBlending,
@@ -364,7 +364,7 @@
       });
       var sunbackground1 = new THREE.Sprite(sunmaterial1);
       sunbackground1.position.set(0, 0, 0);
-      sunbackground1.scale.set(625, 500, 1);
+      sunbackground1.scale.set(500,400, 1);
       var sun = obj_lighting(
         "./texture/fluid1-original.png",
         100,
@@ -1154,6 +1154,7 @@
     }
 
     function obj_lighting(url, size, x, y, z, name) {
+      size=size*0.8
       var startTexture = THREE.ImageUtils.loadTexture(url);
       var starBall = new THREE.Mesh(
         new THREE.SphereGeometry(size, 100, 100),
@@ -1167,6 +1168,7 @@
       return starBall;
     }
     function obj(url, size, x, y, z, name) {
+      size=size*0.8
       var startTexture = THREE.ImageUtils.loadTexture(url);
       if (name == "star3") {
         var starBall = new THREE.Mesh(
@@ -1279,6 +1281,7 @@
     }
 
     function ring1(url, size, width, x, y, z) {
+      size=size*0.8
       var startTexture = THREE.ImageUtils.loadTexture(url);
       var r = new THREE.RingGeometry(size, size + width, size * 10);
       var pos = r.attributes.position;
@@ -1302,6 +1305,7 @@
       return starBall;
     }
     function ring2(url, size, width, x, y, z) {
+      size=size*0.8
       var startTexture = THREE.ImageUtils.loadTexture(url);
       var r = new THREE.RingGeometry(size, size + width, size * 10);
       var pos = r.attributes.position;
@@ -1519,11 +1523,11 @@
         currentSpeedForward = 0;
         currentSpeedRight = 0;
         cameraPosition.x +=
-          (hit_direction.x * hit_frame * rotatespeed) / 100000;
+          (hit_direction.x * hit_frame * rotatespeed) / 10000;
         cameraPosition.y +=
-          (hit_direction.y * hit_frame * rotatespeed) / 100000;
+          (hit_direction.y * hit_frame * rotatespeed) / 10000;
         cameraPosition.z +=
-          (hit_direction.z * hit_frame * rotatespeed) / 100000;
+          (hit_direction.z * hit_frame * rotatespeed) / 10000;
 
         ufo.rotation.x =
           Math.cos((hit_frame * Math.PI) / 7) * (hit_frame / 3000);
