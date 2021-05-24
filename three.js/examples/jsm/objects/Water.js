@@ -25,7 +25,7 @@ import {
  * http://29a.ch/ && http://29a.ch/slides/2012/webglwater/ : Water shader explanations in WebGL
  */
 
-var Water = function ( geometry, options ) {
+var Water = function ( geometry, options, water_size=1.0 ) {
 
 	Mesh.call( this, geometry );
 
@@ -90,7 +90,7 @@ var Water = function ( geometry, options ) {
 				'mirrorSampler': { value: null },
 				'alpha': { value: 1.0 },
 				'time': { value: 0.0 },
-				'size': { value: 1.0 },
+				'size': { value: water_size },
 				'distortionScale': { value: 20.0 },
 				'textureMatrix': { value: new Matrix4() },
 				'sunColor': { value: new Color( 0x7F7F7F ) },
