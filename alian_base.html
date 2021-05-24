@@ -314,7 +314,7 @@ waterColor: 0x001e1f,
       fog: scene.fog !== undefined
     }
   );
-  const ju_map = new THREE.TextureLoader().load("./texture/ju.jpg");
+  const ju_map = new THREE.TextureLoader().load("./texture/ju1.png");
     var jupiter_m=new THREE.MeshBasicMaterial({
       map:ju_map,
       transparent:true,
@@ -357,7 +357,7 @@ waterColor: 0x001e1f,
   function init() {
 
     var skyGeometry = new THREE.SphereGeometry(8000, 100, 100);
-    var map = new THREE.TextureLoader().load('img/bg5.png');
+    var map = new THREE.TextureLoader().load('img/bg6.png');
     map.wrapS = THREE.RepeatWrapping;
     map.wrapT = THREE.RepeatWrapping;
     map.repeat.set(15, 15);
@@ -1478,17 +1478,17 @@ waterColor: 0x001e1f,
         city1.children[0].children[1].material.emissive.r = 0.33
         // city1.children[0].children[2].material.color.r = 0.3
         // city1.children[0].children[2].material.emissive.r = 0.3
-        env_light.color.r = 0.10/1.5
+        env_light.color.r = 0.13/1.5
         city1.children[0].children[1].material.color.g = 0.63
         city1.children[0].children[1].material.emissive.g = 0.63
         // city1.children[0].children[2].material.color.g = 0.6
         // city1.children[0].children[2].material.emissive.g = 0.6
-        env_light.color.g = 0.11/1.5
+        env_light.color.g = 0.15/1.5
         city1.children[0].children[1].material.color.b = 0.70
         city1.children[0].children[1].material.emissive.b = 0.70
         // city1.children[0].children[2].material.color.b = 0.65
         // city1.children[0].children[2].material.emissive.b = 0.65
-        env_light.color.b = 0.13/1.5
+        env_light.color.b = 0.17/1.5
         // for(var i=5;i<10;i++)
         // {
         //   all_obj2.children[i].material.emissive.r=0.475
