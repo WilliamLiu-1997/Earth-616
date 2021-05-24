@@ -1,4 +1,4 @@
-# Solar and Life
+# Solar Human Alian
 
  Press WASD to move, press shift to speed up. Click somewhere to transfer.
  
