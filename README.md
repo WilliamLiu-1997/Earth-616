@@ -1,8 +1,8 @@
 # Solar Human Alian
 
- Press WASD to move, press shift to speed up. Click somewhere to transfer.
- 
  The solar.html is a 3D webpage made by three.js which simulates the planetary system. A UFO can be controlled to explore in it.
+ 
+ Press WASD to move, press shift to speed up. Click somewhere to transfer.
  
  According to the tips on the top, there are two planets earth and europa that have liquid water, which means that there may have life. Find these two planets and click them to chase them. After 5 seconds, you will be redirected to the island and alian base repectively.
  
