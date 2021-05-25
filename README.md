@@ -9,4 +9,4 @@
  In island and alian base, you acan also click somewhere to move. If you want to go back to the solar, just fly high enough and then you will be redirected to the solar (click the moon in the island or click the jupiter in the alian base is also okay).
  
  
- A RTX2060 or better GPU is recommanded for this program!
+ A RTX2060 or better GPU is highly recommanded for this program!
