@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <link rel="stylesheet" href="main.css" />
+  <style>
+
+  </style>
+  <title>Virtual Museum</title>
+</head>
+
+<body>
+  <div id="container"></div>
+  <div id="secondBlocker" style="display: none" onclick="hideSec()">
+    press W A S D to move . Use Mouse to look around.
+  </div>
+  <div id="webgl-container">
+
+    <!-- <input type="file"> -->
+    <p id="drag-and-drop">
+      <img src="./assets/upload.png" alt="/" style="background-color:white;margin: auto;" height="100px">
+      <br>
+      Drag and Drop a JSON file
+    </p>
+  </div>
+  <div id="blocker">
+    <div id="content">
+      <!-- <div>2020 THE IMMERSIVE EXPERIENCE</div> -->
+      <h1>Virtual Museaum Generator</h1>
+      <p>
+        This is a tool for genreating virtual museaum automaticly.
+        <br />
+        <br />
+        <br />
+        <br />
+      </p>
+      <a class="btn" onclick="hideMe()">START EXPERIENCE</a>
+    </div>
+  </div>
+
+  <video id="videoTitle" playsinline webkit-playsinline muted loop autoplay width="320" height="240"
+    src="assets/title.mov" style="display: none"></video>
+
+</body>
+
+<script src="./three.js/build/three.js"></script>
+<script src="./three.js/examples/jsm/loaders/MTLLoader.js" type="module"></script>
+<script src="./lib/jquery.js"></script>
+<script src="https://mamboleoo.be/learnThree/demos/OBJLoader.js"></script>
+<script src="/lib/PointerLockControls.js"></script>
+<script type="text/javascript" src="/lib/dat.gui.js"></script>
+<script src="./main.js" type="module"></script>
+
+<script type="module">
+  import { init } from './main.js';
+  import { animate } from './main.js';
+
+  var jsonFilePath;
+  var container;
+
+  container = document.getElementById('webgl-container');
+  container.addEventListener("dragover", function (e) { e.preventDefault(); }, true);
+  container.addEventListener("drop", function (e) {
+    e.preventDefault();
+    // loadImage(e.dataTransfer.files[0]);
+    console.log(e.dataTransfer.files[0].name);
+    jsonFilePath = e.dataTransfer.files[0].name;
+    loadJSON(function (response) {
+      // Parse JSON string into object
+      var actual_JSON = JSON.parse(response);
+      console.log(actual_JSON);
+      init(actual_JSON);
+      animate();
+      document.getElementById("webgl-container").style.display = "none";
+    });
+  }, true);
+
+  function loadJSON(callback) {
+
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open('GET', jsonFilePath, true); // Replace 'my_data' with the path to your file
+    xobj.onreadystatechange = function () {
+      if (xobj.readyState == 4 && xobj.status == "200") {
+        // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+        callback(xobj.responseText);
+      }
+    };
+    xobj.send(null);
+  }
+</script>
+<script type="text/javascript">
+
+  function hideMe() {
+    // console.log(document.getElementsByClassName("content"));
+    document.getElementById("content").style.display = "none";
+    document.getElementById("blocker").style.display = "none";
+    document.getElementById("secondBlocker").style.display = "block";
+  }
+
+  function hideSec() {
+    document.getElementById("secondBlocker").style.display = "none";
+  }
+</script>
+
+</html>

@@ -1,0 +1,70 @@
+{
+    "mapType":"exhibition",
+    "mapName":"designedName1",
+    "mapCreator":"Ash/William",
+    "configrations":{
+        "cameras":{
+            "cameraPosition":"",
+            "cameraDirection":"",
+            "cameraType": "Perspective",
+            "near":0,
+            "far":1000,
+            "pov":45
+        },
+        "enviroment":{
+            "light":{
+                "ambitientLight": {
+                    "Ambitcolor": "#d1d1d1",
+                    "Ambitntensity" : 0.67
+                },
+                "hasRandomLights":false,
+                "randomLightNumbers":5
+            },
+            "background-color": "black",
+            "fog":{
+                "color": "grey",
+                "near":20,
+                "far":1000
+            }
+        }
+    },
+    "objects":[
+        {
+            "objNum":0,
+            "objUrl":"./obj/LibertStatue",
+            "mtlUrl":"./obj/LibertStatue",
+            "objScale":0.02,
+            "position":{
+                "x":50,
+                "y":20,
+                "z":20
+            },
+            "objDouble":false
+        },
+        {
+            "objNum":1,
+            "objUrl":"./obj/13927_Charging_Bull_Statue_of_Wall_Street_v1_L1",
+            "mtlUrl":"./obj/13927_Charging_Bull_Statue_of_Wall_Street_v1_L1",
+            "objScale":0.1,
+            "position":{
+                "x":50,
+                "y":20,
+                "z":20
+            },
+            "objDouble":false
+        },
+        {
+            "objNum":2,
+            "objUrl":"./obj/12330_Statue_v1_L2",
+            "mtlUrl":"./obj/12330_Statue_v1_L2",
+            "objScale":0.1,
+            "position":{
+                "x":10,
+                "y":20,
+                "z":20
+            },
+            "objDouble":false
+        }
+
+    ]
+}

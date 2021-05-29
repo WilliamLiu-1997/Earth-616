@@ -180,9 +180,27 @@
         window.location.href = "island.html";
       }, 3500);
     }
+    function go_scene_generator() {
+      document.getElementById("blocker").style.backgroundColor =
+        "rgba(0, 0, 0, 1)";
+      $("#blocker").fadeIn(2500);
+      setTimeout(function () {
+        window.location.href = "tool.html";
+      }, 3500);
+    }
+    function go_summer_night() {
+      document.getElementById("blocker").style.backgroundColor =
+        "rgba(0, 0, 0, 1)";
+      $("#blocker").fadeIn(2500);
+      setTimeout(function () {
+        window.location.href = "summer-night.html";
+      }, 3500);
+    }
 
     var follow_frame1=0
     var follow_frame2=0
+    var follow_frame3=0
+    var follow_frame4=0
     var FPS = 60;
     var singleFrameTime = 1 / FPS;
     var timeStamp = 0;
@@ -2015,11 +2033,27 @@
         else{
           follow_frame2=0
         }
+        if(selected_object&&selected_object.object.name=="star6"){
+          follow_frame3+=1
+        }
+        else{
+          follow_frame3=0
+        }
+        if(selected_object&&selected_object.object.name=="star5"){
+          follow_frame4+=1
+        }
+        else{
+          follow_frame4=0
+        }
         if(follow_frame1>FPS*5){
 go_island()
         }
         else if(follow_frame2>FPS*5){
 go_alian_base()
+        }else if (follow_frame3>FPS*5){
+          go_scene_generator()
+        }else if (follow_frame4>FPS*5 ){
+          go_summer_night()
         }
         if (meteorites.length < 7) {
           var meteorite1 = generate_meteoriteObject3D(8);
