@@ -100,6 +100,11 @@
         case 32:
           jump = true;
           break;
+        case 27:
+          $("#blocker").fadeIn(1200);
+          $("#content").fadeIn(1200);
+          $("#secondBlocker").fadeOut(600);
+          break;
       }
     };
 
