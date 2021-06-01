@@ -770,9 +770,10 @@
             break;
 
           case 27:
-            esc = true;
-            $("#blocker").fadeIn(1000);
-            $("#content").fadeIn(1000);
+          esc = true;
+            $("#blocker").fadeIn(1200);
+            $("#content").fadeIn(1200);
+            $("#secondBlocker").fadeOut(600);
             break;
 
           case 69:
@@ -2033,13 +2034,13 @@
         else{
           follow_frame2=0
         }
-        if(selected_object&&selected_object.object.name=="star6"){
+        if(selected_object&&selected_object.object.name=="sun"){
           follow_frame3+=1
         }
         else{
           follow_frame3=0
         }
-        if(selected_object&&selected_object.object.name=="star5"){
+        if(selected_object&&selected_object.object.name=="star9"){
           follow_frame4+=1
         }
         else{
