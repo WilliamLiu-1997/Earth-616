@@ -37,8 +37,8 @@
         width: 88%;
         height: 5%;
         margin: 5%;
-        margin-top: 0.5%;
-        font-size: 2.5vh;
+        margin-top: 2%;
+        font-size: 3vh;
         text-align: center;
         color: #ffffffcc;
         background-color: rgba(0, 0, 0, 0);
@@ -61,21 +61,15 @@
     <div id="secondBlocker" style="display: none"></div>
     <div id="blocker">
       <div id="content">
-        <h1>Explore the Solar</h1>
+        <h1>Explore the Galaxy</h1>
         <p>
-          Our solar system consists of our star, the Sun, and everything bound
-          to it by gravity — the planets Mercury, Venus, Earth, Mars, Jupiter,
-          Saturn, Uranus and Neptune, dwarf planets such as Pluto, dozens of
-          moons and millions of asteroids, comets and meteoroids.
+          A galaxy is a gravitationally bound system of stars, stellar
+          remnants, interstellar gas, dust, and dark matter. The galaxies in the
+          Universe are constantly changing – through secular evolution, mergers
+          and interactions. They are mysterious!
         </p>
-        <p>Go to the solar system, and explore its secrets!</p>
-        <a class="btn" onclick="hideMe()">START EXPLORATION</a><br />
-        <!--<a class="btn1" onclick="goIsland()">Go Island</a
-        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-          class="btn1"
-          onclick="goAlianBase()"
-          >Go Alian Base</a
-        >-->
+        <p>Go to the galaxy, and explore its secrets!</p>
+        <a class="btn" onclick="hideMe()">START EXPLORATION</a>
       </div>
     </div>
   </body>
@@ -133,7 +127,7 @@
 
     uniform float time;
     uniform float alpha;
-
+    
     uniform float noiseRepeat;
 
     varying vec2 vUv;
@@ -164,55 +158,19 @@
     import { MTLLoader } from "./three.js/examples/jsm/loaders/MTLLoader.js";
     import { GUI } from "./three.js/examples/jsm/libs/dat.gui.module.js";
 
-    function go_alian_base() {
-      document.getElementById("blocker").style.backgroundColor =
-        "rgba(0, 0, 0, 1)";
-      $("#blocker").fadeIn(2500);
-      setTimeout(function () {
-        window.location.href = "alian_base.html";
-      }, 3500);
-    }
-    function go_island() {
-      document.getElementById("blocker").style.backgroundColor =
-        "rgba(0, 0, 0, 1)";
-      $("#blocker").fadeIn(2500);
-      setTimeout(function () {
-        window.location.href = "island.html";
-      }, 3500);
-    }
-    function go_lightning() {
-      document.getElementById("blocker").style.backgroundColor =
-        "rgba(0, 0, 0, 1)";
-      $("#blocker").fadeIn(2500);
-      setTimeout(function () {
-        window.location.href = "lightning.html";
-      }, 3500);
-    }
-    function go_tool() {
-      document.getElementById("blocker").style.backgroundColor =
-        "rgba(0, 0, 0, 1)";
-      $("#blocker").fadeIn(2500);
-      setTimeout(function () {
-        window.location.href = "tool.html";
-      }, 3500);
-    }
-
-    var follow_frame1 = 0;
-    var follow_frame2 = 0;
-    var follow_frame3 = 0;
-    var follow_frame4 = 0;
     var FPS = 60;
     var singleFrameTime = 1 / FPS;
     var timeStamp = 0;
     var fps_speed = 120 / FPS;
 
+    var display = document.getElementById("content").style.display;
     var scene;
     var camera;
     var renderer;
-    var rotatespeed = 3 * fps_speed;
+    var rotatespeed = 5 * fps_speed;
     var stats = new Stats();
-    //stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-    //document.body.appendChild(stats.dom);
+    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild(stats.dom);
     var star_radius = new Array();
 
     var add_solar = true;
@@ -230,7 +188,7 @@
     var meteorites = [];
     var gotoground = false;
     var arrived = 50;
-    var ufo_scale = 0.5;
+    var ufo_scale = 2;
 
     var color = new THREE.Color();
     var spotLight;
@@ -249,12 +207,11 @@
     var chaseing_frame = 50;
     var safe_dis = 2.25;
     var hit_open = false;
-    var scaling = false;
 
-    var SEPARATION = 135,
-      AMOUNTX = 24,
-      AMOUNTY = 8,
-      AMOUNTZ = 24;
+    var SEPARATION = 150,
+      AMOUNTX = 20,
+      AMOUNTY = 7,
+      AMOUNTZ = 20;
     var particles,
       particle,
       star_d,
@@ -272,8 +229,8 @@
     var left = 0;
     var right = 0;
 
-    var maxSpeed = 0.3 * fps_speed;
-    var acc = 3 * fps_speed;
+    var maxSpeed = 0.15 * fps_speed;
+    var acc = 15 * fps_speed;
     var currentSpeedForward = 0;
     var currentSpeedRight = 0;
     var Forward = true;
@@ -328,8 +285,8 @@
     var bumpSpeed = 0.025;
     // magnitude of normal displacement
     var bumpScale = 2.5;
-    var noiseRepeat = 60;
-    var bumpRepeat = 30;
+    var noiseRepeat=60;
+    var bumpRepeat=30;
 
     // use "this." to create global object
     var customUniforms = {
@@ -386,7 +343,7 @@
       sunbackground1.scale.set(500, 400, 1);
       var sun = obj_lighting(
         "./texture/fluid1-original.png",
-        100,
+        80,
         0,
         0,
         0,
@@ -394,7 +351,7 @@
       );
       sun.material = customMaterial;
       var star1 = obj("./texture/j022.jpg", 4, 180, 0, 0, "star1");
-      var star2 = obj("./texture/j028.jpg", 8, 240, 0, 0, "star2");
+      var star2 = obj("./texture/j006.jpg", 6, 240, 0, 0, "star2");
       var star3 = obj(
         "./three.js/examples/textures/land_ocean_ice_cloud_2048.jpg",
         10,
@@ -405,75 +362,28 @@
       );
       var starlite3 = obj(
         "./texture/j029.jpg",
-        1,
-        349,
-        200 + 21,
+        1.5,
+        333,
+        200 + 15,
         0,
         "starlite3"
       );
-      var star4 = obj("./texture/saturnmap.jpg", 11, 780, 0, 0, "star4");
-      var ring4 = ring1("./texture/ring1.gif", 15, 12, 780, 0, 0);
-      var star5 = obj("./texture/j006.jpg", 6, 420, 0, 0, "star5");
-      var star6 = obj(
-        "./texture/TDVC_Jupiter_Texture_Map.jpg",
-        25,
-        600,
-        0,
-        0,
-        "star6"
-      );
+      var star4 = obj("./texture/th_saturnclouds.png", 12, 420, 0, 0, "star4");
+      var ring4 = ring1("./texture/ring6.png", 15, 12, 420, 0, 0);
+      var star5 = obj("./texture/j033.jpg", 15, 550, 0, 0, "star5");
+      var star6 = obj("./texture/jupitermap2.jpg", 20, 750, 0, 0, "star6");
       var starlite6 = obj(
-        "./texture/opura1.jpg",
-        0.8,
-        650,
-        200 + 40,
+        "./texture/j024.jpg",
+        2,
+        780,
+        200 + 15,
         0,
         "starlite6"
       );
-      var starlite61 = obj(
-        "./texture/TDVC_Venus_Texture_Map.jpg",
-        1.2,
-        640,
-        200 + 35,
-        0,
-        "starlite61"
-      );
-      var starlite62 = obj(
-        "./texture/TDVC_Uranus_Moon_Texture_Map.jpg",
-        1.3,
-        655,
-        200 + 45,
-        0,
-        "starlite62"
-      );
-      var starlite63 = obj(
-        "./texture/j029.jpg",
-        1.2,
-        660,
-        200 + 50,
-        0,
-        "starlite63"
-      );
-      var starlite64 = obj(
-        "./texture/j019.jpg",
-        1.5,
-        665,
-        200 + 55,
-        0,
-        "starlite64"
-      );
-      var starlite65 = obj(
-        "./texture/j008.jpg",
-        1.4,
-        670,
-        200 + 60,
-        0,
-        "starlite65"
-      );
-      var star7 = obj("./texture/uranus.jpg", 13, 900, 0, 0, "star7");
-      var star8 = obj("./texture/j030.JPG", 8, 1050, 0, 0, "star8");
-      var ring8 = ring2("./texture/ring2.png", 20, 2, 900, 0, 0);
-      var star9 = obj("./texture/j033.jpg", 3, 1200, 0, 0, "star9");
+      var star7 = obj("./texture/j009.jpg", 10, 900, 0, 0, "star7");
+      var star8 = obj("./texture/uranus.JPG", 12, 1000, 0, 0, "star8");
+      var ring8 = ring2("./texture/ring4.png", 20, 0.5, 1000, 0, 0);
+      var star9 = obj("./texture/j030.jpg", 7, 1200, 0, 0, "star9");
 
       sun.name = "sun";
       star1.name = "star1";
@@ -484,14 +394,7 @@
       ring4.name = "ring";
       star5.name = "star5";
       star6.name = "star6";
-
-      starlite61.name = "starlite61";
-      starlite62.name = "starlite62";
-      starlite63.name = "starlite63";
-      starlite64.name = "starlite64";
-      starlite65.name = "starlite65";
       starlite6.name = "starlite6";
-
       star7.name = "star7";
       star8.name = "star8";
       ring8.name = "ring";
@@ -507,11 +410,6 @@
         "star5",
         "star6",
         "starlite6",
-        "starlite61",
-        "starlite62",
-        "starlite63",
-        "starlite64",
-        "starlite65",
         "star7",
         "star8",
         "star9",
@@ -526,12 +424,6 @@
       star5.castShadow = true;
       star6.castShadow = true;
       starlite6.castShadow = true;
-
-      starlite61.castShadow = true;
-      starlite62.castShadow = true;
-      starlite63.castShadow = true;
-      starlite64.castShadow = true;
-      starlite65.castShadow = true;
       star7.castShadow = true;
       star8.castShadow = true;
       //ring8.castShadow = true;
@@ -546,11 +438,6 @@
       star5.receiveShadow = true;
       star6.receiveShadow = true;
       starlite6.receiveShadow = true;
-      starlite61.receiveShadow = true;
-      starlite62.receiveShadow = true;
-      starlite63.receiveShadow = true;
-      starlite64.receiveShadow = true;
-      starlite65.receiveShadow = true;
       star7.receiveShadow = true;
       star8.receiveShadow = true;
       ring8.receiveShadow = true;
@@ -678,7 +565,7 @@
       scene.add(skyBox);
 
       camera = new THREE.PerspectiveCamera(
-        42, // fov 45 degree
+        40, // fov 45 degree
         window.innerWidth / window.innerHeight, //aspect (width/height ratio)
         0.1, //near
         10000 // far
@@ -771,10 +658,7 @@
             break;
 
           case 27:
-            esc = true;
-            $("#blocker").fadeIn(1200);
-            $("#content").fadeIn(1200);
-            $("#secondBlocker").fadeOut(600);
+            esc = !esc;
             break;
 
           case 69:
@@ -841,10 +725,11 @@
         light.position.set(0, 0, 0);
         light.penumbra = 0.3;
         light.castShadow = true;
-        light.shadow.mapSize.width = 16384;
-        light.shadow.mapSize.height = 16384;
+        light.shadow.mapSize.width = 2048;
+        light.shadow.mapSize.height = 2048;
         light.shadow.camera.far = 2500 * 1 /*ufo_scale/100*/;
         light.shadow.camera.near = 1 * 1 /*ufo_scale/100*/;
+        light.shadowBias = -0.001;
         all_obj4.add(light);
 
         all_obj4.add(sunbackground);
@@ -862,12 +747,6 @@
         all_obj3.add(star5);
         all_obj3.add(star6);
         all_obj3.add(starlite6);
-
-        all_obj3.add(starlite61);
-        all_obj3.add(starlite62);
-        all_obj3.add(starlite63);
-        all_obj3.add(starlite64);
-        all_obj3.add(starlite65);
         all_obj3.add(star7);
         all_obj3.add(star8);
         all_obj4.add(ring8);
@@ -1001,31 +880,33 @@
 
           var light_for_ufo = new THREE.PointLight(
             0xffffee,
-            0.1,
-            (100 * ufo_scale) / 200,
+            0.5,
+            (100 * ufo_scale) / 10,
             0.75
           );
           light_for_ufo.penumbra = 0.1;
-          // light_for_ufo.castShadow = true;
-          // light_for_ufo.shadow.mapSize.width = 2048;
-          // light_for_ufo.shadow.mapSize.height = 2048;
-          // light_for_ufo.shadow.camera.far = (100 * ufo_scale) / 10;
-          // light_for_ufo.shadow.camera.near = (0.1 * ufo_scale) / 10;
+          light_for_ufo.castShadow = true;
+          light_for_ufo.shadow.mapSize.width = 2048;
+          light_for_ufo.shadow.mapSize.height = 2048;
+          light_for_ufo.shadow.camera.far = (100 * ufo_scale) / 10;
+          light_for_ufo.shadow.camera.near = (0.1 * ufo_scale) / 10;
+          light_for_ufo.shadowBias = -0.001;
 
           light_for_ufo.position.set(0, 0.3, 0);
 
           var light_for_ufo1 = new THREE.PointLight(
             0xffffee,
-            0.3,
-            (30 * ufo_scale) / 60,
+            1.5,
+            (30 * ufo_scale) / 10,
             0.95
           );
           light_for_ufo1.penumbra = 0.1;
-          // light_for_ufo1.castShadow = true;
-          // light_for_ufo1.shadow.mapSize.width = 2048;
-          // light_for_ufo1.shadow.mapSize.height = 2048;
-          // light_for_ufo1.shadow.camera.far = (30 * ufo_scale) / 10;
-          // light_for_ufo1.shadow.camera.near = (0.1 * ufo_scale) / 10;
+          light_for_ufo1.castShadow = true;
+          light_for_ufo1.shadow.mapSize.width = 2048;
+          light_for_ufo1.shadow.mapSize.height = 2048;
+          light_for_ufo1.shadow.camera.far = (30 * ufo_scale) / 10;
+          light_for_ufo1.shadow.camera.near = (0.1 * ufo_scale) / 10;
+          light_for_ufo1.shadowBias = -0.001;
 
           light_for_ufo1.position.set(0, 0, 0);
 
@@ -1086,24 +967,26 @@
       scene.add(all_obj);
     }
     init();
-    // var controls = new (function () {
-    //   this.baseSpeed = 0.025;
-    //   this.noiseRepeat=60;
-    //   this.noiseScale = 0.0025;
-    //   this.bumpSpeed = 0.025;
-    //   this.bumpRepeat=30;
-    //   this.bumpScale = 2.5;
-    // })();
-    // const gui = new GUI();
-    // const sun_shader = gui.addFolder("shader");
-    // sun_shader.add(controls, "baseSpeed", 0.02, 0.2);
-    // sun_shader.add(controls, "noiseRepeat", 1, 100);
-    // sun_shader.add(controls, "noiseScale", 0.002, 0.02);
-    // sun_shader.add(controls, "bumpSpeed", 0.02, 0.5);
-    // sun_shader.add(controls, "bumpRepeat", 1, 100);
-    // sun_shader.add(controls, "bumpScale", 2, 20);
+    var controls = new (function () {
+      this.distortionSpeed = 0.025;
+      this.distortionRepeat=60;
+      this.distortionScale = 0.0025;
+      this.brightness=0.75;
+      this.bumpSpeed = 0.025;
+      this.bumpRepeat=30;
+      this.bumpScale = 2.5;
+    })();
+    const gui = new GUI();
+    const sun_shader = gui.addFolder("shader");
+    sun_shader.add(controls, "distortionSpeed", 0.02, 0.2);
+    sun_shader.add(controls, "distortionRepeat", 1, 100);
+    sun_shader.add(controls, "distortionScale", 0.002, 0.02);
+    sun_shader.add(controls, "brightness", 0.01, 1);
+    sun_shader.add(controls, "bumpSpeed", 0.02, 0.5);
+    sun_shader.add(controls, "bumpRepeat", 1, 100);
+    sun_shader.add(controls, "bumpScale", 2, 20);
 
-    // sun_shader.open();
+    sun_shader.open();
 
     function obj_loader(url, url1, scale, double = false) {
       var newobj = obj3d.clone();
@@ -1162,6 +1045,7 @@
           light_white.shadow.mapSize.height = 2048;
           light_white.shadow.camera.far = 500 * scale * 1 /*ufo_scale/100*/;
           light_white.shadow.camera.near = 32 * scale * 1 /*ufo_scale/100*/;
+          light_white.shadowBias = -0.001;
           object.position.set(0, 0, 0);
           object.scale.set(0.2, 0.2, 0.2);
           //newobj.add(object);
@@ -1174,7 +1058,6 @@
     }
 
     function obj_lighting(url, size, x, y, z, name) {
-      size = size * 0.8;
       var startTexture = THREE.ImageUtils.loadTexture(url);
       var starBall = new THREE.Mesh(
         new THREE.SphereGeometry(size, 100, 100),
@@ -1188,7 +1071,6 @@
       return starBall;
     }
     function obj(url, size, x, y, z, name) {
-      size = size * 0.8;
       var startTexture = THREE.ImageUtils.loadTexture(url);
       if (name == "star3") {
         var starBall = new THREE.Mesh(
@@ -1203,28 +1085,7 @@
             ),
           })
         );
-      } else if (name == "star2") {
-        //console.log(name)
-        startTexture.wrapS = startTexture.wrapT = THREE.RepeatWrapping;
-        startTexture.repeat.set(3, 3);
-        var starBall = new THREE.Mesh(
-          new THREE.SphereGeometry(size, 50, 50),
-          new THREE.MeshStandardMaterial({
-            map: startTexture,
-            normalMap: new THREE.TextureLoader().load(
-              "./texture/normal1.jpg",
-              function (texture) {
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(3, 3);
-              }
-            ),
-          })
-        );
-      } else if (size > 10 && size < 18 && size != 12) {
-        if (name == "star7") {
-          startTexture.wrapS = startTexture.wrapT = THREE.RepeatWrapping;
-          startTexture.repeat.set(3, 3);
-        }
+      } else if (size > 10 && size < 18) {
         var starBall = new THREE.Mesh(
           new THREE.SphereGeometry(size, 50, 50),
           new THREE.MeshStandardMaterial({
@@ -1237,8 +1098,7 @@
             ),
           })
         );
-      } else if (size < 18 && name != "starlite6") {
-        //console.log(name)
+      } else if (size < 18) {
         var starBall = new THREE.Mesh(
           new THREE.SphereGeometry(size, 50, 50),
           new THREE.MeshStandardMaterial({
@@ -1251,47 +1111,11 @@
             ),
           })
         );
-      } else if (name == "starlite6") {
-        //console.log(name)
-        startTexture.wrapS = startTexture.wrapT = THREE.RepeatWrapping;
-        startTexture.repeat.set(5, 5);
-        var starBall = new THREE.Mesh(
-          new THREE.SphereGeometry(size, 50, 50),
-          new THREE.MeshStandardMaterial({
-            map: startTexture,
-            normalMap: new THREE.TextureLoader().load(
-              "./texture/normal2.jpg",
-              function (texture) {
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(30, 30);
-              }
-            ),
-          })
-        );
-      } else if (size < 18) {
-        var starBall = new THREE.Mesh(
-          new THREE.SphereGeometry(size, 50, 50),
-          new THREE.MeshStandardMaterial({
-            map: startTexture,
-            normalMap: new THREE.TextureLoader().load(
-              "./texture/normal3.jpg",
-              function (texture) {
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-              }
-            ),
-          })
-        );
       } else {
         var starBall = new THREE.Mesh(
           new THREE.SphereGeometry(size, 50, 50),
           new THREE.MeshStandardMaterial({
             map: startTexture,
-            normalMap: new THREE.TextureLoader().load(
-              "./texture/normal4.jpg",
-              function (texture) {
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-              }
-            ),
           })
         );
       }
@@ -1301,22 +1125,12 @@
     }
 
     function ring1(url, size, width, x, y, z) {
-      size = size * 0.8;
       var startTexture = THREE.ImageUtils.loadTexture(url);
-      var r = new THREE.RingGeometry(size, size + width, size * 10);
-      var pos = r.attributes.position;
-      var v3 = new THREE.Vector3();
-      for (let i = 0; i < pos.count; i++) {
-        v3.fromBufferAttribute(pos, i);
-        r.attributes.uv.setXY(i, v3.length() < size + 1 ? 0 : 1, 1);
-      }
       var starBall = new THREE.Mesh(
-        r,
+        new THREE.RingGeometry(size, size + width, size * 10),
         new THREE.MeshStandardMaterial({
           map: startTexture,
           side: THREE.DoubleSide,
-          transparent: true,
-          opacity: 0.8,
         })
       );
       starBall.rotation.x = -Math.PI / 2;
@@ -1325,22 +1139,12 @@
       return starBall;
     }
     function ring2(url, size, width, x, y, z) {
-      size = size * 0.8;
       var startTexture = THREE.ImageUtils.loadTexture(url);
-      var r = new THREE.RingGeometry(size, size + width, size * 10);
-      var pos = r.attributes.position;
-      var v3 = new THREE.Vector3();
-      for (let i = 0; i < pos.count; i++) {
-        v3.fromBufferAttribute(pos, i);
-        r.attributes.uv.setXY(i, v3.length() < size + 1 ? 0 : 1, 1);
-      }
       var starBall = new THREE.Mesh(
-        r,
+        new THREE.RingGeometry(size, size + width, size * 10),
         new THREE.MeshStandardMaterial({
           map: startTexture,
           side: THREE.DoubleSide,
-          transparent: true,
-          opacity: 0.8,
         })
       );
       starBall.rotation.x = -Math.PI / 2;
@@ -1396,20 +1200,13 @@
     }
 
     function bounder_detect() {
-      var distance =
-        Math.sqrt(
-          cameraPosition.x * cameraPosition.x +
-            cameraPosition.z * cameraPosition.z
-        ) - 1500;
-      var dir = vec
-        .clone()
-        .set(0 - cameraPosition.x, 0, 0 - cameraPosition.z)
-        .normalize();
-      if (distance > 0) {
-        selected_object = false;
-        cameraPosition.z += distance * dir.z;
-        cameraPosition.x += distance * dir.x;
-      }
+      var distance=Math.sqrt(cameraPosition.x*cameraPosition.x+cameraPosition.z*cameraPosition.z)-1500
+    var dir=vec.clone().set(0-cameraPosition.x,0,0-cameraPosition.z).normalize()
+    if(distance>0){
+      selected_object=false;
+      cameraPosition.z+=distance*dir.z
+      cameraPosition.x+=distance*dir.x
+    }
       cameraPosition.y = Math.max(
         -508 + 0.55 * ufo_scale,
         Math.min(400, cameraPosition.y)
@@ -1424,23 +1221,16 @@
         crash_detect(ufo, star5, "star5") &&
         crash_detect(ufo, star6, "star6") &&
         crash_detect(ufo, starlite6, "starlite6") &&
-        crash_detect(ufo, starlite61, "starlite61") &&
-        crash_detect(ufo, starlite62, "starlite62") &&
-        crash_detect(ufo, starlite63, "starlite63") &&
-        crash_detect(ufo, starlite64, "starlite64") &&
-        crash_detect(ufo, starlite65, "starlite65") &&
         crash_detect(ufo, star7, "star7") &&
         crash_detect(ufo, star8, "star8") &&
         crash_detect(ufo, star9, "star9")
-      ) {
+      )
         return false;
-      } else {
-        return true;
-      }
+      else return true;
     }
     function crash_detect(a, b, i) {
       if (hit_frame > 490) return true;
-      if (star_radius[i] + 1 > a.position.distanceTo(b.position)) {
+      if (star_radius[i] + 2 > a.position.distanceTo(b.position)) {
         hit_direction
           .set(
             a.position.x - b.position.x,
@@ -1542,9 +1332,12 @@
         moveForward = moveLeft = moveRight = moveBackward = false;
         currentSpeedForward = 0;
         currentSpeedRight = 0;
-        cameraPosition.x += (hit_direction.x * hit_frame * rotatespeed) / 10000;
-        cameraPosition.y += (hit_direction.y * hit_frame * rotatespeed) / 10000;
-        cameraPosition.z += (hit_direction.z * hit_frame * rotatespeed) / 10000;
+        cameraPosition.x +=
+          (hit_direction.x * hit_frame * rotatespeed) / 100000;
+        cameraPosition.y +=
+          (hit_direction.y * hit_frame * rotatespeed) / 100000;
+        cameraPosition.z +=
+          (hit_direction.z * hit_frame * rotatespeed) / 100000;
 
         ufo.rotation.x =
           Math.cos((hit_frame * Math.PI) / 7) * (hit_frame / 3000);
@@ -1567,11 +1360,15 @@
         ufo.children[10].material.specular.set(0x44e0ff);
         ufo.children[10].material.emissive.set(0x44e0ff);
       }
-      if (document.getElementById("content").style.display == "none") {
+      if (
+        display != "none" &&
+        document.getElementById("esc").style.display == "none"
+      ) {
         esc = false;
+        display = document.getElementById("content").style.display;
       }
-      if (fast) maxSpeed = 0.6 * fps_speed;
-      else maxSpeed = Math.max(maxSpeed - 0.03 * fps_speed, 0.3 * fps_speed);
+      if (fast) maxSpeed = 0.3 * fps_speed;
+      else maxSpeed = Math.max(maxSpeed - 0.01 * fps_speed, 0.15 * fps_speed);
 
       if ((moveForward || moveBackward || moveRight || moveLeft) && !fast) {
         ufo.children[1].scale.y =
@@ -1699,27 +1496,33 @@
           currentSpeedRight = Math.max(0, currentSpeedRight - delta * acc);
         }
       }
+
       angleX += (left / 15 / Math.PI - right / 15 / Math.PI) * fps_speed;
       cameraDirection.x -= Math.sin(angleX);
       cameraDirection.z -= Math.cos(angleX);
 
-      if (cameraDirection.y < 0.85 * ufo_scale && !scaling) {
-        angleY +=
-          (up / 600 / Math.PI) * fps_speed * ufo_scale * Math.sqrt(ufo_scale);
+      if (cameraDirection.y < 0.85 * ufo_scale) {
+        angleY += (up / 600 / Math.PI) * fps_speed * ufo_scale;
       }
-      if (cameraDirection.y > -0.8 * ufo_scale && !scaling) {
-        angleY -=
-          (down / 500 / Math.PI) * fps_speed * ufo_scale * Math.sqrt(ufo_scale);
+      if (cameraDirection.y > -0.8 * ufo_scale) {
+        angleY -= (down / 500 / Math.PI) * fps_speed * ufo_scale;
       }
-      //console.log(angleY)
-      cameraDirection.y = (Math.sin(angleY) * 100) / ufo_scale;
+      angleY = Math.max(
+        -0.015 * ufo_scale,
+        Math.min(0.018 * ufo_scale, angleY)
+      );
+      cameraDirection.y += (Math.sin(angleY) * 20) / ufo_scale;
+      cameraDirection.y = Math.max(
+        -0.8 * ufo_scale,
+        Math.min(0.85 * ufo_scale, cameraDirection.y)
+      );
       cameraDirection.setLength(2.4 * ufo_scale);
 
       if (
         add_solar &&
         selected_object &&
         plant_name.includes(selected_object.object.name) &&
-        document.getElementById("content").style.display == "none"
+        document.getElementById("esc").style.display == "none"
       ) {
         safe_dis = 1 * ufo_scale;
         if (selected_object.object.name == "sun") safe_dis = 10;
@@ -1782,21 +1585,16 @@
           tranfer_speed = Math.max(tranfer_speed - 0.1 * fps_speed, 1);
           arrived -= 1;
         }
-        if (selected_object.object.name == "starlite3") {
-          cameraPosition.x += (chasing.x * catchspeed) / 10;
-          cameraPosition.y += (chasing.y * catchspeed) / 10;
-          cameraPosition.z += (chasing.z * catchspeed) / 10;
-        } else {
-          cameraPosition.x += (chasing.x * catchspeed) / 20;
-          cameraPosition.y += (chasing.y * catchspeed) / 20;
-          cameraPosition.z += (chasing.z * catchspeed) / 20;
-        }
+
+        cameraPosition.x += (chasing.x * catchspeed) / 50;
+        cameraPosition.y += (chasing.y * catchspeed) / 50;
+        cameraPosition.z += (chasing.z * catchspeed) / 50;
       } else if (
         arrived > 0 &&
         selected_object &&
-        document.getElementById("content").style.display == "none"
+        document.getElementById("esc").style.display == "none"
       ) {
-        ////console.log(selected_object.point)
+        //console.log(selected_object.point)
         safe_dis = 1 * ufo_scale;
         chaseing_frame = 50;
         ufo.children[10].material.color.set(0xffff33);
@@ -1937,8 +1735,8 @@
         .normalize();
       while (
         (v1.y < 0 && y < 500) ||
-        vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.85 ||
-        vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.851 ||
+        vec.clone().set(-x, -y, -z).normalize().dot(v1) < 0.89 ||
+        vec.clone().set(-x, -y, -z).normalize().dot(v1) > 0.9 ||
         (z < 0 && v1.z < 0)
       ) {
         v1 = vec
@@ -1994,7 +1792,7 @@
     function animate() {
       if (esc) {
         document.querySelector("body").style.cursor =
-          "url(./img/cursor.png),default";
+          'url("chrome-extension://jlgkpaicikihijadgifklkbpdajbkhjo/image/cursors/001.png"),default';
         document.getElementById("aiming1").style.display = "none";
       } else {
         document.querySelector("body").style.cursor = "none";
@@ -2004,46 +1802,18 @@
       var delta = clock.getDelta();
 
       customUniforms.time.value += delta;
-      // customUniforms.baseSpeed.value = controls.baseSpeed;
-      // customUniforms.noiseScale.value = controls.noiseScale;
-      // customUniforms.bumpSpeed.value = controls.bumpSpeed;
-      // customUniforms.bumpScale.value = controls.bumpScale;
-      // customUniforms.bumpRepeat.value = controls.bumpRepeat;
-      // customUniforms.noiseRepeat.value = controls.noiseRepeat;
+      customUniforms.baseSpeed.value = controls.distortionSpeed;
+      customUniforms.noiseScale.value = controls.distortionScale;
+      customUniforms.blendOffset.value=controls.brightness;
+      customUniforms.bumpSpeed.value = controls.bumpSpeed;
+      customUniforms.bumpScale.value = controls.bumpScale;
+      customUniforms.bumpRepeat.value = controls.bumpRepeat;
+      customUniforms.noiseRepeat.value = controls.distortionRepeat;
       requestAnimationFrame(animate);
       timeStamp += delta;
       if (timeStamp > singleFrameTime) {
         stats.update();
-        if (selected_object && selected_object.object.name == "star3") {
-          follow_frame1 += 1;
-        } else {
-          follow_frame1 = 0;
-        }
-        if (selected_object && selected_object.object.name == "star4") {
-          follow_frame2 += 1;
-        } else {
-          follow_frame2 = 0;
-        }
-        if (selected_object && selected_object.object.name == "star6") {
-          follow_frame3 += 1;
-        } else {
-          follow_frame3 = 0;
-        }
-        if (selected_object && selected_object.object.name == "star9") {
-          follow_frame4 += 1;
-        } else {
-          follow_frame4 = 0;
-        }
-        if (follow_frame1 > FPS * 5) {
-          go_island();
-        } else if (follow_frame2 > FPS * 5) {
-          go_alian_base();
-        } else if (follow_frame3 > FPS * 5) {
-          go_lightning();
-        }else if (follow_frame4 > FPS * 5) {
-          go_tool();
-        }
-        if (meteorites.length < 12) {
+        if (meteorites.length < 8) {
           var meteorite1 = generate_meteoriteObject3D(8);
           meteorites.push(meteorite1);
           scene.add(meteorite1[0]);
@@ -2067,13 +1837,13 @@
 
           var position2 = (1.2 * rotate) / 5;
           star2.rotateOnWorldAxis(
-            vec.clone().set(0, 2, 0).normalize(),
+            vec.clone().set(-1, 2, 1).normalize(),
             ((0.02 / Math.PI) * rotatespeed) / 5
           );
           star2.position.x = Math.sin(position2) * 240;
           star2.position.z = Math.cos(position2) * 240;
 
-          var position3 = (1.5 * rotate) / 10;
+          var position3 = (1.5 * rotate) / 5;
           star3.rotateOnWorldAxis(
             vec.clone().set(0.2, 1, 0).normalize(),
             ((0.04 / Math.PI) * rotatespeed) / 5
@@ -2083,107 +1853,49 @@
           var position3 = (10 * rotate) / 5;
           starlite3.rotateOnWorldAxis(
             vec.clone().set(0.1, 1, 0).normalize(),
-            ((0.4 / Math.PI) * rotatespeed) / 3 / 5
+            ((0.4 / Math.PI) * rotatespeed) / 5
           );
-          starlite3.position.x =
-            Math.sin(position3 / 2) * 19 + star3.position.x;
-          starlite3.position.z =
-            Math.cos(position3 / 2) * 19 + star3.position.z;
-          starlite3.position.y =
-            Math.sin(position3 / 2) * 21 + star3.position.y;
+          starlite3.position.x = Math.sin(position3) * 13 + star3.position.x;
+          starlite3.position.z = Math.cos(position3) * 13 + star3.position.z;
+          starlite3.position.y = Math.sin(position3) * 15 + star3.position.y;
 
-          var position4 = (0.7 * rotate) / 5;
+          var position4 = (-0.7 * rotate) / 5;
           star4.rotateOnWorldAxis(
             vec.clone().set(0, 1, 0).normalize(),
             ((0.06 / Math.PI) * rotatespeed) / 5
           );
-          star4.position.x = Math.sin(position4) * 780;
-          star4.position.z = Math.cos(position4) * 780;
+          star4.position.x = Math.cos(position4) * 420;
+          star4.position.z = Math.sin(position4) * 420;
           ring4.rotateOnWorldAxis(
             vec.clone().set(0, 1, 0).normalize(),
             ((((0.7 * 0.0005) / Math.PI) * rotatespeed) / 5) * 10
           );
-          ring4.position.x = Math.sin(position4) * 780;
-          ring4.position.z = Math.cos(position4) * 780;
+          ring4.position.x = Math.cos(position4) * 420;
+          ring4.position.z = Math.sin(position4) * 420;
 
           var position5 = (0.5 * rotate) / 5;
           star5.rotateOnWorldAxis(
             vec.clone().set(1, 4, 1).normalize(),
             ((0.03 / Math.PI) * rotatespeed) / 5
           );
-          star5.position.x = Math.sin(position5) * 420;
-          star5.position.z = Math.cos(position5) * 420;
+          star5.position.x = Math.sin(position5) * 550;
+          star5.position.z = Math.cos(position5) * 550;
 
           var position6 = (0.3 * rotate) / 5;
           star6.rotateOnWorldAxis(
             vec.clone().set(0, 5, 0).normalize(),
             ((0.02 / Math.PI) * rotatespeed) / 5
           );
-          star6.position.x = Math.sin(position6) * 600;
-          star6.position.z = Math.cos(position6) * 600;
+          star6.position.x = Math.sin(position6) * 750;
+          star6.position.z = Math.cos(position6) * 750;
           position6 = (2 * rotate) / 5;
           starlite6.rotateOnWorldAxis(
-            vec.clone().set(0.1, 1, 0.3).normalize(),
-            ((0.2 / Math.PI) * rotatespeed) / 50
+            vec.clone().set(1, 1, 1.5).normalize(),
+            ((0.2 / Math.PI) * rotatespeed) / 5
           );
-          starlite6.position.x = Math.sin(position6) * 50 + star6.position.x;
-          starlite6.position.z = Math.cos(position6) * 50 + star6.position.z;
-          starlite6.position.y = Math.sin(position6) * 40 + star6.position.y;
-
-          starlite61.rotateOnWorldAxis(
-            vec.clone().set(0.5, 1, 0.2).normalize(),
-            ((0.2 / Math.PI) * rotatespeed) / 50
-          );
-          starlite61.position.x =
-            Math.sin(position6 * 2) * 40 + star6.position.x;
-          starlite61.position.z =
-            Math.cos(position6 * 2) * 40 + star6.position.z;
-          starlite61.position.y =
-            Math.sin(position6 * 2) * 35 + star6.position.y;
-
-          starlite62.rotateOnWorldAxis(
-            vec.clone().set(0.2, 1, 0.6).normalize(),
-            ((0.2 / Math.PI) * rotatespeed) / 50
-          );
-          starlite62.position.x =
-            Math.sin(position6 * 1.2) * 55 + star6.position.x;
-          starlite62.position.z =
-            Math.cos(position6 * 1.2) * 55 + star6.position.z;
-          starlite62.position.y =
-            Math.sin(position6 * 1.2) * 45 + star6.position.y;
-
-          starlite63.rotateOnWorldAxis(
-            vec.clone().set(0.1, 1, 0.5).normalize(),
-            ((0.2 / Math.PI) * rotatespeed) / 50
-          );
-          starlite63.position.x =
-            Math.sin(position6 * 1.5) * 60 + star6.position.x;
-          starlite63.position.z =
-            Math.cos(position6 * 1.5) * 60 + star6.position.z;
-          starlite63.position.y =
-            Math.sin(position6 * 1.5) * 50 + star6.position.y;
-
-          starlite64.rotateOnWorldAxis(
-            vec.clone().set(0.2, 1, 0.3).normalize(),
-            ((0.2 / Math.PI) * rotatespeed) / 50
-          );
-          starlite64.position.x =
-            Math.sin(position6 * 0.8) * 65 + star6.position.x;
-          starlite64.position.z =
-            Math.cos(position6 * 0.8) * 65 + star6.position.z;
-          starlite64.position.y =
-            Math.sin(position6 * 0.8) * 55 + star6.position.y;
-
-          starlite65.rotateOnWorldAxis(
-            vec.clone().set(0.6, 1, 0.3).normalize(),
-            ((0.2 / Math.PI) * rotatespeed) / 50
-          );
-          starlite65.position.x =
-            Math.sin(position6 * 0.18) * 70 + star6.position.x;
-          starlite65.position.z =
-            Math.cos(position6 * 0.18) * 70 + star6.position.z;
-          starlite65.position.y =
-            Math.sin(position6 * 0.18) * 60 + star6.position.y;
+          starlite6.position.x = Math.sin(position6) * 30 + star6.position.x;
+          starlite6.position.z = Math.cos(position6) * 30 + star6.position.z;
+          starlite6.position.y = Math.sin(position6) * 20 + star6.position.y;
 
           var position7 = (0.4 * rotate) / 5;
           star7.rotateOnWorldAxis(
@@ -2193,19 +1905,19 @@
           star7.position.x = Math.sin(position7) * 900;
           star7.position.z = Math.cos(position7) * 900;
 
-          var position8 = (0.2 * rotate) / 5;
+          var position8 = (-0.2 * rotate) / 5;
           star8.rotateOnWorldAxis(
             vec.clone().set(0, 1, 0).normalize(),
             ((0.1 / Math.PI) * rotatespeed) / 5
           );
-          star8.position.x = Math.sin(position8) * 1050;
-          star8.position.z = Math.cos(position8) * 1050;
+          star8.position.x = Math.cos(position8) * 1000;
+          star8.position.z = Math.sin(position8) * 1000;
           ring8.rotateOnWorldAxis(
             vec.clone().set(0, 1, 0).normalize(),
             ((((0.2 * 0.0005) / Math.PI) * rotatespeed) / 5) * 10
           );
-          ring8.position.x = Math.sin(position7) * 900;
-          ring8.position.z = Math.cos(position7) * 900;
+          ring8.position.x = Math.cos(position8) * 1000;
+          ring8.position.z = Math.sin(position8) * 1000;
 
           var position9 = (0.1 * rotate) / 5;
           star9.rotateOnWorldAxis(
@@ -2259,22 +1971,11 @@
     window.addEventListener("resize", MyResize);
   </script>
   <script>
-    document.querySelector("body").style.cursor =
-      "url(./img/cursor.png),default";
     function hideMe() {
-      $("#content").fadeOut(1000);
+      document.getElementById("esc").style.display = "none";
+      $("#content").fadeOut(2000);
       $("#blocker").fadeOut(2000);
       $("#secondBlocker").delay(1200).fadeIn(1000);
-    }
-
-    function goAlianBase() {
-      window.location.href = "alian_base.html";
-    }
-    function goIsland() {
-      window.location.href = "island.html";
-    }
-    function goLightning() {
-      window.location.href = "lightning.html";
     }
   </script>
 </html>
