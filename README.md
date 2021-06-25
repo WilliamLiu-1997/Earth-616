@@ -14,4 +14,5 @@ A RTX2060 or better GPU is highly recommended for this program!
 
 ## Video
 
-https://youtu.be/fM_gqr0ZL3U
+Youtube: https://youtu.be/fM_gqr0ZL3U
+Bilibili: https://b23.tv/zNxSJA
