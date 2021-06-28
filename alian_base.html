@@ -997,7 +997,6 @@
     //  else return true;
   }
   function crash_detect(a, b, i) {
-    if (hit_frame > 450) return true;
     if (star_radius[i] + 2 > a.position.distanceTo(b.position)) {
       hit_direction.set(a.position.x - b.position.x, a.position.y - b.position.y, a.position.z - b.position.z).normalize();
       return false;
@@ -1066,7 +1065,7 @@
 
   function operation_method_1(delta) {
     bounder_detect()
-    if (hit_detect()&&hit_frame<485) {
+    if (hit_detect()&&hit_frame<490) {
       hit_frame = 500;
       chaseing_frame = 0;
     };
