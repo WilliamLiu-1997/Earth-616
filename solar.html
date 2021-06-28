@@ -1535,7 +1535,7 @@
     window.addEventListener("mousedown", onMouseClick, false);
 
     function operation_method_1(delta) {
-      if (bounder_detect()) {
+      if (bounder_detect()&&hit_frame<485) {
         hit_frame = 500;
         chaseing_frame = 0;
       }
