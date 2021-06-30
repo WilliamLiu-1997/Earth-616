@@ -319,7 +319,7 @@
     // multiplier for distortion speed
     var blendSpeed = 0.01;
     // adjust lightness/darkness of blended texture
-    var blendOffset = 0.75;
+    var blendOffset = 0.7;
 
     // texture to determine normal displacement
     var bumpTexture = noiseTexture;
@@ -833,7 +833,7 @@
       scene.add(new THREE.AmbientLight(0x111111));
       if (add_solar) {
         const light = new THREE.PointLight(
-          0xffeeaa,
+          0xffeecc,
           1.5,
           2500 * 1 /*ufo_scale/100*/,
           2
